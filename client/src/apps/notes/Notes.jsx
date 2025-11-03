@@ -161,7 +161,7 @@ export default function Notes({ user }) {
       console.error("Failed to copy note", err);
     }
   };
-  return 
+  return (
     <div className="app-notes">
       {/* Editor Modal */}
       <EditorModal
@@ -250,6 +250,7 @@ export default function Notes({ user }) {
           </Grid>
         ))}
       </Grid>
-    </div>;
+    </div>
+  )
 }
 
