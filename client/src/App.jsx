@@ -49,7 +49,7 @@ import { requestNotificationPermission } from "./utils/requestNotificationPermis
 import { Toaster } from "react-hot-toast";
 import BannerList from "./pages/banner/BannerList";
 import BannerListPage from "./pages/banner/BannerListPage";
-
+import { setToken } from "./api/newRequest";
 
 
 
