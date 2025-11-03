@@ -54,11 +54,16 @@ const Header = ({ user, setUser }) => {
     setDropdownOpen(dropdownOpen === id ? null : id);
 
   const handleLogout = async () => {
-    try { await logoutRequest(); } catch (e) {}
-    clearToken();
-    localStorage.removeItem("currentUser");
-    setUser(null);
-    navigate("/login");
+    try {
+      await logoutRequest();
+    } catch (e) {
+      console.warn("Logout API failed:", e.message);
+    }
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("accessToken");
+    navigate("/");
+    window.location.reload();
   };
 
   if (!showHeader) return null;
