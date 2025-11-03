@@ -18,8 +18,9 @@ const AuthorDashboardLayout = ({ user, setUser }) => {
   return (
     <div className="author-dashboard-layout">
 
-      {/* Navbar */}
+      {/* Navbar 
       <AuthorNavbar user={user} setUser={setUser} />
+      */}
       
 
       {/* Sidebar */}
