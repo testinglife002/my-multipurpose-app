@@ -105,6 +105,8 @@ const Header = ({ user, setUser }) => {
           {renderDropdown("home", <Home size={16} />, "Home", [
             { to: "/", label: "Main Home" },
             { to: "/gordius", label: "Gordius Home" },
+            { to: "/project-manager", label: "Project Manager" },
+            { to: "/channel-manager", label: "Channel Manager" },
             { to: "/task-manager", label: "Task Manager" },
           ])}
 
