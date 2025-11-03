@@ -107,6 +107,7 @@ function NotesDetails({ user }) {
   if (!note) return <Alert severity="error">Note not found</Alert>;
 
   return (
+    <div style={{marginTop:'7%'}} >
     <div className="note-container">
       <div className="note-back-btn">
         <Link to="/apps/notesapp" className="btn-link">
@@ -178,6 +179,7 @@ function NotesDetails({ user }) {
         initialTags={modalData.tags}
         initialBlocks={modalData.blocks}
       />
+    </div>
     </div>
   );
 }

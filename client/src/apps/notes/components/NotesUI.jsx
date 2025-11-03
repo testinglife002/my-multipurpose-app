@@ -231,7 +231,8 @@ const NotesUI = ({ user }) => {
 
 
   return (
-    <div className="notes-ui">
+    <div style={{marginTop:'7%'}} >
+      <div className="notes-ui">
       <EditorModal
         open={showModal}   // ✅ corrected
         handleClose={() => setShowModal(false)}
@@ -395,6 +396,7 @@ const NotesUI = ({ user }) => {
           Copied to My Notes!
         </Alert>
       </Snackbar>
+    </div>
     </div>
   );
 };
