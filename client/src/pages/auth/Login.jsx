@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
 import newRequest, { setToken } from '../../api/newRequest';
 import "./Auth.css";
+import toast from "react-hot-toast";
 
 export default function Login({ setUser }) {
   const navigate = useNavigate();
