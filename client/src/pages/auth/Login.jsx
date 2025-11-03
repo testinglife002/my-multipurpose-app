@@ -1,76 +1,84 @@
 // frontend/src/pages/auth/Login.jsx
 // frontend/src/pages/auth/Login.jsx
-import { useState } from "react";
+// src/pages/auth/Login.jsx
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Mail, Lock } from "lucide-react";
-import newRequest, { setToken } from '../../api/newRequest';
-import "./Auth.css";
+import toast from "react-hot-toast";
+import newRequest, { setToken } from "../../api/newRequest";
 
-export default function Login({ setUser }) {
+const Login = ({ setUser }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [err, setErr] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setErr("");
+    if (!email || !password) {
+      toast.error("Email and password are required");
+      return;
+    }
+
+    setLoading(true);
     try {
       const res = await newRequest.post("/auth/login", { email, password });
-      const { user, token } = res.data;
-      sessionStorage.setItem("accessToken", token);
-      // ✅ Set token in Axios for all requests
-      setToken(token);
-      // Save user info in state if needed
-      console.log("Logged in user:", user);
-      console.log("token", token);
-       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user) 
 
-      if (user.role === "admin") navigate("/admin/dashboard");
-      else if (user.role === "author") navigate("/author/dashboard");
-      else navigate("/user/dashboard");
+      // ✅ Extract user and token from response
+      const { user, token } = res.data;
+
+      // ✅ Save token for API calls
+      setToken(token);
+
+      // ✅ Save user & token to localStorage
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      localStorage.setItem("token", token);
+
+      // ✅ Update state
+      setUser(user);
+
+      toast.success(`Welcome back, ${user.username}!`);
+      navigate("/dashboard"); // Redirect to dashboard after login
     } catch (err) {
-      setErr(err.response?.data?.message || err.message);
+      console.error("Login error:", err);
+      toast.error(err?.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h3 className="auth-title">Login</h3>
-        <form onSubmit={handleLogin} className="auth-form">
-          <div className="input-wrapper">
-            <Mail size={18} className="input-icon" />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="auth-input"
-              required
-            />
-          </div>
+    <div className="auth-page">
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit} className="auth-form">
+        <label>
+          Email
+          <input
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </label>
 
-          <div className="input-wrapper">
-            <Lock size={18} className="input-icon" />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="auth-input"
-              required
-            />
-          </div>
+        <label>
+          Password
+          <input
+            type="password"
+            placeholder="********"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
 
-          <button className="auth-btn" type="submit">
-            Login
-          </button>
-          {err && <div className="auth-error">{err}</div>}
-        </form>
-      </div>
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+      </form>
     </div>
   );
-}
+};
+
+export default Login;
+

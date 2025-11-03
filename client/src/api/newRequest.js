@@ -1,5 +1,6 @@
 // ✅ src/utils/newRequest.js
 // src/utils/newRequest.js
+// src/api/newRequest.js
 import axios from "axios";
 
 const API_URL =
@@ -7,12 +8,12 @@ const API_URL =
   "https://my-multipurpose-app.onrender.com/api";
 
 const newRequest = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL || "https://my-multipurpose-app.onrender.com/api",
-  withCredentials: true, // ✅ sends cookie automatically
+  baseURL: API_URL,
+  withCredentials: true, // sends cookies if needed
 });
 
-// ✅ Load token from sessionStorage on init (in case of page refresh)
-const token = sessionStorage.getItem("accessToken");
+// ✅ Load token from localStorage on init
+const token = localStorage.getItem("token");
 if (token) {
   newRequest.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 }
@@ -20,24 +21,18 @@ if (token) {
 // ✅ Utility: set token after login
 export const setToken = (token) => {
   if (token) {
-    sessionStorage.setItem("accessToken", token);
+    localStorage.setItem("token", token);
     newRequest.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 };
 
 // ✅ Utility: clear token on logout
 export const clearToken = () => {
-  sessionStorage.removeItem("accessToken");
+  localStorage.removeItem("token");
   delete newRequest.defaults.headers.common["Authorization"];
 };
 
-// ✅ Add Bearer token from localStorage (optional fallback)
-newRequest.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
-
+// ✅ Logout request helper
 export const logoutRequest = async () => {
   try {
     await newRequest.post("/auth/logout");
@@ -46,6 +41,6 @@ export const logoutRequest = async () => {
   }
 };
 
-
 export default newRequest;
+
 

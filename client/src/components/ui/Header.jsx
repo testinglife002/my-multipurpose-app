@@ -55,18 +55,15 @@ const Header = ({ user, setUser }) => {
 
   const handleLogout = async () => {
     try {
-      await newRequest.post("/auth/logout");
-      localStorage.setItem("user", null);
-      
+      await logoutRequest();
     } catch (e) {
       console.warn(e.message);
     }
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("accessToken");
+    clearToken();
+    localStorage.removeItem("currentUser");
     setUser(null);
-    navigate("/");
-    window.location.href = "/";
+    navigate("/login");
+    window.location.reload();
   };
 
   if (!showHeader) return null;

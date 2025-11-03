@@ -54,43 +54,54 @@ import { setToken } from "./api/newRequest";
 
 
 function AppWrapper() {
-  const location = useLocation();
-
-  const [active, setActive] = useState("home");
+   const location = useLocation();
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [headerHeight, setHeaderHeight] = useState(100);
 
-  const [role, setRole] = useState("guest");
-  const [loading, setLoading] = useState(true);
-
+  // ✅ Load user & token from localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem('currentUser')
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
+    const storedUser = localStorage.getItem("currentUser");
+    const storedToken = localStorage.getItem("token");
+    if (storedUser && storedToken) {
+      setUser(JSON.parse(storedUser));
+      setToken(storedToken);
     }
-  }, [])
+  }, []);
 
-  // console.log(user);
-
+  // ✅ Sync across tabs
   useEffect(() => {
-    const token = sessionStorage.getItem("accessToken")
-    if (token) {
-      setToken(token)
-    }
-  }, [])
+    const handleStorage = (e) => {
+      if (e.key === "currentUser" || e.key === "token") {
+        const user = localStorage.getItem("currentUser");
+        const token = localStorage.getItem("token");
+        if (user && token) {
+          setUser(JSON.parse(user));
+          setToken(token);
+        } else {
+          setUser(null);
+          clearToken();
+        }
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
 
   useEffect(() => {
     requestNotificationPermission();
   }, []);
 
   // Routes where header should NOT appear
-  const noHeaderPaths = ["/login", "/register", "/verify-email", "/apps", "/author", "/designs"];
+  const noHeaderPaths = ["/login", "/register", "/verify-email", "/apps", "/author", "/designs", "/admin"];
   const isAdminPath = location.pathname.startsWith("/admin");
+  
 
   // Show header if NOT in noHeaderPaths AND not an admin path (Header visible in /admin/* too)
   const showHeader = !noHeaderPaths.includes(location.pathname);
 
   // Dynamic page padding based on header height
-  const [headerHeight, setHeaderHeight] = useState(100);
+  // const [headerHeight, setHeaderHeight] = useState(100);
   useEffect(() => {
     const updatePadding = () => {
       const headerEl = document.querySelector(".header-alt");
