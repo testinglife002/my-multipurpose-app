@@ -320,7 +320,7 @@ const NotesUI = ({ user }) => {
       </div>
 
       {/* Render Notes */}
-      <div className={`notes-container ${view}`} style={{ marginTop: "5%" }}>
+      <div className={`notes-container ${view}`} style={{ marginTop: "10%" }}>
         {notes
           .filter((n) => n && n._id)
           .map((note) => {
