@@ -4,10 +4,10 @@ import axios from "axios";
 
 const API_URL =
   import.meta.env.VITE_BACKEND_URL?.trim() ||
-  "http://localhost:5000/api";
+  "https://my-multipurpose-app.onrender.com/api";
 
 const newRequest = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_BACKEND_URL || "https://my-multipurpose-app.onrender.com/api",
   withCredentials: true, // ✅ sends cookie automatically
 });
 
