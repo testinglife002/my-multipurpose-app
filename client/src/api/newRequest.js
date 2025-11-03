@@ -26,8 +26,15 @@ export const clearToken = () => {
   delete newRequest.defaults.headers.common["Authorization"];
 };
 
+
+// ✅ Logout API call
 export const logoutRequest = async () => {
-  try { await newRequest.post("/auth/logout"); } catch (err) { console.error(err); }
+  try {
+    await newRequest.post("/auth/logout");
+    clearToken();
+  } catch (err) {
+    console.error("Logout failed:", err);
+  }
 };
 
 export default newRequest;

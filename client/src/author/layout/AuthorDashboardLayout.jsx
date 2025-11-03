@@ -6,7 +6,7 @@ import SidebarTabs from "../components/SidebarTabs";
 import AuthorNavbar from "./AuthorNavbar";
 import "./AuthorDashboardLayout.css";
 
-const AuthorDashboardLayout = ({ user }) => {
+const AuthorDashboardLayout = ({ user, setUser }) => {
   const location = useLocation();
   const currentPath = location.pathname.split("/").pop();
 
@@ -18,9 +18,9 @@ const AuthorDashboardLayout = ({ user }) => {
   return (
     <div className="author-dashboard-layout">
 
-      {/* Navbar 
-      <AuthorNavbar user={user}  />
-      */}
+      {/* Navbar */}
+      <AuthorNavbar user={user} setUser={setUser} />
+      
 
       {/* Sidebar */}
       <aside className={`author-main-sidebar ${sidebarOpen ? "open" : "collapsed"}`} style={{marginTop:'2%'}} >

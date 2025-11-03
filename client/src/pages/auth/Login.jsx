@@ -24,7 +24,7 @@ export default function Login({ setUser }) {
       const { user, token } = res.data;
       setToken(token);
       localStorage.setItem("currentUser", JSON.stringify(user));
-      localStorage.setItem("token", token);
+      // localStorage.setItem("token", token);
       setUser(user);
       toast.success(`Welcome, ${user.username}`);
 

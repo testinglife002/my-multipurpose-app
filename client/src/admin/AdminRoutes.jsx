@@ -25,7 +25,7 @@ import PostDetail from "./pages/PostDetail";
 import EditingPost from "./pages/EditingPost";
 import ChannelManager from "./pages/ChannelManager";
 
-export default function AdminRoutes({ user }) {
+export default function AdminRoutes({ user, setUser }) {
   return (
     <Routes>
       <Route path="dashboard/*" element={<AdminLayout user={user} />}>

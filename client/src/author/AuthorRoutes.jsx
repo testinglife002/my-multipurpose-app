@@ -19,10 +19,10 @@ import AllPostsList from "./pages/AllPostsList";
 import Post from "../admin/pages/Post";
 
 
-export default function AuthorRoutes({ user }) {
+export default function AuthorRoutes({ user, setUser }) {
   return (
     <Routes>
-      <Route path="/dashboard/*" element={<AuthorDashboardLayout user={user} />}>
+      <Route path="/dashboard/*" element={<AuthorDashboardLayout user={user} setUser={setUser} />}>
         <Route index element={<Navigate to="profile" replace />} />
         <Route path="profile" element={<UserProfile />} />
         <Route path="allCategories" element={<AllCategories />} />

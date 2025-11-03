@@ -38,7 +38,7 @@ const secondaryTabs = [
   { path: "notifications", label: "Notifications", icon: <Bell size={16} /> },
 ];
 
-const UserDashboardLayout = ({ user }) => {
+const UserDashboardLayout = ({ user, setUser }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname.split("/").pop();
@@ -61,14 +61,9 @@ const UserDashboardLayout = ({ user }) => {
   const isActive = (path) => path === currentPath;
 
   const handleLogout = async () => {
-    try {
-      await logoutRequest();
-    } catch (e) {
-      console.warn("Logout API failed:", e.message);
-    }
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("accessToken");
+    await logoutRequest();
+    localStorage.removeItem("currentUser");
+    setUser(null);
     navigate("/");
     window.location.reload();
   };

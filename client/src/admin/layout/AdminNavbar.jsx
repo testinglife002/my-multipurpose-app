@@ -6,21 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import { logoutRequest } from '../../api/newRequest';
 import './AdminNavbar.css';
 
-const AdminNavbar = ({ toggleSidebar, user, isSidebarExpanded }) => {
+const AdminNavbar = ({ toggleSidebar, user, setUser, isSidebarExpanded }) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      await logoutRequest();
-    } catch (err) {
-      console.warn("Logout API failed:", err.message);
-    }
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    sessionStorage.removeItem('accessToken');
-    // redirect to login page
-    navigate('/login');
-    window.location.reload(); // optional, forces refresh
+    await logoutRequest();
+    localStorage.removeItem("currentUser");
+    setUser(null);
+    navigate("/");
+    window.location.reload();
   };
 
   return (

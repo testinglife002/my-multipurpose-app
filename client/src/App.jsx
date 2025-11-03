@@ -123,10 +123,10 @@ function AppWrapper() {
         <Route path="/dashboard/*" element={<PageWrapper><DashboardLayout user={user} /></PageWrapper>} />
         <Route path="/user/*" element={<PageWrapper><UserDashboardLayout user={user} /></PageWrapper>} />
         
-        <Route path="/apps/*" element={<AppsRoutes user={user} />} />
-        <Route path="/designs/*" element={<DesignRoutes user={user} />} />
-        <Route path="/author/*" element={<AuthorRoutes user={user} />} />
-        <Route path="/admin/*" element={<AdminRoutes user={user} />} />
+        <Route path="/apps/*" element={<AppsRoutes user={user} setUser={setUser}  />} />
+        <Route path="/designs/*" element={<DesignRoutes user={user} setUser={setUser}  />} />
+        <Route path="/author/*" element={<AuthorRoutes user={user} setUser={setUser}  />} />
+        <Route path="/admin/*" element={<AdminRoutes user={user} setUser={setUser}  />} />
 
         {/* Other routes with Header */}
         <Route path="/gordius" element={<PageWrapper><HomeGordius /></PageWrapper>} />

@@ -5,19 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { logoutRequest } from "../../api/newRequest";
 import "./AuthorNavbar.css";
 
-const AuthorNavbar = ({ user }) => {
+const AuthorNavbar = ({ user, setUser }) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      await logoutRequest();
-    } catch (err) {
-      console.warn("Logout API failed:", err.message);
-    }
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("accessToken");
-    navigate("/login");
+    await logoutRequest();
+    localStorage.removeItem("currentUser");
+    setUser(null);
+    navigate("/");
     window.location.reload();
   };
 

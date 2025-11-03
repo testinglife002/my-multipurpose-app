@@ -9,7 +9,7 @@ import AdminSidebar from "./AdminSidebar";
 import AdminNavbar from "./AdminNavbar";
 import AdminDashboardNavbar from "./AdminDashboardNavbar";
 
-const AdminLayout = ({  user }) => {
+const AdminLayout = ({  user, setUser }) => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
 
   const toggleSidebar = () => setIsSidebarExpanded((prev) => !prev);
@@ -19,7 +19,7 @@ const AdminLayout = ({  user }) => {
   return (
     <div className="admin-dashboard-container">
       {/* Header */}
-      <AdminHeader toggleSidebar={toggleSidebar} user={user} />
+      <AdminHeader toggleSidebar={toggleSidebar} user={user}  />
 
       {/* Sidebar */}
       <AdminSidebar isExpanded={isSidebarExpanded} setIsExpanded={setIsSidebarExpanded} />
@@ -36,6 +36,7 @@ const AdminLayout = ({  user }) => {
           toggleSidebar={toggleSidebar}
           user={user}
           isSidebarExpanded={isSidebarExpanded}
+          setUser={setUser}
         />
 
         {/*<AdminDashboardNavbar isSidebarExpanded={isSidebarExpanded} />*/}
