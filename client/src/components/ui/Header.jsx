@@ -11,7 +11,7 @@ import {
   UserCircle,
   ShieldCheck,
 } from "lucide-react";
-import { logoutRequest } from "../../api/newRequest";
+import { clearToken, logoutRequest } from "../../api/newRequest";
 import Ticker from "./Ticker";
 import "./Header.css";
 
@@ -54,16 +54,11 @@ const Header = ({ user, setUser }) => {
     setDropdownOpen(dropdownOpen === id ? null : id);
 
   const handleLogout = async () => {
-    try {
-      await logoutRequest();
-    } catch (e) {
-      console.warn(e.message);
-    }
+    try { await logoutRequest(); } catch (e) {}
     clearToken();
     localStorage.removeItem("currentUser");
     setUser(null);
     navigate("/login");
-    window.location.reload();
   };
 
   if (!showHeader) return null;

@@ -7,32 +7,31 @@ import newRequest, { setToken } from '../../api/newRequest';
 import "./Auth.css";
 
 export default function Login({ setUser }) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [err, setErr] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setErr("");
+    if (!email || !password) return toast.error("Email & password required");
+    setLoading(true);
     try {
       const res = await newRequest.post("/auth/login", { email, password });
       const { user, token } = res.data;
-      sessionStorage.setItem("accessToken", token);
-      // ✅ Set token in Axios for all requests
       setToken(token);
-      // Save user info in state if needed
-      console.log("Logged in user:", user);
-      console.log("token", token);
+      localStorage.setItem("currentUser", JSON.stringify(user));
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user) 
+      setUser(user);
+      toast.success(`Welcome, ${user.username}`);
 
       if (user.role === "admin") navigate("/admin/dashboard");
       else if (user.role === "author") navigate("/author/dashboard");
       else navigate("/user/dashboard");
     } catch (err) {
       setErr(err.response?.data?.message || err.message);
+      toast.error(err?.response?.data?.message || "Login failed");
     }
   };
 
@@ -65,8 +64,8 @@ export default function Login({ setUser }) {
             />
           </div>
 
-          <button className="auth-btn" type="submit">
-            Login
+          <button className="auth-btn" type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
           </button>
           {err && <div className="auth-error">{err}</div>}
         </form>

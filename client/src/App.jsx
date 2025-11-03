@@ -1,6 +1,6 @@
 // src/App.jsx
 // src/App.jsx
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 
 import Home from "./pages/home/Home";
@@ -49,7 +49,7 @@ import { requestNotificationPermission } from "./utils/requestNotificationPermis
 import { Toaster } from "react-hot-toast";
 import BannerList from "./pages/banner/BannerList";
 import BannerListPage from "./pages/banner/BannerListPage";
-import { setToken } from "./api/newRequest";
+import { setToken, clearToken } from "./api/newRequest";
 
 
 
@@ -58,34 +58,12 @@ function AppWrapper() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [headerHeight, setHeaderHeight] = useState(100);
+  const nav = useRef();
 
   // ✅ Load user & token from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("currentUser");
-    const storedToken = localStorage.getItem("token");
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setToken(storedToken);
-    }
-  }, []);
-
-  // ✅ Sync across tabs
-  useEffect(() => {
-    const handleStorage = (e) => {
-      if (e.key === "currentUser" || e.key === "token") {
-        const user = localStorage.getItem("currentUser");
-        const token = localStorage.getItem("token");
-        if (user && token) {
-          setUser(JSON.parse(user));
-          setToken(token);
-        } else {
-          setUser(null);
-          clearToken();
-        }
-      }
-    };
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
+    if (storedUser) setUser(JSON.parse(storedUser));
   }, []);
 
   useEffect(() => {
@@ -122,7 +100,7 @@ function AppWrapper() {
       <>{children}</>
     );
 
-    const nav = useRef();
+   
 
   const scrollTop = () => {
       nav.current?.scrollIntoView({behavior: 'smooth'});

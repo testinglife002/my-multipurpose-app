@@ -17,56 +17,6 @@ import { dirname } from "path"; // ✅
 import connectDB from "./config/db.js";
 
 
-// ========================
-// CORS: robust handling (preflight + error responses)
-// ========================
-// Build allowed origins (no trailing slashes)
-/*
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://127.0.0.1:5173",
-  process.env.CLIENT_URL,                      // e.g. https://mymultipurposeapp.vercel.app
-  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined // e.g. https://mymultipurposeapp.vercel.app
-].filter(Boolean);
-
-// Default CORS middleware (will call our origin function)
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // allow non-browser requests (e.g., Postman, server-to-server) with no origin
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      console.warn("Blocked by CORS:", origin);
-      return callback(new Error("Not allowed by CORS"));
-    },
-    credentials: true,
-    allowedHeaders:
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Client-Id",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-  })
-);
-
-// Always respond to OPTIONS preflight with proper headers (defensive)
-app.options("*", (req, res) => {
-  const origin = req.headers.origin || "*";
-  res.header("Access-Control-Allow-Origin", origin);
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET,POST,PUT,PATCH,DELETE,OPTIONS,HEAD"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    req.headers["access-control-request-headers"] ||
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Access-Control-Allow-Credentials", "true");
-  return res.sendStatus(204);
-});
-*/
-
-
 
 
 // ========================
@@ -114,17 +64,6 @@ connectDB(); // assumes config/db.js exports an async connect function
 
 const app = express();
 
-// ========================
-// Body parsers, cookies, proxy
-// ========================
-
-app.use(express.json());
-// app.use(express.json({ limit: "10mb" }));
-// app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use(bodyParser.json());
-app.use(cookieParser());
-app.set("trust proxy", 1);
-
 
 // ========================
 // Security & rate limiting
@@ -139,6 +78,8 @@ app.use(
 );
 
 
+
+
 const allowedOrigins = (process.env.CORS_ORIGINS || '').split(',').map(o => o.trim());
 
 app.use(cors({
@@ -151,6 +92,16 @@ app.use(cors({
 }));
 
 
+// ========================
+// Body parsers, cookies, proxy
+// ========================
+
+app.use(express.json());
+// app.use(express.json({ limit: "10mb" }));
+// app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.set("trust proxy", 1);
 
 
 
