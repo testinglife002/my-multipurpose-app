@@ -1,0 +1,171 @@
+/* Layout container */
+.hero-section {
+  position: relative; /* important for global absolute positioning */
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: #000;
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* Hero Area */
+.hero-area {
+  position: relative;
+  flex: 1;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-bg-swiper {
+  height: 100%;
+  width: 100%;
+}
+
+.hero-slide {
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Overlay styles */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 5rem;
+}
+
+.overlay-content {
+  max-width: 500px;
+  color: #fff;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+  color: #ddd;
+}
+
+/* CTA Button */
+.cta-button {
+  display: inline-block;
+  background-color: #fff;
+  color: #000;
+  padding: 0.9rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.cta-button:hover {
+  background-color: #000;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+/* Social icons */
+.social-icons {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.social-icons a {
+  color: #fff;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.2);
+  color: #00acee;
+}
+
+/* Vertical Slider Panel */
+/* Ensure the vertical slider stays aligned */
+.slider-panel {
+  width: 320px;
+  height: 100vh;
+  background-color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 5;
+}
+
+.vertical-swiper {
+  height: 100%;
+  width: 100%;
+}
+
+.slider-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.slider-content img {
+  width: 260px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #333;
+  transition: transform 0.4s ease;
+}
+
+.slider-content img:hover {
+  transform: scale(1.05);
+}
+
+.slider-content h6 {
+  margin-top: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Floating Action Button */
+/* Move the floating button OUTSIDE the panel */
+.fab-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 50; /* sits just outside the 320px slider panel */
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.fab-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-3px);
+}
