@@ -1,6 +1,5 @@
 // src/appcomponents/NotesUI.jsx
-// src/appcomponents/NotesUI.jsx
-import { useEffect, useState, useRef, useContext, useCallback } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import {
   FiGrid,
   FiList,
@@ -11,17 +10,19 @@ import {
   FiShare2,
   FiClipboard,
 } from "react-icons/fi";
-import { Button, IconButton, Snackbar, Alert } from "@mui/material";
-import { FaPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Snackbar, Alert, Button, IconButton, Box, Typography } from "@mui/material";
+import { FiPlus } from "react-icons/fi";
 import newRequest from "../../../api/newRequest";
+import "./NotesUI.css";
+import { Link } from "react-router-dom";
 import EditorModal from "./EditorModal";
 import ShareModal from "./ShareModal";
 import { EditorContext } from "./EditorContext";
-import "./NotesUI.css";
+import { FaPlus } from "react-icons/fa";
+import { blueGrey } from "@mui/material/colors";
 
 const NotesUI = ({ user }) => {
-  const [notes, setNotes] = useState([]);
+   const [notes, setNotes] = useState([]);
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState("");
   const [view, setView] = useState("grid");
@@ -211,11 +212,14 @@ const NotesUI = ({ user }) => {
     }
   };
 
-  // ------------------- Render -------------------
+
+
+
   return (
-    <div style={{ marginTop: "7%" }}>
+    <div style={{marginTop:'7%'}} >
+      <div className="notes-ui">
       <EditorModal
-        open={showModal}
+        open={showModal}   // ✅ corrected
         handleClose={() => setShowModal(false)}
         onSave={handleSave}
         initialTitle={modalData.title}
@@ -225,26 +229,34 @@ const NotesUI = ({ user }) => {
         initialBlocks={modalData.blocks}
         initialSharedWith={modalData.initialSharedWith}
       />
+    
 
+      {/* Share Modal */}
       {showShareModal && (
         <ShareModal
-          open={showShareModal}
+          open={showShareModal}                // ✅ fixed
           noteId={shareNoteId}
           onClose={() => setShowShareModal(false)}
-          onShared={handleConfirmShare}
+          onShared={handleConfirmShare}        // ✅ matches ShareModal.jsx
         />
       )}
 
-      {/* Toolbar */}
-      <div className="notes-toolbar ">
-        <div className="filters">
-          {["all", "my", "public", "copies", "shared"].map((f) => (
-            <Button key={f} onClick={() => setFilter(f)}>
-              {f.charAt(0).toUpperCase() + f.slice(1)}
-            </Button>
-          ))}
 
-          <div className={`project-dropdown ${filter === "project" ? "active" : ""}`}>
+      {/* Toolbar */}
+      <div className="notes-toolbar">
+        <div className="filters">
+          <Button onClick={() => setFilter("all")}>All</Button>
+          <Button onClick={() => setFilter("my")}>My Notes</Button>
+          <Button onClick={() => setFilter("public")}>Public</Button>
+          <Button onClick={() => setFilter("copies")}>Copies</Button>
+          <Button onClick={() => setFilter("shared")}>Shared with Me</Button>
+
+          {/* Project Dropdown */}
+          <div
+            className={`project-dropdown ${
+              filter === "project" ? "active" : ""
+            }`}
+          >
             <Button className="dropdown-toggle">
               {selectedProject
                 ? projects.find((p) => p._id === selectedProject)?.name
@@ -277,67 +289,88 @@ const NotesUI = ({ user }) => {
         </div>
 
         <div className="view-toggle">
-          {[
-            { icon: FiGrid, key: "grid" },
-            { icon: FiList, key: "list" },
-            { icon: FiSquare, key: "card" },
-            { icon: FiTable, key: "table" },
-          ].map((v) => (
-            <IconButton key={v.key} onClick={() => setView(v.key)}>
-              <v.icon style={{ color: "blue" }} />
-            </IconButton>
-          ))}
+          <IconButton onClick={() => setView("grid")}  >
+            <FiGrid style={{color: 'blue'}} />
+          </IconButton>
+          <IconButton onClick={() => setView("list")}>
+            <FiList style={{color: 'blue'}} />
+          </IconButton>
+          <IconButton onClick={() => setView("card")}>
+            <FiSquare style={{color: 'blue'}} />
+          </IconButton>
+          <IconButton onClick={() => setView("table")}>
+            <FiTable style={{color: 'blue'}} />
+          </IconButton>
         </div>
       </div>
 
-      {/* Notes */}
+      {/* Render Notes */}
       <div className={`notes-container ${view}`} style={{ marginTop: "10%" }}>
-        {notes.map((note) => {
-          const canEdit = user?._id && note?.createdBy?._id && user._id === note.createdBy._id;
-          return (
-            <div key={note._id} className="note-item">
-              <h4>{note.title}</h4>
-              <p className="meta">
-                {note.createdBy?.username || "Unknown"} ·{" "}
-                {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : ""}
-              </p>
-              <p className="project">{note.project?.name ? `Project: ${note.project.name}` : ""}</p>
-              <div className="actions">
-                {canEdit && (
-                  <>
+        {notes
+          .filter((n) => n && n._id)
+          .map((note) => {
+            const canEdit =
+              user?._id &&
+              note?.createdBy?._id &&
+              user._id === note.createdBy._id;
+            return (
+              <div key={note._id} className="note-item">
+                <h4>{note.title}</h4>
+                <p className="meta">
+                  {note.createdBy?.username || "Unknown"} ·{" "}
+                  {note.createdAt
+                    ? new Date(note.createdAt).toLocaleDateString()
+                    : ""}
+                </p>
+                <p className="project">
+                  {note.project?.name ? `Project: ${note.project.name}` : ""}
+                </p>
+                <div className="actions">
+                  {canEdit && (
                     <Button size="small" onClick={() => handleEdit(note._id)}>
                       <FiEdit2 />
                     </Button>
-                    <Button size="small" color="error" onClick={() => handleDelete(note._id)}>
+
+                  )}
+                  {canEdit && (
+                    <Button
+                      size="small"
+                      color="error"
+                      onClick={() => handleDelete(note._id)}
+                    >
                       <FiTrash2 />
                     </Button>
+                  )}
+                  {canEdit && (
                     <Button size="small" onClick={() => handleShare(note._id)}>
                       <FiShare2 />
                     </Button>
-                  </>
-                )}
-                {note._id && (
-                  <>
+                  )}
+                  {note._id && (
                     <Link to={`/apps/note/${note._id}`} className="btn-link">
                       <FiClipboard /> View
                     </Link>
+                  )}
+                  {note._id && (
                     <Button size="small" onClick={() => handleCopy(note._id)}>
                       <FiClipboard />
                     </Button>
-                  </>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
 
-      {/* Floating Add Button */}
+      {/* Floating Button */}
       <Button className="floating-btn" onClick={handleAdd}>
-        <FaPlus size={16} />
+         <FaPlus size={16} />
       </Button>
+      
 
-      {/* Toast Snackbar */}
+      
+
+      {/* Snackbar (Toast replacement) */}
       <Snackbar
         open={showToast}
         autoHideDuration={2000}
@@ -349,8 +382,8 @@ const NotesUI = ({ user }) => {
         </Alert>
       </Snackbar>
     </div>
+    </div>
   );
 };
 
 export default NotesUI;
-
