@@ -337,6 +337,7 @@ export const getNotesByProject = async (req, res) => {
 
 /* ------------------------------- UPDATE --------------------------------- */
 /* ------------------------- UPDATE NOTE ------------------------- */
+// inside server/controllers/note.controller.js
 export const updateNote = async (req, res) => {
   try {
     const { id } = req.params;
@@ -353,7 +354,8 @@ export const updateNote = async (req, res) => {
     if (blocks.length) note.blocks = blocks;
     note.isPublic = isPublic;
     note.tags = tags || [];
-    if (sharedWith.length) {
+
+    if (Array.isArray(sharedWith) && sharedWith.length) {
       note.sharedWith = Array.from(new Set([...note.sharedWith.map(String), ...sharedWith.map(String)])).map(
         (id) => mongoose.Types.ObjectId(id)
       );
@@ -361,24 +363,14 @@ export const updateNote = async (req, res) => {
 
     await note.save();
 
-    
     // Notify shared users
-    // Notify shared users about update
     if (note.sharedWith.length) {
-      await pushNotification({
-        actor: userId,
-        userIds: note.sharedWith,
-        type: "note_updated_shared",
-        title: `Note "${note.title}" updated`,
-        message: `📝 ${note.createdBy.username} updated a shared note "${note.title}".`,
-        referenceId: note._id,
-        url: `/notes/${note._id}`,
-      });
-    }
+      // build usernames for creator notification
+      const sharedUsers = await User.find({ _id: { $in: note.sharedWith } }).select("username");
+      const sharedUsernames = sharedUsers.map(u => u.username).join(", ");
 
       await Promise.allSettled([
-        
-        // Notify creator
+        // Notify creator (self)
         pushNotification({
           actor: userId,
           user: userId,
@@ -388,7 +380,8 @@ export const updateNote = async (req, res) => {
           referenceId: note._id,
           url: `/notes/${note._id}`,
         }),
-        await pushNotification({
+        // Notify shared users
+        pushNotification({
           actor: userId,
           userIds: note.sharedWith,
           type: "note_updated_shared",
@@ -397,14 +390,16 @@ export const updateNote = async (req, res) => {
           referenceId: note._id,
           url: `/notes/${note._id}`,
         })
-      ])
-        
-      res.json(note);
+      ]);
+    }
+
+    res.json(note);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to update note" });
   }
 };
+
 
 
 
@@ -443,8 +438,7 @@ export const deleteNote = async (req, res) => {
 
 /* ------------------------------- SHARE ---------------------------------- */
 /* ---------------- SHARE ---------------- */
-/* ------------------------- SHARE NOTE ------------------------- */
-
+/* ------------------------- SHARE NOTE ----------- */
 export const shareNote = async (req, res) => {
   try {
       const { id } = req.params;

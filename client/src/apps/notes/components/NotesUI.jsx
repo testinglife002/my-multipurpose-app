@@ -1,5 +1,6 @@
 // src/appcomponents/NotesUI.jsx
-import { useEffect, useState, useRef, useContext } from "react";
+// src/appcomponents/NotesUI.jsx
+import React, { useEffect, useState, useRef, useContext, useCallback } from "react";
 import {
   FiGrid,
   FiList,
@@ -10,19 +11,17 @@ import {
   FiShare2,
   FiClipboard,
 } from "react-icons/fi";
-import { Snackbar, Alert, Button, IconButton, Box, Typography } from "@mui/material";
-import { FiPlus } from "react-icons/fi";
-import newRequest from "../../../api/newRequest";
-import "./NotesUI.css";
+import { Snackbar, Alert, Button, IconButton } from "@mui/material";
+import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import newRequest from "../../../api/newRequest";
 import EditorModal from "./EditorModal";
 import ShareModal from "./ShareModal";
 import { EditorContext } from "./EditorContext";
-import { FaPlus } from "react-icons/fa";
-import { blueGrey } from "@mui/material/colors";
+import "./NotesUI.css";
 
 const NotesUI = ({ user }) => {
-   const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState([]);
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState("");
   const [view, setView] = useState("grid");
@@ -212,178 +211,138 @@ const NotesUI = ({ user }) => {
     }
   };
 
-
-
-
   return (
-    <div style={{marginTop:'7%'}} >
+    <div style={{ marginTop: "7%" }}>
       <div className="notes-ui">
-      <EditorModal
-        open={showModal}   // ✅ corrected
-        handleClose={() => setShowModal(false)}
-        onSave={handleSave}
-        initialTitle={modalData.title}
-        initialProject={modalData.projectId}
-        initialIsPublic={modalData.isPublic}
-        initialTags={modalData.tags}
-        initialBlocks={modalData.blocks}
-        initialSharedWith={modalData.initialSharedWith}
-      />
-    
-
-      {/* Share Modal */}
-      {showShareModal && (
-        <ShareModal
-          open={showShareModal}                // ✅ fixed
-          noteId={shareNoteId}
-          onClose={() => setShowShareModal(false)}
-          onShared={handleConfirmShare}        // ✅ matches ShareModal.jsx
+        <EditorModal
+          open={showModal}
+          handleClose={() => setShowModal(false)}
+          onSave={handleSave}
+          initialTitle={modalData.title}
+          initialProject={modalData.projectId}
+          initialIsPublic={modalData.isPublic}
+          initialTags={modalData.tags}
+          initialBlocks={modalData.blocks}
+          initialSharedWith={modalData.initialSharedWith}
         />
-      )}
 
+        {showShareModal && (
+          <ShareModal
+            open={showShareModal}
+            noteId={shareNoteId}
+            onClose={() => setShowShareModal(false)}
+            onShared={handleConfirmShare}
+          />
+        )}
 
-      {/* Toolbar */}
-      <div className="notes-toolbar">
-        <div className="filters">
-          <Button onClick={() => setFilter("all")}>All</Button>
-          <Button onClick={() => setFilter("my")}>My Notes</Button>
-          <Button onClick={() => setFilter("public")}>Public</Button>
-          <Button onClick={() => setFilter("copies")}>Copies</Button>
-          <Button onClick={() => setFilter("shared")}>Shared with Me</Button>
+        {/* Toolbar */}
+        <div className="notes-toolbar">
+          <div className="filters">
+            <Button onClick={() => setFilter("all")}>All</Button>
+            <Button onClick={() => setFilter("my")}>My Notes</Button>
+            <Button onClick={() => setFilter("public")}>Public</Button>
+            <Button onClick={() => setFilter("copies")}>Copies</Button>
+            <Button onClick={() => setFilter("shared")}>Shared with Me</Button>
 
-          {/* Project Dropdown */}
-          <div
-            className={`project-dropdown ${
-              filter === "project" ? "active" : ""
-            }`}
-          >
-            <Button className="dropdown-toggle">
-              {selectedProject
-                ? projects.find((p) => p._id === selectedProject)?.name
-                : "Filter by Project"}
-            </Button>
-            <div className="dropdown-menu">
-              {projects.map((p) => (
+            {/* Project Dropdown */}
+            <div className={`project-dropdown ${filter === "project" ? "active" : ""}`}>
+              <Button className="dropdown-toggle">
+                {selectedProject ? projects.find((p) => p._1d === selectedProject)?.name : "Filter by Project"}
+              </Button>
+              <div className="dropdown-menu">
+                {projects.map((p) => (
+                  <div
+                    key={p._id}
+                    className="dropdown-item"
+                    onClick={() => {
+                      setSelectedProject(p._id);
+                      setFilter("project");
+                    }}
+                  >
+                    {p.name}
+                  </div>
+                ))}
                 <div
-                  key={p._id}
-                  className="dropdown-item"
+                  className="dropdown-item clear"
                   onClick={() => {
-                    setSelectedProject(p._id);
-                    setFilter("project");
+                    setSelectedProject("");
+                    setFilter("all");
                   }}
                 >
-                  {p.name}
+                  Clear Filter
                 </div>
-              ))}
-              <div
-                className="dropdown-item clear"
-                onClick={() => {
-                  setSelectedProject("");
-                  setFilter("all");
-                }}
-              >
-                Clear Filter
               </div>
             </div>
           </div>
+
+          <div className="view-toggle">
+            <IconButton onClick={() => setView("grid")}>
+              <FiGrid style={{ color: "blue" }} />
+            </IconButton>
+            <IconButton onClick={() => setView("list")}>
+              <FiList style={{ color: "blue" }} />
+            </IconButton>
+            <IconButton onClick={() => setView("card")}>
+              <FiSquare style={{ color: "blue" }} />
+            </IconButton>
+            <IconButton onClick={() => setView("table")}>
+              <FiTable style={{ color: "blue" }} />
+            </IconButton>
+          </div>
         </div>
 
-        <div className="view-toggle">
-          <IconButton onClick={() => setView("grid")}  >
-            <FiGrid style={{color: 'blue'}} />
-          </IconButton>
-          <IconButton onClick={() => setView("list")}>
-            <FiList style={{color: 'blue'}} />
-          </IconButton>
-          <IconButton onClick={() => setView("card")}>
-            <FiSquare style={{color: 'blue'}} />
-          </IconButton>
-          <IconButton onClick={() => setView("table")}>
-            <FiTable style={{color: 'blue'}} />
-          </IconButton>
-        </div>
-      </div>
-
-      {/* Render Notes */}
-      <div className={`notes-container ${view}`} style={{ marginTop: "10%" }}>
-        {notes
-          .filter((n) => n && n._id)
-          .map((note) => {
-            const canEdit =
-              user?._id &&
-              note?.createdBy?._id &&
-              user._id === note.createdBy._id;
+        {/* Notes list */}
+        <div className={`notes-container ${view}`} style={{ marginTop: "10%" }}>
+          {notes.map((note) => {
+            const canEdit = user?._id && note?.createdBy?._id && user._id === note.createdBy._id;
             return (
               <div key={note._id} className="note-item">
                 <h4>{note.title}</h4>
                 <p className="meta">
-                  {note.createdBy?.username || "Unknown"} ·{" "}
-                  {note.createdAt
-                    ? new Date(note.createdAt).toLocaleDateString()
-                    : ""}
+                  {note.createdBy?.username || "Unknown"} · {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : ""}
                 </p>
-                <p className="project">
-                  {note.project?.name ? `Project: ${note.project.name}` : ""}
-                </p>
+                <p className="project">{note.project?.name ? `Project: ${note.project.name}` : ""}</p>
                 <div className="actions">
                   {canEdit && (
-                    <Button size="small" onClick={() => handleEdit(note._id)}>
-                      <FiEdit2 />
-                    </Button>
-
+                    <>
+                      <Button size="small" onClick={() => handleEdit(note._1d)}>
+                        <FiEdit2 />
+                      </Button>
+                      <Button size="small" color="error" onClick={() => handleDelete(note._id)}>
+                        <FiTrash2 />
+                      </Button>
+                      <Button size="small" onClick={() => handleShare(note._id)}>
+                        <FiShare2 />
+                      </Button>
+                    </>
                   )}
-                  {canEdit && (
-                    <Button
-                      size="small"
-                      color="error"
-                      onClick={() => handleDelete(note._id)}
-                    >
-                      <FiTrash2 />
-                    </Button>
-                  )}
-                  {canEdit && (
-                    <Button size="small" onClick={() => handleShare(note._id)}>
-                      <FiShare2 />
-                    </Button>
-                  )}
-                  {note._id && (
-                    <Link to={`/apps/note/${note._id}`} className="btn-link">
-                      <FiClipboard /> View
-                    </Link>
-                  )}
-                  {note._id && (
-                    <Button size="small" onClick={() => handleCopy(note._id)}>
-                      <FiClipboard />
-                    </Button>
-                  )}
+                  <Link to={`/apps/note/${note._id}`} className="btn-link">
+                    <FiClipboard /> View
+                  </Link>
+                  <Button size="small" onClick={() => handleCopy(note._id)}>
+                    <FiClipboard />
+                  </Button>
                 </div>
               </div>
             );
           })}
+        </div>
+
+        {/* Floating Add Button */}
+        <Button className="floating-btn" onClick={handleAdd}>
+          <FaPlus size={16} />
+        </Button>
+
+        {/* Snackbar (Toast) */}
+        <Snackbar open={showToast} autoHideDuration={2000} onClose={() => setShowToast(false)} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
+          <Alert severity="success" sx={{ width: "100%" }}>
+            Copied to My Notes!
+          </Alert>
+        </Snackbar>
       </div>
-
-      {/* Floating Button */}
-      <Button className="floating-btn" onClick={handleAdd}>
-         <FaPlus size={16} />
-      </Button>
-      
-
-      
-
-      {/* Snackbar (Toast replacement) */}
-      <Snackbar
-        open={showToast}
-        autoHideDuration={2000}
-        onClose={() => setShowToast(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      >
-        <Alert severity="success" sx={{ width: "100%" }}>
-          Copied to My Notes!
-        </Alert>
-      </Snackbar>
-    </div>
     </div>
   );
 };
 
 export default NotesUI;
+
