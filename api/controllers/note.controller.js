@@ -62,7 +62,8 @@ export const getUsersByIds = async (req, res) => {
 export const listNotes = async (req, res) => {
   try {
     const userId = req.user?.id;
-    const objectUserId = mongoose.Types.ObjectId(userId);
+    const objectUserId = new mongoose.Types.ObjectId(userId)
+
 
     const notes = await Note.find({
       $or: [
@@ -88,7 +89,8 @@ export const listNotes = async (req, res) => {
 export const getNotes = async (req, res) => {
   try {
     const userId = req.user?.id;
-    const objectUserId = mongoose.Types.ObjectId(userId);
+    const objectUserId = new mongoose.Types.ObjectId(userId)
+
 
     const notes = await Note.find({
       $or: [
@@ -123,7 +125,7 @@ export const createNote = async (req, res) => {
     if (!title) return res.status(400).json({ message: "Title required" });
 
     const cleanSharedWith = Array.from(new Set(sharedWith.map(String))).map((id) =>
-      mongoose.Types.ObjectId(id)
+      new mongoose.Types.ObjectId(userId)
     );
 
     const note = await Note.create({
@@ -230,7 +232,7 @@ export const getNoteById = async (req, res) => {
 export const getAllNotes = async (req, res) => {
   try {
     const userId = req.user?.id;
-    const objectUserId = mongoose.Types.ObjectId(userId);
+    const objectUserId = new mongoose.Types.ObjectId(userId);
 
     const notes = await Note.find({
       $or: [
@@ -302,7 +304,7 @@ export const getCopiedNotes = async (req, res) => {
 export const getSharedWithMeNotes = async (req, res) => {
   try {
     const userId = req.user?.id;
-    const objectUserId = mongoose.Types.ObjectId(userId);
+    const objectUserId = new mongoose.Types.ObjectId(userId);
     const notes = await Note.find({ sharedWith: objectUserId })
       .populate("createdBy", "_id username email")
       .populate("project", "name")
@@ -357,7 +359,7 @@ export const updateNote = async (req, res) => {
 
     if (Array.isArray(sharedWith) && sharedWith.length) {
       note.sharedWith = Array.from(new Set([...note.sharedWith.map(String), ...sharedWith.map(String)])).map(
-        (id) => mongoose.Types.ObjectId(id)
+        (id) => new mongoose.Types.ObjectId(id)
       );
     }
 
@@ -456,7 +458,7 @@ export const shareNote = async (req, res) => {
       // Merge existing sharedWith with targetUserIds without duplicates
       const existingIds = (note.sharedWith || []).map((id) => String(id));
       const mergedIds = [...new Set([...existingIds, ...targetUserIds.map(String)])];
-      note.sharedWith = mergedIds.map((id) => mongoose.Types.ObjectId(id));
+      note.sharedWith = mergedIds.map((id) => new mongoose.Types.ObjectId(userId));
       await note.save();
 
       await pushNotification({
