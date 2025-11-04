@@ -13,7 +13,7 @@
 }
 
 /* 🔹 Toolbar */
-.toolbar {
+.notes-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,13 +26,13 @@
   margin-top: 4%;
 }
 
-.toolbar .filters {
+.notes-toolbar .filters {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-.toolbar button {
+.notes-toolbar button {
   background: #3700b3;
   color: white !important;
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -41,7 +41,7 @@
   transition: all 0.2s ease-in-out;
 }
 
-.toolbar button:hover {
+.notes-toolbar button:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: scale(1.05);
 }

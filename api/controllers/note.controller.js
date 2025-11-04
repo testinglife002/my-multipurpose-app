@@ -1,6 +1,8 @@
 // server/controllers/note.controller.js
+// server/controllers/note.controller.js
 import Note from "../models/note.model.js";
 import User from "../models/user.model.js";
+import mongoose from "mongoose";
 import fs from "fs";
 import path from "path";
 import { v2 as cloudinary } from "cloudinary";
@@ -8,19 +10,18 @@ import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 import { pushNotification } from "../utils/pushNotification.js";
 
-// Configure Cloudinary (if env set)
+// Cloudinary config
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Utility to format notes consistently
+// Utility: format notes
 const formatNotes = (notes, userId) => {
   return notes.map((note) => {
     const n = note.toObject ? note.toObject() : note;
-    // support both populated createdBy (object) and raw ObjectId
-    const createdById = (note.createdBy && note.createdBy._id) ? note.createdBy._id : note.createdBy;
+    const createdById = note.createdBy?._id || note.createdBy;
     return {
       ...n,
       canEdit: String(createdById) === String(userId),
@@ -29,12 +30,13 @@ const formatNotes = (notes, userId) => {
   });
 };
 
-/* ---------------------------- USERS (helper) ---------------------------- */
-// Get all users except current user
+/* ------------------------- USERS ------------------------- */
 export const getAllUsers = async (req, res) => {
   try {
     const currentUserId = req.user?.id;
-    const users = await User.find({ _id: { $ne: currentUserId } }).select("username email role isAdmin");
+    const users = await User.find({ _id: { $ne: currentUserId } }).select(
+      "username email role isAdmin"
+    );
     res.status(200).json(users);
   } catch (err) {
     console.error("Error fetching users:", err);
@@ -42,17 +44,13 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-
-// POST /notes/users-by-ids
 export const getUsersByIds = async (req, res) => {
   try {
     const { ids } = req.body;
-    if (!ids || !Array.isArray(ids)) {
+    if (!ids || !Array.isArray(ids))
       return res.status(400).json({ message: "Invalid request" });
-    }
 
-    const users = await User.find({ _id: { $in: ids } })
-      .select("_id username email");
+    const users = await User.find({ _id: { $in: ids } }).select("_id username email");
     res.json(users);
   } catch (err) {
     console.error(err);
@@ -60,101 +58,73 @@ export const getUsersByIds = async (req, res) => {
   }
 };
 
-
-
-
-/* ------------------------------- READ ---------------------------------- */
-/**
- * listNotes (legacy / general): own + public + sharedWithMe
- * kept for backward compatibility with your routes
- */
+/* ------------------------- LIST NOTES ------------------------- */
 export const listNotes = async (req, res) => {
   try {
     const userId = req.user?.id;
-    const [own, publicNotes, sharedWithMe] = await Promise.all([
-      Note.find({ createdBy: userId }).populate("createdBy", "username").populate("project", "name"),
-      Note.find({ isPublic: true }).populate("createdBy", "username").populate("project", "name"),
-      Note.find({ sharedWith: userId }).populate("createdBy", "username").populate("project", "name"),
-    ]);
+    const objectUserId = mongoose.Types.ObjectId(userId);
 
-    const map = new Map();
-    [...own, ...publicNotes, ...sharedWithMe].forEach((n) => map.set(String(n._id), n));
-    const notes = Array.from(map.values())
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      .map((note) => {
-        const n = note.toObject();
-        // createdUsername fallback
-        n.createdUsername = note.createdBy?.username || n.createdUsername || "Unknown";
-        return n;
-      });
+    const notes = await Note.find({
+      $or: [
+        { createdBy: objectUserId },
+        { isPublic: true },
+        { sharedWith: objectUserId },
+      ],
+    })
+      .populate("createdBy", "username")
+      .populate("project", "name")
+      .populate("sharedOriginal", "title createdBy")
+      .populate("sharedWith", "_id username")
+      .sort({ createdAt: -1 });
 
-    res.json(notes);
-  } catch (e) {
-    console.error("Error listing notes:", e);
-    res.status(500).json({ message: e.message });
+    res.json(formatNotes(notes, userId));
+  } catch (err) {
+    console.error("Error listing notes:", err);
+    res.status(500).json({ message: err.message });
   }
 };
 
+/* ------------------------- GET NOTES ------------------------- */
 export const getNotes = async (req, res) => {
   try {
     const userId = req.user?.id;
+    const objectUserId = mongoose.Types.ObjectId(userId);
+
     const notes = await Note.find({
-      $or: [{ createdBy: userId }, { isPublic: true }, { sharedWith: userId }],
+      $or: [
+        { createdBy: objectUserId },
+        { isPublic: true },
+        { sharedWith: objectUserId },
+      ],
     })
-      .populate("project", "name")
       .populate("createdBy", "_id username email")
+      .populate("project", "name")
       .populate("sharedOriginal", "title createdBy")
       .populate("copiedFrom", "_id username email")
-      .populate("sharedWith", "_id username email");
+      .populate("sharedWith", "_id username email")
+      .sort({ createdAt: -1 });
 
-
-    const notesWithFlags = notes.map((note) => {
-      const obj = note.toObject();
-      const createdById = (note.createdBy && note.createdBy._id) ? note.createdBy._id : note.createdBy;
-      obj.canEdit = String(createdById) === String(userId);
-      obj.isCopy = !!note.sharedOriginal;
-      return obj;
-    });
-
-    res.json(notesWithFlags);
+    res.json(formatNotes(notes, userId));
   } catch (err) {
     console.error("Error getting notes:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
-/* ------------------------------- CREATE -------------------------------- */
+/* ------------------------- CREATE NOTE ------------------------- */
+/* ------------------------- CREATE NOTE ------------------------- */
 export const createNote = async (req, res) => {
-  console.log("Reached createNote"); // <--- temporary debug
-  console.log("Authenticated user:", req.user);
-
   try {
     const userId = req.user?.id;
     const username = req.user?.username || "";
-    const {
-      title,
-      projectId = null,
-      blocks = [],
-      isPublic = false,
-      tags = [],
-      sharedWith = [],
-    } = req.body;
-
-    console.log(req.body)
-    console.log("Incoming createNote payload:", req.body);
-
+    const { title, projectId, blocks = [], isPublic = false, tags = [], sharedWith = [] } = req.body;
 
     if (!userId) return res.status(401).json({ message: "Authentication required" });
-    // if (!title || !Array.isArray(blocks) || blocks.length === 0) {
-    //   return res.status(400).json({ message: "Title and content blocks are required." });
-    // }
+    if (!title) return res.status(400).json({ message: "Title required" });
 
-    if (!title) {
-       return res.status(400).json({ message: "Title blocks are required." });
-     }
-
-     if (!Array.isArray(sharedWith)) note.sharedWith = [];
-
+    const cleanSharedWith = Array.from(new Set(sharedWith.map(String))).map((id) =>
+      mongoose.Types.ObjectId(id)
+    );
 
     const note = await Note.create({
       title,
@@ -166,94 +136,82 @@ export const createNote = async (req, res) => {
       createdUsername: username,
       sharedOriginal: null,
       copiedFrom: null,
-      sharedWith, // save sharedWith properly
+      sharedWith: cleanSharedWith,
     });
 
-    // Push notification to shared users
-    // inside createNote (after creating the note)
-    if (sharedWith.length > 0) {
-      try {
-        const sharedUsers = await User.find({ _id: { $in: sharedWith } }).select("username");
-        const sharedUsernames = sharedUsers.map(u => u.username).join(", ");
+    const notifications = [];
 
-        // Notification to creator
-        await pushNotification({
-          actor: userId,
-          user: userId,
-          type: "note_shared_self",
-          title: `You shared a note "${title}"`,
-          message: `📝 You shared a new note "${title}" with ${sharedUsernames}.`,
-          referenceId: note._id,
-          url: `/notes/${note._id}`,
-        });
+    // Notify creator
+    notifications.push(
+      pushNotification({
+        actor: userId,
+        user: userId,
+        type: sharedWith.length ? "note_shared_self" : "note_created",
+        title: sharedWith.length ? `You shared a note "${title}"` : `Note "${title}" created`,
+        message: sharedWith.length
+          ? `📝 You shared a new note "${title}" with ${cleanSharedWith.length} users.`
+          : `📝 You created a new note "${title}".`,
+        referenceId: note._id,
+        url: `/notes/${note._id}`,
+      })
+    );
 
-        // Notification to each shared user
-        await pushNotification({
+    // Notify shared users
+    if (cleanSharedWith.length) {
+      notifications.push(
+        pushNotification({
           actor: userId,
-          userIds: sharedWith,
+          userIds: cleanSharedWith,
           type: "note_shared_with_user",
           title: `New note shared with you`,
-          message: `📝 ${username} shared a new note "${title}" with you.`,
+          message: `📝 ${username} shared a note "${title}" with you.`,
           referenceId: note._id,
           url: `/notes/${note._id}`,
-        });
-      } catch (pushErr) {
-        console.error("Push notification failed (createNote sharedWith):", pushErr);
-      }
-    } else {
-      // If no sharing, only notify self about creation
-      try {
-        await pushNotification({
-          actor: userId,
-          user: userId,
-          type: "note_created",
-          title: `Note "${title}" created`,
-          message: `📝 You created a new note "${title}".`,
-          referenceId: note._id,
-          url: `/notes/${note._id}`,
-        });
-      } catch (pushErr) {
-        console.error("Push notification failed (createNote self):", pushErr);
-      }
+        })
+      );
     }
+
+    await Promise.allSettled(notifications);
 
     res.status(201).json(note);
   } catch (err) {
-    console.error("Error creating note:", err);
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to create note" });
   }
 };
 
 
 
 /* ------------------------------- GET single ----------------------------- */
+/* ------------------------- GET SINGLE NOTE ------------------------- */
 export const getNote = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user?.id;
 
     const note = await Note.findById(id)
-      .populate("project", "name")
       .populate("createdBy", "_id username email")
-      .populate("sharedWith", "_id username email") // ✅ add this
-      .populate("sharedOriginal", "title createdBy");
+      .populate("project", "name")
+      .populate("sharedOriginal", "title createdBy")
+      .populate("sharedWith", "_id username email");
 
-    if (!note) return res.status(404).json({ message: "Not found" });
+    if (!note) return res.status(404).json({ message: "Note not found" });
 
-    const createdById = (note.createdBy && note.createdBy._id) ? String(note.createdBy._id) : String(note.createdBy);
-    const sharedWithIds = (note.sharedWith || []).map(String);
+    const canView =
+      String(note.createdBy._id) === String(userId) ||
+      note.isPublic ||
+      (note.sharedWith || []).map(String).includes(String(userId));
 
-    const allowed = createdById === String(userId) || note.isPublic || sharedWithIds.includes(String(userId));
-    if (!allowed) return res.status(403).json({ message: "Forbidden" });
+    if (!canView) return res.status(403).json({ message: "Forbidden" });
 
     const noteObj = note.toObject();
-    noteObj.canEdit = createdById === String(userId);
+    noteObj.canEdit = String(note.createdBy._id) === String(userId);
     noteObj.isCopy = !!note.sharedOriginal;
 
     res.json(noteObj);
   } catch (err) {
-    console.error("Error fetching single note:", err);
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch note" });
   }
 };
 
@@ -268,15 +226,24 @@ export const getNoteById = async (req, res) => {
   }
 };
 
-/* ------------------------------- ALL / FILTERED ------------------------- */
+/* ------------------------- GET ALL NOTES ------------------------- */
 export const getAllNotes = async (req, res) => {
   try {
     const userId = req.user?.id;
+    const objectUserId = mongoose.Types.ObjectId(userId);
+
     const notes = await Note.find({
-      $or: [{ createdBy: userId }, { isPublic: true }, { sharedWith: userId }],
+      $or: [
+        { createdBy: objectUserId },
+        { isPublic: true },
+        { sharedWith: objectUserId },
+      ],
     })
       .populate("createdBy", "_id username email")
       .populate("project", "name")
+      .populate("sharedOriginal", "title createdBy")
+      .populate("copiedFrom", "_id username")
+      .populate("sharedWith", "_id username")
       .sort({ createdAt: -1 });
 
     res.json(formatNotes(notes, userId));
@@ -335,7 +302,8 @@ export const getCopiedNotes = async (req, res) => {
 export const getSharedWithMeNotes = async (req, res) => {
   try {
     const userId = req.user?.id;
-    const notes = await Note.find({ sharedWith: userId })
+    const objectUserId = mongoose.Types.ObjectId(userId);
+    const notes = await Note.find({ sharedWith: objectUserId })
       .populate("createdBy", "_id username email")
       .populate("project", "name")
       .sort({ createdAt: -1 });
@@ -368,55 +336,50 @@ export const getNotesByProject = async (req, res) => {
 };
 
 /* ------------------------------- UPDATE --------------------------------- */
+/* ------------------------- UPDATE NOTE ------------------------- */
 export const updateNote = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user?.id;
-    const {
-      title,
-      projectId = "",
-      blocks = [],
-      isPublic = false,
-      tags = [],
-      sharedWith = [], // <-- properly accept updated sharedWith
-    } = req.body;
-
-    console.log(req.body);
-
-    if (!userId) return res.status(401).json({ message: "Authentication required" });
+    const { title, projectId, blocks = [], isPublic = false, tags = [], sharedWith = [] } = req.body;
 
     const note = await Note.findById(id).populate("createdBy", "_id username");
     if (!note) return res.status(404).json({ message: "Note not found" });
-
-    const canEdit = String(note.createdBy._id) === String(userId);
-    if (!canEdit) return res.status(403).json({ message: "Forbidden: not your note" });
+    if (String(note.createdBy._id) !== String(userId))
+      return res.status(403).json({ message: "Forbidden: not your note" });
 
     if (title !== undefined) note.title = title;
     note.project = projectId || null;
-    if (Array.isArray(blocks) && blocks.length) note.blocks = blocks;
-    if (Array.isArray(tags)) note.tags = tags;
-    note.isPublic = typeof isPublic === "boolean" ? isPublic : note.isPublic;
-
-    // Update sharedWith properly
-    if (Array.isArray(sharedWith)) {
-      const cleanIds = sharedWith.map(u => (typeof u === "object" ? u.value : u));
-      note.sharedWith = Array.from(new Set(cleanIds.map(String)));
+    if (blocks.length) note.blocks = blocks;
+    note.isPublic = isPublic;
+    note.tags = tags || [];
+    if (sharedWith.length) {
+      note.sharedWith = Array.from(new Set([...note.sharedWith.map(String), ...sharedWith.map(String)])).map(
+        (id) => mongoose.Types.ObjectId(id)
+      );
     }
-
-
-    console.log("Updating sharedWith:", sharedWith);
-    
 
     await note.save();
 
-    // Notify all shared users
-    if (note.sharedWith?.length > 0) {
-      try {
-        const sharedUsers = await User.find({ _id: { $in: note.sharedWith } }).select("username");
-        const sharedUsernames = sharedUsers.map(u => u.username).join(", ");
+    
+    // Notify shared users
+    // Notify shared users about update
+    if (note.sharedWith.length) {
+      await pushNotification({
+        actor: userId,
+        userIds: note.sharedWith,
+        type: "note_updated_shared",
+        title: `Note "${note.title}" updated`,
+        message: `📝 ${note.createdBy.username} updated a shared note "${note.title}".`,
+        referenceId: note._id,
+        url: `/notes/${note._id}`,
+      });
+    }
 
-        // Notify creator (self)
-        await pushNotification({
+      await Promise.allSettled([
+        
+        // Notify creator
+        pushNotification({
           actor: userId,
           user: userId,
           type: "note_updated_self",
@@ -424,117 +387,113 @@ export const updateNote = async (req, res) => {
           message: `📝 You updated the note "${note.title}" shared with ${sharedUsernames}.`,
           referenceId: note._id,
           url: `/notes/${note._id}`,
-        });
-
-        // Notify shared users
+        }),
         await pushNotification({
           actor: userId,
           userIds: note.sharedWith,
           type: "note_updated_shared",
-          title: `Shared note updated`,
-          message: `📝 ${note.createdBy.username} updated the shared note "${note.title}".`,
+          title: `Note "${note.title}" updated`,
+          message: `📝 ${note.createdBy.username} updated a shared note "${note.title}".`,
           referenceId: note._id,
           url: `/notes/${note._id}`,
-        });
-      } catch (pushErr) {
-        console.error("Push notification (updateNote) failed:", pushErr);
-      }
-    }
-
-
-    const noteObj = note.toObject();
-    noteObj.canEdit = canEdit;
-    res.json(noteObj);
+        })
+      ])
+        
+      res.json(note);
   } catch (err) {
-    console.error("Error updating note:", err);
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to update note" });
   }
 };
 
 
 
 /* ------------------------------- DELETE --------------------------------- */
+/* ------------------------- DELETE NOTE ------------------------- */
 export const deleteNote = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user?.id;
-    if (!userId) return res.status(401).json({ message: "Authentication required" });
 
     const note = await Note.findById(id).populate("createdBy", "_id username");
     if (!note) return res.status(404).json({ message: "Note not found" });
-
-    const canEdit = String(note.createdBy._id) === String(userId);
-    if (!canEdit) return res.status(403).json({ message: "Forbidden: not your note" });
+    if (String(note.createdBy._id) !== String(userId))
+      return res.status(403).json({ message: "Forbidden" });
 
     await Note.findByIdAndDelete(id);
 
-    if (note.sharedWith?.length > 0) {
-      try {
-        await pushNotification({
-          actor: userId,
-          userIds: note.sharedWith,
-          type: "note_deleted",
-          title: `Note "${note.title}" deleted`,
-          message: `🗑️ The shared note "${note.title}" has been deleted.`,
-          referenceId: note._id,
-        });
-      } catch (pushErr) {
-        console.error("Push notification (deleteNote) failed:", pushErr);
-      }
+    // Notify shared users
+    if (note.sharedWith.length) {
+      pushNotification({
+        actor: userId,
+        userIds: note.sharedWith,
+        type: "note_deleted",
+        title: `Note "${note.title}" deleted`,
+        message: `🗑️ The shared note "${note.title}" was deleted.`,
+        referenceId: note._id,
+      });
     }
 
     res.json({ message: "Note deleted" });
   } catch (err) {
-    console.error("Error deleting note:", err);
+    console.error(err);
     res.status(500).json({ message: "Failed to delete note" });
   }
 };
 
 /* ------------------------------- SHARE ---------------------------------- */
 /* ---------------- SHARE ---------------- */
+/* ------------------------- SHARE NOTE ------------------------- */
+
 export const shareNote = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { targetUserIds } = req.body;
-    const userId = req.user?.id;
+      const { id } = req.params;
+      const { targetUserIds } = req.body;
+      const userId = req.user?.id;
 
-    if (!Array.isArray(targetUserIds) || targetUserIds.length === 0)
-      return res.status(400).json({ message: "No users selected" });
+      if (!Array.isArray(targetUserIds) || targetUserIds.length === 0)
+        return res.status(400).json({ message: "No users selected" });
 
-    const note = await Note.findById(id);
-    if (!note) return res.status(404).json({ message: "Note not found" });
-    if (String(note.createdBy) !== String(userId)) return res.status(403).json({ message: "Forbidden" });
+      const note = await Note.findById(id).populate("createdBy", "_id username");
+      if (!note) return res.status(404).json({ message: "Note not found" });
+      if (String(note.createdBy._id) !== String(userId))
+        return res.status(403).json({ message: "Forbidden" });
 
-    note.sharedWith = Array.from(new Set([...(note.sharedWith || []), ...targetUserIds]));
-    await note.save();
+      // Merge existing sharedWith with targetUserIds without duplicates
+      const existingIds = (note.sharedWith || []).map((id) => String(id));
+      const mergedIds = [...new Set([...existingIds, ...targetUserIds.map(String)])];
+      note.sharedWith = mergedIds.map((id) => mongoose.Types.ObjectId(id));
+      await note.save();
 
-    await pushNotification({
-      actor: userId,
-      userIds: targetUserIds,
-      type: "note_shared_with_user",
-      title: "Note shared",
-      message: `📝 ${req.user?.username} shared "${note.title}" with you.`,
-      referenceId: note._id,
-      url: `/notes/${note._id}`,
-    });
+      await pushNotification({
+        actor: userId,
+        userIds: targetUserIds,
+        type: "note_shared_with_user",
+        title: "Note shared",
+        message: `📝 ${req.user?.username} shared "${note.title}" with you.`,
+        referenceId: note._id,
+        url: `/notes/${note._id}`,
+      });
 
-    res.json({ message: "Note shared successfully", note });
+      res.json({ message: "Note shared successfully", note });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+      console.error("Error sharing note:", err);
+      res.status(500).json({ message: err.message });
   }
 };
 
 /* ------------------------------- COPY ----------------------------------- */
+
+/* ------------------------- COPY NOTE ------------------------- */
 export const copyNote = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user?.id;
-    if (!userId) return res.status(401).json({ message: "Authentication required" });
 
     const original = await Note.findById(id).populate("createdBy", "_id username");
     if (!original) return res.status(404).json({ message: "Note not found" });
 
-    const newNote = new Note({
+    const newNote = await Note.create({
       title: original.title,
       project: original.project,
       blocks: original.blocks,
@@ -547,62 +506,42 @@ export const copyNote = async (req, res) => {
       sharedWith: [],
     });
 
-    await newNote.save();
-
-    // notify original author asynchronously
-    try {
-      if (String(original.createdBy._id) !== String(userId)) {
-        await pushNotification({
-          actor: userId,
-          user: original.createdBy._id,
-          type: "note_copied",
-          title: `Your note "${original.title}" was copied`,
-          message: `📋 ${req.user?.username || "Someone"} made a copy of your note "${original.title}".`,
-          referenceId: newNote._id,
-          url: `/notes/${newNote._id}`,
-        });
-      }
-    } catch (pushErr) {
-      console.error("Push notification (copyNote) failed:", pushErr);
+    if (String(original.createdBy._id) !== String(userId)) {
+      pushNotification({
+        actor: userId,
+        user: original.createdBy._id,
+        type: "note_copied",
+        title: `Your note "${original.title}" was copied`,
+        message: `📋 ${req.user.username || "Someone"} copied your note "${original.title}".`,
+        referenceId: newNote._id,
+        url: `/notes/${newNote._id}`,
+      });
     }
 
-    const noteObj = newNote.toObject();
-    noteObj.canEdit = true;
-
-    res.status(201).json(noteObj);
+    res.status(201).json({ ...newNote.toObject(), canEdit: true });
   } catch (err) {
-    console.error("Error copying note:", err);
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to copy note" });
   }
 };
 
-/* ------------------------------- UPLOADS -------------------------------- */
+/* ------------------------- UPLOADS ------------------------- */
+const handleUpload = async (file, folder, resourceType = "image") => {
+  if (process.env.USE_CLOUDINARY === "true") {
+    const result = await cloudinary.uploader.upload(file.path, { folder, resource_type: resourceType });
+    await fs.promises.unlink(file.path).catch(() => {});
+    return result.secure_url;
+  }
+  return `/public/uploads/notes/${file.filename}`;
+};
+
 export const uploadNoteImage = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ success: 0, message: "No file uploaded" });
-
-    let fileUrl;
-
-    if (process.env.USE_CLOUDINARY === "true") {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "notes",
-        resource_type: "image",
-      });
-      fileUrl = result.secure_url;
-      await fs.promises.unlink(req.file.path).catch(() => {});
-    } else {
-      fileUrl = `/public/uploads/notes/${req.file.filename}`;
-    }
-
-    res.json({
-      success: 1,
-      file: {
-        url: fileUrl,
-      },
-    });
-  } catch (error) {
-    console.error("Error uploading note image:", error);
-    if (req.file) await fs.promises.unlink(req.file.path).catch(() => {});
+    const url = await handleUpload(req.file, "notes", "image");
+    res.json({ success: 1, file: { url } });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ success: 0, message: "Upload failed" });
   }
 };
@@ -610,66 +549,36 @@ export const uploadNoteImage = async (req, res) => {
 export const uploadNoteFile = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ success: 0, message: "No file uploaded" });
-
-    let fileUrl;
-
-    if (process.env.USE_CLOUDINARY === "true") {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "notes/files",
-        resource_type: "raw",
-      });
-      fileUrl = result.secure_url;
-      await fs.promises.unlink(req.file.path).catch(() => {});
-    } else {
-      fileUrl = `/public/uploads/notes/${req.file.filename}`;
-    }
-
-    res.json({
-      success: 1,
-      file: {
-        url: fileUrl,
-        name: req.file.originalname,
-        size: req.file.size,
-      },
-    });
-  } catch (error) {
-    console.error("Error uploading note file:", error);
-    if (req.file) await fs.promises.unlink(req.file.path).catch(() => {});
+    const url = await handleUpload(req.file, "notes/files", "raw");
+    res.json({ success: 1, file: { url, name: req.file.originalname, size: req.file.size } });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ success: 0, message: "Upload failed" });
   }
 };
 
-
-
-/**
- * POST /notes/fetch-url
- * Fetch webpage metadata for Editor.js LinkTool preview
- */
+/* ------------------------- FETCH URL ------------------------- */
 export const fetchUrl = async (req, res) => {
-  const { url } = req.body;
-  if (!url) return res.status(400).json({ success: 0, message: "Missing URL" });
-
   try {
+    const { url } = req.body;
+    if (!url) return res.status(400).json({ success: 0, message: "Missing URL" });
+
     const response = await fetch(url);
     const html = await response.text();
     const $ = cheerio.load(html);
 
-    const getMeta = (name) =>
-      $(`meta[property='${name}']`).attr("content") ||
-      $(`meta[name='${name}']`).attr("content");
+    const getMeta = (name) => $(`meta[property='${name}']`).attr("content") || $(`meta[name='${name}']`).attr("content");
 
-    const data = {
+    res.json({
       success: 1,
       meta: {
         title: getMeta("og:title") || $("title").text() || url,
         description: getMeta("description") || getMeta("og:description") || "",
         image: { url: getMeta("og:image") || "" },
       },
-    };
-
-    res.json(data);
+    });
   } catch (err) {
-    console.error("❌ Error fetching URL preview:", err.message);
+    console.error(err);
     res.json({ success: 0 });
   }
 };

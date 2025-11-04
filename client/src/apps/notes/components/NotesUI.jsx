@@ -1,5 +1,6 @@
 // src/appcomponents/NotesUI.jsx
-import { useEffect, useState, useRef, useContext } from "react";
+// src/appcomponents/NotesUI.jsx
+import { useEffect, useState, useRef, useContext, useCallback } from "react";
 import {
   FiGrid,
   FiList,
@@ -10,16 +11,14 @@ import {
   FiShare2,
   FiClipboard,
 } from "react-icons/fi";
-import { Snackbar, Alert, Button, IconButton, Box, Typography } from "@mui/material";
-import { FiPlus } from "react-icons/fi";
-import newRequest from "../../../api/newRequest";
-import "./NotesUI.css";
+import { Button, IconButton, Snackbar, Alert } from "@mui/material";
+import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import newRequest from "../../../api/newRequest";
 import EditorModal from "./EditorModal";
 import ShareModal from "./ShareModal";
 import { EditorContext } from "./EditorContext";
-import { FaPlus } from "react-icons/fa";
-import { blueGrey } from "@mui/material/colors";
+import "./NotesUI.css";
 
 const NotesUI = ({ user }) => {
   const [notes, setNotes] = useState([]);
@@ -39,44 +38,57 @@ const NotesUI = ({ user }) => {
     isPublic: false,
     tags: [],
     blocks: [],
-    sharedWith: [],
+    initialSharedWith: [],
   });
+
   const updatedId = useRef(null);
   const { editorInstanceRef } = useContext(EditorContext);
 
-  // fetch projects
-  const fetchProjects = async () => {
+  // ------------------- Fetch Projects -------------------
+  const fetchProjects = useCallback(async () => {
     try {
       const res = await newRequest.get("/projects");
-      setProjects(res.data.projects);
+      setProjects(res.data.projects || []);
     } catch (err) {
-      console.error(err);
+      console.error("Failed to fetch projects:", err);
     }
-  };
+  }, []);
 
-  // console.log(projects)
-
-  // fetch notes
-  const fetchNotes = async (type, projectId = "") => {
-    try {
-      let url = "/notes/all";
-      if (type === "my") url = "/notes/my";
-      if (type === "public") url = "/notes/public";
-      if (type === "copies") url = "/notes/copies";
-      if (type === "shared") url = "/notes/shared";
-      if (type === "project" && projectId) url = `/notes/project/${projectId}`;
-
-      const res = await newRequest.get(url);
-      const cleanData = (res.data || []).filter((n) => n && n._id);
-      setNotes(cleanData);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // ------------------- Fetch Notes -------------------
+  const fetchNotes = useCallback(
+    async (type = "all", projectId = "") => {
+      try {
+        let url = "/notes/all";
+        switch (type) {
+          case "my":
+            url = "/notes/my";
+            break;
+          case "public":
+            url = "/notes/public";
+            break;
+          case "copies":
+            url = "/notes/copies";
+            break;
+          case "shared":
+            url = "/notes/shared";
+            break;
+          case "project":
+            if (projectId) url = `/notes/project/${projectId}`;
+            break;
+        }
+        const res = await newRequest.get(url);
+        const cleanData = (res.data || []).filter((n) => n?._id);
+        setNotes(cleanData);
+      } catch (err) {
+        console.error("Failed to fetch notes:", err);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [fetchProjects]);
 
   useEffect(() => {
     if (filter === "project" && selectedProject) {
@@ -84,19 +96,21 @@ const NotesUI = ({ user }) => {
     } else {
       fetchNotes(filter);
     }
-  }, [filter, selectedProject]);
+  }, [filter, selectedProject, fetchNotes]);
 
-  // Handlers
+  // ------------------- Handlers -------------------
+  const resetModalData = () => ({
+    title: "",
+    projectId: "",
+    isPublic: false,
+    tags: [],
+    blocks: [],
+    initialSharedWith: [],
+  });
+
   const handleAdd = () => {
     updatedId.current = null;
-    setModalData({
-      title: "",
-      projectId: "",
-      isPublic: false,
-      tags: [],
-      blocks: [],
-      sharedWith: [],
-    });
+    setModalData(resetModalData());
     setShowModal(true);
   };
 
@@ -106,13 +120,11 @@ const NotesUI = ({ user }) => {
     if (!note) return;
 
     try {
-      // Fetch user info for sharedWith IDs (if any)
       let sharedUserDetails = [];
-      if (note.sharedWith && note.sharedWith.length > 0) {
+      if (note.sharedWith?.length) {
         const res = await newRequest.post("/notes/users-by-ids", {
           ids: note.sharedWith,
         });
-
         sharedUserDetails = res.data.map((u) => ({
           value: u._id,
           label: `${u.username} (${u.email})`,
@@ -125,7 +137,7 @@ const NotesUI = ({ user }) => {
         isPublic: note.isPublic,
         tags: note.tags || [],
         blocks: note.blocks || [],
-        initialSharedWith: sharedUserDetails || [],
+        initialSharedWith: sharedUserDetails,
       });
 
       setShowModal(true);
@@ -134,13 +146,11 @@ const NotesUI = ({ user }) => {
     }
   };
 
-
-
   const handleDelete = async (noteId) => {
     if (!window.confirm("Are you sure you want to delete this note?")) return;
     try {
       await newRequest.delete(`/notes/${noteId}`);
-      fetchNotes();
+      fetchNotes(filter === "project" && selectedProject ? "project" : filter, selectedProject);
     } catch (err) {
       console.error(err);
     }
@@ -152,21 +162,11 @@ const NotesUI = ({ user }) => {
   };
 
   const handleConfirmShare = (targetUserIds) => {
-    console.log("🧩 handleConfirmShare got:", targetUserIds);
-
-    const ids = Array.isArray(targetUserIds)
-      ? targetUserIds
-      : targetUserIds
-      ? [targetUserIds]
-      : [];
-
+    const ids = Array.isArray(targetUserIds) ? targetUserIds : targetUserIds ? [targetUserIds] : [];
     setNotes((prev) =>
       prev.map((n) =>
         n._id === shareNoteId
-          ? {
-              ...n,
-              sharedWith: [...new Set([...(n.sharedWith || []), ...ids])],
-            }
+          ? { ...n, sharedWith: [...new Set([...(n.sharedWith || []), ...ids])] }
           : n
       )
     );
@@ -174,16 +174,12 @@ const NotesUI = ({ user }) => {
     setShareNoteId(null);
   };
 
-
-
-
   const handleCopy = async (noteId) => {
     try {
       await newRequest.post(`/notes/${noteId}/copy`);
       setCopiedNoteId(noteId);
       setShowToast(true);
-      fetchNotes();
-
+      fetchNotes(filter === "project" && selectedProject ? "project" : filter, selectedProject);
       setTimeout(() => {
         setCopiedNoteId(null);
         setShowToast(false);
@@ -193,34 +189,21 @@ const NotesUI = ({ user }) => {
     }
   };
 
-  // inside NotesUI.jsx
-  // inside NotesUI.jsx
   const handleSave = async (title, project, isPublic, tags, blocks, sharedWith) => {
     try {
-      const savedBlocks = blocks.length ? blocks : [{ type: "paragraph", data: { text: "" } }]; 
+      const savedBlocks = blocks.length ? blocks : [{ type: "paragraph", data: { text: "" } }];
       const projectId = typeof project === "string" ? project : project?.value || null;
-      const sharedUserIds = sharedWith.map(u => u?.value || u);
+      const sharedUserIds = sharedWith.map((u) => u?.value || u);
 
       const payload = { title: title.trim(), projectId, isPublic, tags, blocks: savedBlocks, sharedWith: sharedUserIds };
 
-      console.group("📝 handleSave Debug Info");
-      console.log("Updating note ID:", updatedId.current || "New Note");
-      console.log("Payload being sent:", payload);
-      console.log("SharedWith IDs:", sharedUserIds);
-      console.groupEnd();
-
-      let res;
       if (updatedId.current) {
-        res = await newRequest.put(`/notes/${updatedId.current}`, payload);
-        console.log("Update response:", res.data);
+        await newRequest.put(`/notes/${updatedId.current}`, payload);
       } else {
-        res = await newRequest.post("/notes", payload);
-        console.log("Create response:", res.data);
+        await newRequest.post("/notes", payload);
       }
 
-      await fetchNotes(filter === "project" && selectedProject ? "project" : filter, selectedProject);
-      console.log("Notes refreshed after save.");
-
+      fetchNotes(filter === "project" && selectedProject ? "project" : filter, selectedProject);
       setShowModal(false);
       updatedId.current = null;
     } catch (err) {
@@ -228,13 +211,11 @@ const NotesUI = ({ user }) => {
     }
   };
 
-
-
+  // ------------------- Render -------------------
   return (
-    <div style={{marginTop:'7%'}} >
-      <div className="notes-ui">
+    <div style={{ marginTop: "7%" }}>
       <EditorModal
-        open={showModal}   // ✅ corrected
+        open={showModal}
         handleClose={() => setShowModal(false)}
         onSave={handleSave}
         initialTitle={modalData.title}
@@ -244,34 +225,26 @@ const NotesUI = ({ user }) => {
         initialBlocks={modalData.blocks}
         initialSharedWith={modalData.initialSharedWith}
       />
-    
 
-      {/* Share Modal */}
       {showShareModal && (
         <ShareModal
-          open={showShareModal}                // ✅ fixed
+          open={showShareModal}
           noteId={shareNoteId}
           onClose={() => setShowShareModal(false)}
-          onShared={handleConfirmShare}        // ✅ matches ShareModal.jsx
+          onShared={handleConfirmShare}
         />
       )}
 
-
       {/* Toolbar */}
-      <div className="toolbar">
+      <div className="notes-toolbar ">
         <div className="filters">
-          <Button onClick={() => setFilter("all")}>All</Button>
-          <Button onClick={() => setFilter("my")}>My Notes</Button>
-          <Button onClick={() => setFilter("public")}>Public</Button>
-          <Button onClick={() => setFilter("copies")}>Copies</Button>
-          <Button onClick={() => setFilter("shared")}>Shared with Me</Button>
+          {["all", "my", "public", "copies", "shared"].map((f) => (
+            <Button key={f} onClick={() => setFilter(f)}>
+              {f.charAt(0).toUpperCase() + f.slice(1)}
+            </Button>
+          ))}
 
-          {/* Project Dropdown */}
-          <div
-            className={`project-dropdown ${
-              filter === "project" ? "active" : ""
-            }`}
-          >
+          <div className={`project-dropdown ${filter === "project" ? "active" : ""}`}>
             <Button className="dropdown-toggle">
               {selectedProject
                 ? projects.find((p) => p._id === selectedProject)?.name
@@ -304,88 +277,67 @@ const NotesUI = ({ user }) => {
         </div>
 
         <div className="view-toggle">
-          <IconButton onClick={() => setView("grid")}  >
-            <FiGrid style={{color: 'blue'}} />
-          </IconButton>
-          <IconButton onClick={() => setView("list")}>
-            <FiList style={{color: 'blue'}} />
-          </IconButton>
-          <IconButton onClick={() => setView("card")}>
-            <FiSquare style={{color: 'blue'}} />
-          </IconButton>
-          <IconButton onClick={() => setView("table")}>
-            <FiTable style={{color: 'blue'}} />
-          </IconButton>
+          {[
+            { icon: FiGrid, key: "grid" },
+            { icon: FiList, key: "list" },
+            { icon: FiSquare, key: "card" },
+            { icon: FiTable, key: "table" },
+          ].map((v) => (
+            <IconButton key={v.key} onClick={() => setView(v.key)}>
+              <v.icon style={{ color: "blue" }} />
+            </IconButton>
+          ))}
         </div>
       </div>
 
-      {/* Render Notes */}
+      {/* Notes */}
       <div className={`notes-container ${view}`} style={{ marginTop: "10%" }}>
-        {notes
-          .filter((n) => n && n._id)
-          .map((note) => {
-            const canEdit =
-              user?._id &&
-              note?.createdBy?._id &&
-              user._id === note.createdBy._id;
-            return (
-              <div key={note._id} className="note-item">
-                <h4>{note.title}</h4>
-                <p className="meta">
-                  {note.createdBy?.username || "Unknown"} ·{" "}
-                  {note.createdAt
-                    ? new Date(note.createdAt).toLocaleDateString()
-                    : ""}
-                </p>
-                <p className="project">
-                  {note.project?.name ? `Project: ${note.project.name}` : ""}
-                </p>
-                <div className="actions">
-                  {canEdit && (
+        {notes.map((note) => {
+          const canEdit = user?._id && note?.createdBy?._id && user._id === note.createdBy._id;
+          return (
+            <div key={note._id} className="note-item">
+              <h4>{note.title}</h4>
+              <p className="meta">
+                {note.createdBy?.username || "Unknown"} ·{" "}
+                {note.createdAt ? new Date(note.createdAt).toLocaleDateString() : ""}
+              </p>
+              <p className="project">{note.project?.name ? `Project: ${note.project.name}` : ""}</p>
+              <div className="actions">
+                {canEdit && (
+                  <>
                     <Button size="small" onClick={() => handleEdit(note._id)}>
                       <FiEdit2 />
                     </Button>
-
-                  )}
-                  {canEdit && (
-                    <Button
-                      size="small"
-                      color="error"
-                      onClick={() => handleDelete(note._id)}
-                    >
+                    <Button size="small" color="error" onClick={() => handleDelete(note._id)}>
                       <FiTrash2 />
                     </Button>
-                  )}
-                  {canEdit && (
                     <Button size="small" onClick={() => handleShare(note._id)}>
                       <FiShare2 />
                     </Button>
-                  )}
-                  {note._id && (
+                  </>
+                )}
+                {note._id && (
+                  <>
                     <Link to={`/apps/note/${note._id}`} className="btn-link">
                       <FiClipboard /> View
                     </Link>
-                  )}
-                  {note._id && (
                     <Button size="small" onClick={() => handleCopy(note._id)}>
                       <FiClipboard />
                     </Button>
-                  )}
-                </div>
+                  </>
+                )}
               </div>
-            );
-          })}
+            </div>
+          );
+        })}
       </div>
 
-      {/* Floating Button */}
+      {/* Floating Add Button */}
       <Button className="floating-btn" onClick={handleAdd}>
-         <FaPlus size={16} />
+        <FaPlus size={16} />
       </Button>
-      
 
-      
-
-      {/* Snackbar (Toast replacement) */}
+      {/* Toast Snackbar */}
       <Snackbar
         open={showToast}
         autoHideDuration={2000}
@@ -397,8 +349,8 @@ const NotesUI = ({ user }) => {
         </Alert>
       </Snackbar>
     </div>
-    </div>
   );
 };
 
 export default NotesUI;
+
