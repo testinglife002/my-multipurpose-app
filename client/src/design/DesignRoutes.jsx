@@ -13,9 +13,11 @@ const DesignRoutes = ({ user }) => {
       {/* Base path: /designs */}
       <Route path="/" element={<CanvaLayout user={user} />}>
         {/* Other sub-routes */}
-        <Route path="canva-home" element={<CanvaHome />} />        {/* /designs/home */}
-        <Route path="templates" element={<CanvaTemplate />} /> 
-        <Route path="projects" element={<CanvaProject />} /> 
+        <Route path="canva-home" element={<CanvaHome />} />
+        <Route path="templates" element={<CanvaTemplate />} />
+        <Route path="projects" element={<CanvaProject />} />
+        {/*<Route path="design/create" element={<CreateDesign />} />
+        <Route path=":designId/edit" element={<Main />} />*/}
       </Route>
       <Route path="design/create" element={<CreateDesign />} />  {/* /designs/design/create */}
       <Route path=":designId/edit" element={<Main />} />          {/* /designs/:designId/edit */}

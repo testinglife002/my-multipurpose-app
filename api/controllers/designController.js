@@ -54,7 +54,15 @@ class DesignController {
             image_url: url
         }) 
         
-        return res.status(200).json({design})
+        // return res.status(200).json({design})
+        res.status(200).json({
+          design: {
+            _id: design._id,
+            components: design.components,
+            image_url: design.image_url,
+          },
+        });
+
 
     } catch (error) {
         console.log(error.message)

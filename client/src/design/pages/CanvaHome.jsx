@@ -31,10 +31,19 @@ const CanvaHome = () => {
 
   const create = (e) => {
     e.preventDefault();
+    /*
     navigate("/designs/design/create", {
-      state: { type: "create", width: state.width, height: state.height },
-       replace: true,
+      // state: { type: "create", width: state.width, height: state.height },
+      // replace: true,
     });
+    */
+    navigate("/designs/design/create", {
+      state: {
+        width: Number(state.width),
+        height: Number(state.height),
+      },
+    });
+
   };
 
   const getUserDesigns = async () => {
@@ -134,7 +143,7 @@ const CanvaHome = () => {
               >
                 {group.map((d, j) => (
                   <div className="design-card" key={j}>
-                    <Link to={`/design/${d._id}/edit`}>
+                    <Link to={`/designs/${d._id}/edit`}>
                       <img
                         src={d.image_url}
                         alt="User Design"
