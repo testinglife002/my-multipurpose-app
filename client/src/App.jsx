@@ -142,6 +142,10 @@ function AppWrapper() {
         <Route path="/create-banner-alt" element={<PageWrapper><BannerMakerAlt /></PageWrapper>} />
         <Route path="/create-banner-ad" element={<PageWrapper><BannerMakerAdvanced /></PageWrapper>} />*/}
         
+        <Route path="/banners-main" element={<PageWrapper><BannerMain  /></PageWrapper>} />
+        <Route path="/banners-maker" element={<PageWrapper><BannerMaker  /></PageWrapper>} />
+        <Route path="/banners-maker-alt" element={<PageWrapper><BannerMakerAlt  /></PageWrapper>} />
+        <Route path="/banners-maker-ad" element={<PageWrapper><BannerMakerAdvanced  /></PageWrapper>} />
         <Route path="/banners" element={<PageWrapper><BannerListPage  /></PageWrapper>} />
         <Route path="/create-banner-new" element={<PageWrapper><BannerMakerNew /></PageWrapper>} />
         <Route path="/banner-maker" element={<PageWrapper><BannerMakerPage /></PageWrapper>} />

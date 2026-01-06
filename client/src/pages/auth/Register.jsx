@@ -44,10 +44,13 @@ export default function Register() {
 
       const payload = { ...form, img: imgUrl };
       const res = await newRequest.post("/auth/register", payload);
-      alert(
-        res.data.message || "Registered. Check email for verification code."
-      );
-      navigate("/verify-email", { state: { email: form.email } });
+      // alert(
+      //  res.data.message || "Registered. Check email for verification code."
+      // );
+      alert("Registration successful. Please login.");
+      // navigate("/verify-email", { state: { email: form.email } });
+      navigate("/login");
+
     } catch (err) {
       setError(err.response?.data?.message || err.message);
     }

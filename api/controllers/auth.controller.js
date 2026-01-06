@@ -42,24 +42,29 @@ export const register = async (req, res, next) => {
       isAuthor: !!isAuthor,
       role: userRole,
       isAdmin: userRole === "admin",
-      verifyCode,
-      verifyCodeExpires,
-      isVerified: false,
+      // verifyCode,
+      // verifyCodeExpires,
+      // isVerified: false,
+      // 🔴 TEMPORARY BYPASS EMAIL VERIFICATION
+      isVerified: true,
     });
 
     await user.save();
 
     // ✅ SendPulse REST API call wrapped in safe try-catch
+    /*
     try {
-      await sendingVerifyEmail(email, verifyCode);
-      console.log(`✅ verifyCode: verification email sent → ${email}`);
+       await sendingVerifyEmail(email, verifyCode);
+       console.log(`✅ verifyCode: verification email sent → ${email}`);
     } catch (mailErr) {
       console.error("❌ verifyCode failed to send verification:", mailErr.message);
     }
+    */
 
     res.status(201).json({
-      message: "User created. Check email for verification code.",
-      email,
+      // message: "User created. Check email for verification code.",
+      message: "Registration successful. Please login.",
+      // email,
     });
 
   } catch (err) {
@@ -139,7 +144,7 @@ export const login = async (req, res, next) => {
     const isCorrect = bcrypt.compareSync(password, user.password);
     if (!isCorrect) return next(createError(400, "Wrong email or password"));
 
-    if (!user.isVerified) return next(createError(403, "Email not verified. Please verify your account."));
+    // if (!user.isVerified) return next(createError(403, "Email not verified. Please verify your account."));
 
     const token = jwt.sign({
       id: user._id,

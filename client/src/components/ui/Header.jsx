@@ -121,6 +121,10 @@ const Header = ({ user, setUser }) => {
               ])}
 
               {renderDropdown("templates", <FileText size={16} />, "Templates", [
+                { to: "/banners-main", label: "Create Banner New" },
+                { to: "/banners-maker", label: "Create Banner New" },
+                { to: "/banners-maker-alt", label: "Create Banner New" },
+                { to: "/banners-maker-ad", label: "Create Banner New" },
                 { to: "/create-banner-new", label: "Create Banner New" },
                 { to: "/banners", label: "Banners" },
                 { to: "/banner-maker", label: "Banner Maker" },
