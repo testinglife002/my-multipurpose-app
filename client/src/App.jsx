@@ -50,6 +50,7 @@ import { Toaster } from "react-hot-toast";
 import BannerList from "./pages/banner/BannerList";
 import BannerListPage from "./pages/banner/BannerListPage";
 import { setToken, clearToken } from "./api/newRequest";
+import TextEditorPage from "./text-editor/pages/TextEditorPage";
 
 
 
@@ -154,6 +155,7 @@ function AppWrapper() {
 
         {/* Other Apps */}
         <Route path="/text-editor" element={<PageWrapper><TextApp /></PageWrapper>} />
+        <Route path="/text-editor-design" element={<PageWrapper><TextEditorPage /></PageWrapper>} />
 
         <Route path="/whatsapp/*" element={<PageWrapper><WhatsApp /></PageWrapper>} />
         <Route path="/whatsapp/sender" element={<PageWrapper><WhatsAppSender /></PageWrapper>} />

@@ -1,0 +1,53 @@
+.bg-controls {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  color: #e5e7eb;
+}
+
+.bg-controls h4 {
+  font-size: 14px;
+  margin-top: 6px;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 4px;
+}
+
+.bg-controls label {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  gap: 4px;
+}
+
+.bg-controls input[type="range"],
+.bg-controls input[type="file"],
+.bg-controls input[type="color"] {
+  width: 100%;
+}
+
+.bg-controls hr {
+  border: none;
+  border-top: 1px solid #1e293b;
+  margin: 8px 0;
+}
+
+.checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+/* scrollbar */
+.bg-controls::-webkit-scrollbar {
+  width: 6px;
+}
+.bg-controls::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}

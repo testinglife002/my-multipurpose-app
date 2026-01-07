@@ -130,6 +130,7 @@ const Header = ({ user, setUser }) => {
                 { to: "/banner-maker", label: "Banner Maker" },
                 { to: "/banner-templates", label: "Banner Templates" },
                 { to: "/text-editor", label: "Text Editor" },
+                { to: "/text-editor-design", label: "Text Design Editor" },
               ])}
 
               {renderDropdown("designs", <Palette size={16} />, "Designs", [

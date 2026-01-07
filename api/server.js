@@ -79,7 +79,6 @@ app.use(
 
 
 
-
 const allowedOrigins = (process.env.CORS_ORIGINS || '').split(',').map(o => o.trim());
 
 app.use(cors({
@@ -90,6 +89,7 @@ app.use(cors({
   },
   credentials: true,
 }));
+
 
 
 // ========================
