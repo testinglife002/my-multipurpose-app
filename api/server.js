@@ -50,6 +50,27 @@ import bannerRoutes from "./routes/banner.routes.js";
 import ogRoutes from "./routes/ogRoutes.js";
 import ogFetchRoutes from "./routes/ogFetchRoutes.js";
 // import sendPulseRoutes from "./routes/sendPulseRoutes.js";
+import leadRoutes from "./routes/lead.routes.js";
+import customerRoutes from "./routes/customer.routes.js";
+import invoiceRoutes from "./routes/invoice.routes.js";
+import invoiceDeliveryRoutes from "./routes/invoiceDelivery.routes.js";
+import salesRoutes from "./routes/sales.routes.js";
+import productRoutes from "./routes/product.routes.js";
+
+import designsRoutes from "./routes/fabric/designRoutes.js";
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // ✅ Fix __dirname for ES Modules
@@ -137,6 +158,14 @@ app.use("/api/banner", bannerRoutes);
 app.use("/og", ogRoutes);
 app.use("/og", ogFetchRoutes);
 // app.use("/api/sendpulse", sendPulseRoutes);
+app.use("/api/leads", leadRoutes);
+app.use("/api/customers", customerRoutes);
+app.use("/api/invoices", invoiceRoutes);
+app.use("/api/invoices", invoiceDeliveryRoutes);
+app.use("/api/sales", salesRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/designs", designsRoutes);
+
 
 // ========================
 // Health check

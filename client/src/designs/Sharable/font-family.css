@@ -1,0 +1,45 @@
+/* Dropdown container */
+.font-family-dropdown {
+  width: 240px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+/* Header */
+.font-family-header {
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+/* Scrollable list */
+.font-family-list {
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+/* Individual font row */
+.font-family-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #111827;
+  transition: background 0.15s ease;
+}
+
+/* Hover */
+.font-family-item:hover {
+  background: #f3f4f6;
+}
+
+/* Active / selected (optional later) */
+.font-family-item.active {
+  background: #2563eb;
+  color: #ffffff;
+}

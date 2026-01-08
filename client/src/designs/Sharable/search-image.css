@@ -1,0 +1,18 @@
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.image-card {
+  overflow: hidden;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.image-card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}

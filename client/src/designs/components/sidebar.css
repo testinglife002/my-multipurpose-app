@@ -1,0 +1,94 @@
+/* ============================= */
+/* SIDEBAR WRAPPER */
+/* ============================= */
+
+.editor-sidebar {
+  display: flex;
+  height: 100vh;
+  background: #ffffff;
+}
+
+.editor-sidebar.collapsed {
+  width: 120px;
+}
+
+.editor-sidebar:not(.collapsed) {
+  width: 400px;
+}
+
+/* ============================= */
+/* LEFT ICON MENU */
+/* ============================= */
+
+.editor-sidebar-menu {
+  width: 120px;
+  border-right: 1px solid #e5e5e5;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fafafa;
+}
+
+.editor-sidebar-item {
+  width: 96px;
+  padding: 10px 6px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  border-radius: 8px;
+  color: #444;
+  transition: all 0.2s ease;
+}
+
+.editor-sidebar-item span {
+  font-size: 11px;
+}
+
+.editor-sidebar-item:hover {
+  background: #eaeaea;
+}
+
+.editor-sidebar-item.active {
+  background: #111;
+  color: #ffffff;
+}
+
+/* ============================= */
+/* SETTINGS PANEL */
+/* ============================= */
+
+.editor-sidebar-settings {
+  width: 280px;
+  border-right: 1px solid #e5e5e5;
+  padding: 18px;
+  background: #f9f9f9;
+}
+
+.editor-sidebar-settings h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.editor-sidebar-settings p {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+/* ============================= */
+/* SETTINGS PLACEHOLDER */
+/* ============================= */
+
+.settings-content {
+  background: #ffffff;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 13px;
+  color: #333;
+}

@@ -1,0 +1,55 @@
+.shapes-settings-dropdown {
+  position: absolute;
+  top: 56px;
+  right: 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  width: 260px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.shapes-settings-icons {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.shape-setting-btn {
+  background: #f3f4f6;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.shape-setting-btn.active,
+.shape-setting-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.shapes-settings-content {
+  margin-top: 12px;
+}
+
+
+
+
+
+
+.delete-btn {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+
+
+

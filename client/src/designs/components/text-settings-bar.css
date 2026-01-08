@@ -1,0 +1,37 @@
+.shapes-dropdown {
+  position: absolute;
+  top: 56px;
+  right: 16px;
+  width: 280px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  z-index: 100;
+}
+
+.shapes-toolbar {
+  display: flex;
+  gap: 6px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.tool-btn {
+  background: #f3f4f6;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tool-btn.active,
+.tool-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.shapes-panel-content {
+  margin-top: 12px;
+}

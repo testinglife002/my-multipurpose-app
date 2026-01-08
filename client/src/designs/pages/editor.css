@@ -1,0 +1,20 @@
+.editor-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.editor-body {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 60px);
+}
+
+.editor-canvas {
+  flex: 1;
+  background: #f4f4f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto; 
+}

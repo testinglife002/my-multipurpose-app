@@ -1,0 +1,15 @@
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-group label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.control-group input[type="range"] {
+  width: 100%;
+}

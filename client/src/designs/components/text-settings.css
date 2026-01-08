@@ -1,0 +1,43 @@
+/* Container */
+.text-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Common item style */
+.text-item {
+  padding: 12px 14px;
+  background-color: #f3f4f6; /* secondary-like */
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+/* Hover effect */
+.text-item:hover {
+  background-color: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+/* Heading */
+.text-heading {
+  font-size: 24px;
+  font-weight: 700;
+  color: black;
+}
+
+/* Subheading */
+.text-subheading {
+  font-size: 20px;
+  font-weight: 500;
+  color: black;
+}
+
+/* Paragraph */
+.text-paragraph {
+  font-size: 14px;
+  font-weight: 400;
+  color: black;
+}

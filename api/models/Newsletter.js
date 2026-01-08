@@ -4,7 +4,8 @@ import mongoose from "mongoose";
 const newsletterSchema = new mongoose.Schema({
   subject: { type: String, required: true },
   recipients: [{ type: String, required: true }],
-  templateId: { type: mongoose.Schema.Types.ObjectId, ref: "Template" },
+  // templateId: { type: mongoose.Schema.Types.ObjectId, ref: "Template" },
+  templateId: { type: mongoose.Schema.Types.ObjectId, ref: "EmailTemplate" },
   sentAt: { type: Date, default: Date.now },
 });
 

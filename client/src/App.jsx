@@ -51,6 +51,10 @@ import BannerList from "./pages/banner/BannerList";
 import BannerListPage from "./pages/banner/BannerListPage";
 import { setToken, clearToken } from "./api/newRequest";
 import TextEditorPage from "./text-editor/pages/TextEditorPage";
+import SalesRoutes from "./sales/sales.routes";
+import CRMRoutes from "./crm/crm.routes";
+import InvoiceRoutes from "./invoices/invoice.routes";
+import DesignEditor from "./designs/pages/DesignEditor";
 
 
 
@@ -131,11 +135,24 @@ function AppWrapper() {
 
         {/* Other routes with Header */}
         <Route path="/gordius" element={<PageWrapper><HomeGordius /></PageWrapper>} />
+
+
         
         <Route path="/task-manager" element={<PageWrapper><TaskManager /></PageWrapper>} />
         <Route path="/project-manager" element={<PageWrapper><ProjectManager user={user} /></PageWrapper>} />
         <Route path="/channel-manager" element={<PageWrapper><ChannelManager /></PageWrapper>} />
         <Route path="/author/project-manager" element={<PageWrapper><ProjectManagerAuthor /></PageWrapper>} />
+
+
+        <Route path="/sales/*" element={<SalesRoutes />} />
+        <Route path="/crm/*" element={<CRMRoutes />} />
+        <Route path="/invoices/*" element={<InvoiceRoutes />} />
+
+        {/*
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/designs/:designId" element={<DesignEditor />} />
+        */}
+        <Route path="/design/:designId" element={<DesignEditor />} />
 
         {/* Banner / Templates */}
         {/*<Route path="/banner-main" element={<PageWrapper><BannerMain /></PageWrapper>} />

@@ -1,0 +1,30 @@
+/* components/editor/Sharable/shapes.css */
+
+.shapes-panel {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 12px;
+}
+
+.shape-item {
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.shape-item:hover {
+  background: #f3f4f6;
+  border-color: #111827;
+}
+
+.shape-item span {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #111827;
+}
