@@ -1,6 +1,6 @@
 // backend/controllers/designController.js
 import formidable from 'formidable';
-import { v2 as cloudinary } from 'cloudinary';
+import cloudinary from "cloudinary";
 import Design from '../models/designModel.js';
 import UserImage from '../models/userImageModel.js';
 import BackgroundImage from '../models/backgroundImageModel.js';
@@ -32,11 +32,12 @@ class DesignController {
 
     try {
 
+        // ✅ Cloudinary v1 configuration
         cloudinary.config({
-            cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-            api_key: process.env.CLOUDINARY_API_KEY,
-            api_secret: process.env.CLOUDINARY_API_SECRET,
-            secure: true // Optional: to ensure HTTPS URLs
+          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+          api_key: process.env.CLOUDINARY_API_KEY,
+          api_secret: process.env.CLOUDINARY_API_SECRET,
+          secure: true,
         });
 
         // with Promise

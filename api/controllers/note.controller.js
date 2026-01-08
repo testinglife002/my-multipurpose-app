@@ -5,16 +5,18 @@ import User from "../models/user.model.js";
 import mongoose from "mongoose";
 import fs from "fs";
 import path from "path";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "cloudinary";
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 import { pushNotification } from "../utils/pushNotification.js";
 
 // Cloudinary config
+// ✅ Cloudinary v1 configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
 });
 
 // Utility: format notes
