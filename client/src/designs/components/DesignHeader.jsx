@@ -1,8 +1,8 @@
 // ✅ src/designs/components/DesignHeader.jsx
 import { ArrowLeft, Save, Share2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import ImageKit from "imagekit";
-
+// import ImageKit from "imagekit";
+import ImageKit from "imagekit-javascript";
 import { saveDesign } from "../../services/designService";
 // import { useCanvasHook } from "../../context/CanvasContext";
 import './design-header.css';
@@ -16,8 +16,9 @@ export default function DesignHeader({ designInfo, realDesignId }) {
 
   const imagekit = new ImageKit({
     publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
-    privateKey: import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY,
+    // privateKey: import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY,
     urlEndpoint: import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT,
+    authenticationEndpoint: "https://my-multipurpose-app.onrender.com/api/imagekit/auth"
   });
 
   const onSave = async () => {

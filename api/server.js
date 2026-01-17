@@ -59,6 +59,9 @@ import productRoutes from "./routes/product.routes.js";
 
 import designsRoutes from "./routes/fabric/designRoutes.js";
 import designRoute from "./routes/fabric/design.routes.js";
+import imagekitRoutes from "./routes/fabric/imagekit.routes.js";
+
+
 
 
 
@@ -173,7 +176,9 @@ app.use("/api/sales", salesRoutes);
 app.use("/api/products", productRoutes);
 
 app.use("/api/designs", designRoute);
-// app.use("/api/design", designRoute);
+ app.use("/api/design", designsRoutes);
+app.use("/api/imagekit", imagekitRoutes);
+
 
 
 // ========================

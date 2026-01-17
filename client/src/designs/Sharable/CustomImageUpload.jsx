@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import ImageKit from 'imagekit';
+ import ImageKit from "imagekit-javascript";
+// import ImageKit from 'imagekit';
 import { FabricImage } from 'fabric';
 import { useCanvasHook } from '../../context/CanvasContext';
 // import { useParams } from 'next/navigation';
@@ -19,12 +20,14 @@ function CustomImageUpload({ selectedAi }) {
    * ⚠️ WARNING: privateKey should NOT be exposed in production.
    * Move uploads to a server route for production use.
    */
+  
   const imagekit = useMemo(
     () =>
       new ImageKit({
-        publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
-        privateKey: process.env.NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY,
-        urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
+        publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
+        // privateKey: import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY,
+        urlEndpoint: import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT,
+        authenticationEndpoint: "https://my-multipurpose-app.onrender.com/api/imagekit/auth",
       }),
     []
   );

@@ -5,8 +5,8 @@ import { Image as FabricImage } from "fabric";
 
 import { useCanvasHook } from '../../context/CanvasContext';
 import { useParams } from 'react-router-dom';
- import ImageKit from "imagekit";
-// import ImageKit from "imagekit-javascript";
+// import ImageKit from "imagekit";
+ import ImageKit from "imagekit-javascript";
 
 
 
@@ -20,12 +20,12 @@ import { useParams } from 'react-router-dom';
     urlEndpoint : import.meta.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
 });
 */
-const imagekit = new ImageKit({
-  publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
-  privateKey : import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY,
-  urlEndpoint: import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT,
-  authenticationEndpoint: "http://localhost:5000/api/imagekit/auth"
-});
+  const imagekit = new ImageKit({
+    publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
+    // privateKey: import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY,
+    urlEndpoint: import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT,
+    authenticationEndpoint: "https://my-multipurpose-app.onrender.com/api/imagekit/auth"
+  });
 
 
 function UploadImage() {
@@ -35,9 +35,9 @@ function UploadImage() {
 
   var imagekit = new ImageKit({
     publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
-    privateKey : import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY,
+    // privateKey: import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY,
     urlEndpoint: import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT,
-  authenticationEndpoint: "http://localhost:5000/api/imagekit/auth"
+    authenticationEndpoint: "https://my-multipurpose-app.onrender.com/api/imagekit/auth"
   });
 
   const onFileUpload = async (event) => {
@@ -46,7 +46,8 @@ function UploadImage() {
     const file = event.target.files[0];
     const imageRef = await imagekit.upload({
       file: file,
-      fileName: designId + ".png",
+      // fileName: designId + ".png",
+      fileName: `${designId}.png`,
       isPublished: true
     }).then(res => {
     console.log(res.url);

@@ -2,7 +2,8 @@
 
 
 import React, { useEffect, useState, useMemo } from "react";
-import ImageKit from "imagekit";
+ import ImageKit from "imagekit-javascript";
+// import ImageKit from "imagekit";
 import { Image as FabricImage } from "fabric"; // ✅ FIX
 import { useCanvasHook } from '../../context/CanvasContext';
 
@@ -16,13 +17,15 @@ export default function UploadCustomImage({ selectedAi }) {
   const [loading, setLoading] = useState(false);
   const [baseImage, setBaseImage] = useState(null);
   const [image, setImage] = useState(null);
-
+  
+  
   const imagekit = useMemo(
     () =>
       new ImageKit({
-        publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
-        privateKey: process.env.NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY,
-        urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
+        publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
+        // privateKey: import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY,
+        urlEndpoint: import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT,
+        authenticationEndpoint: "https://my-multipurpose-app.onrender.com/api/imagekit/auth",
       }),
     []
   );
@@ -31,26 +34,27 @@ export default function UploadCustomImage({ selectedAi }) {
      Upload Image
   ----------------------------- */
   const onImageUpload = async (event) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files[0];
     if (!file) return;
 
-    try {
-      setLoading(true);
+    setLoading(true);
 
-      const imageRef = await imagekit.upload({
+    try {
+      const res = await imagekit.upload({
         file,
         fileName: `${designId}.png`,
         isPublished: true,
       });
 
-      setBaseImage(imageRef.url);
-      setImage(imageRef.url);
+      setBaseImage(res.url);
+      setImage(res.url);
     } catch (err) {
-      console.error("Upload failed:", err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
+
 
   /* -----------------------------
      AI Preview
