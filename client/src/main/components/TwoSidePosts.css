@@ -1,0 +1,27 @@
+.two-side-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.post-card {
+  background:white;
+  display:flex;
+  border-radius:8px;
+  overflow:hidden;
+  border:1px solid #ddd;
+}
+
+.post-card-content {
+  padding:12px;
+  flex:1;
+}
+
+.post-card-thumb {
+  width:120px;
+  background:#555;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}

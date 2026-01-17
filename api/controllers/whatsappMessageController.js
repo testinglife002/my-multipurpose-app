@@ -1,10 +1,11 @@
 // Controller – whatsappMessageController.js
 // controllers/whatsappMessageController.js
-import WhatsAppMessage from "../models/WhatsAppMessage.js";
-import cloudinary from "../utils/cloudinary.js";
+// import WhatsAppMessage from "../models/WhatsAppMessage.js";
+// import cloudinary from "../utils/cloudinary.js";
 import fs from "fs";
+import WhatsAppMessage from "../models/WhatsAppMessage.js";
+import { uploadMediaToCloudinary } from "../utils/cloudinary.js";
 
-// Split text message into 1600-character chunks
 const splitMessage = (text) => {
   const maxLength = 1600;
   const chunks = [];
@@ -16,37 +17,24 @@ const splitMessage = (text) => {
   return chunks;
 };
 
-// Mock WhatsApp API sender (replace with actual API integration)
-// Mock WhatsApp API call (replace with Twilio / WhatsApp Cloud API)
 const sendWhatsAppAPI = async ({ to, body, mediaUrls, type }) => {
-  console.log(`📤 Sending WhatsApp message to ${to}`);
-  console.log(`Type: ${type}, Body: ${body?.slice(0, 50)}...`);
-  if (mediaUrls) console.log(`Media URL: ${mediaUrls}`);
-  return { success: true }; // Simulate successful send
+  return { success: true };
 };
 
-// Controller: Send WhatsApp message
 export const sendMessage = async (req, res) => {
-    console.log(req.body);
   try {
     const { to, body, type = "text", templateId, userId } = req.body;
 
     if (!to) {
-      return res.status(400).json({ success: false, error: "Recipient number (to) is required." });
+      return res.status(400).json({ success: false, error: "Recipient required" });
     }
 
-    // let mediaUrl = null;
-
-    // Upload media files to Cloudinary if provided
     let mediaUrls = [];
 
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
-        const uploadRes = await cloudinary.uploader.upload(file.path, {
-          resource_type: "auto",
-        });
+        const uploadRes = await uploadMediaToCloudinary(file);
         mediaUrls.push(uploadRes.secure_url);
-        fs.unlinkSync(file.path); // Cleanup local file
       }
     }
 
@@ -54,8 +42,9 @@ export const sendMessage = async (req, res) => {
     const results = [];
 
     for (const chunk of textChunks) {
-      const apiResult = await sendWhatsAppAPI({ to, text: chunk, mediaUrls, type });
-      const message = await WhatsAppMessage.create({
+      const sendResult = await sendWhatsAppAPI({ to, body: chunk, mediaUrls, type });
+
+      const messageDoc = await WhatsAppMessage.create({
         to,
         body: chunk,
         type,
@@ -65,6 +54,7 @@ export const sendMessage = async (req, res) => {
         status: sendResult.success ? "sent" : "failed",
         error: sendResult.success ? null : "Send failed",
       });
+
       results.push({
         messageId: messageDoc._id,
         status: messageDoc.status,
@@ -76,13 +66,13 @@ export const sendMessage = async (req, res) => {
       success: true,
       count: results.length,
       messages: results,
-      message: "Messages processed successfully."
     });
   } catch (error) {
     console.error("❌ Error sending message:", error);
     return res.status(500).json({ success: false, error: error.message });
   }
 };
+
 
 // Controller: Get all messages (optional)
 // Controller: Fetch all messages

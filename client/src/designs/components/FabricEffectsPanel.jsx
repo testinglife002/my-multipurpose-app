@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 // import CustomImageUpload from './CustomImageUpload';
 import { AITransformationSettings } from '../../lib/aiTransformations';
 import {
-  applyDropShadow,
+  dropShadow,
   upscaleImage,
   smartCrop,
   
@@ -29,7 +29,7 @@ export default function FabricEffectsPanel() {
 
     switch (option.action) {
       case 'shadow':
-        applyDropShadow(canvasEditor);
+        dropShadow(canvasEditor);
         break;
       case 'upscale':
         upscaleImage(canvasEditor);

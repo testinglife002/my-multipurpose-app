@@ -210,7 +210,7 @@ export const getCurrentUser = async (req, res) => {
     if (!token) return res.status(401).json({ message: "No active session" });
 
     // ✅ Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
 
     // ✅ Find user (exclude password)
     const user = await User.findById(decoded.id).select("-password");

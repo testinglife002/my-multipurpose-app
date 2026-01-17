@@ -10,8 +10,9 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
-import { useCanvasHook } from "../[designId]/page";
+
 import "./layers-panel.css";
+import { useCanvasHook } from "../../context/CanvasContext";
 
 export default function LayersPanel() {
   const { canvasEditor } = useCanvasHook();

@@ -9,4 +9,5 @@ const uploadSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.model("Upload", uploadSchema);
+export default mongoose.model("Upload", uploadSchema, "uploads");
+

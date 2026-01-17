@@ -13,4 +13,5 @@ const upload = multer({ dest: "temp/" }); // temp folder for incoming uploads
 
 router.post("/", upload.single("image"), uploadImage);
 
+
 export default router;

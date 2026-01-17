@@ -1,0 +1,171 @@
+.drawing-panel {
+  padding: 16px;
+  font-family: system-ui, sans-serif;
+}
+
+/* MAIN BUTTON */
+.drawing-main-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.drawing-main-btn.active {
+  background: #7c3aed;
+  color: #fff;
+  border-color: #7c3aed;
+}
+
+/* TABS */
+.drawing-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 16px 0;
+  gap: 6px;
+}
+
+.drawing-tabs button {
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 6px;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+.drawing-tabs button.active {
+  background: #7c3aed;
+  color: #fff;
+  border-color: #7c3aed;
+}
+
+/* SECTION */
+.drawing-section {
+  margin-top: 12px;
+}
+
+/* COLOR */
+.color-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.color-preview div {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.color-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.color-dot.active {
+  border-color: #7c3aed;
+}
+
+.color-inputs {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.color-inputs input[type="color"] {
+  width: 44px;
+  height: 40px;
+  padding: 0;
+}
+
+.color-inputs input[type="text"] {
+  flex: 1;
+  padding: 8px;
+}
+
+/* BRUSH */
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.range-row input[type="range"] {
+  flex: 1;
+}
+
+.brush-presets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.brush-presets button {
+  padding: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.brush-presets button.active {
+  background: #7c3aed;
+  color: #fff;
+  border-color: #7c3aed;
+}
+
+/* ERASER */
+.eraser-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.eraser-btn.active {
+  background: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+  text-transform: uppercase;
+}
+
+.drawing-section {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e5e5;
+}

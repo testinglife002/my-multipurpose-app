@@ -58,7 +58,7 @@ import salesRoutes from "./routes/sales.routes.js";
 import productRoutes from "./routes/product.routes.js";
 
 import designsRoutes from "./routes/fabric/designRoutes.js";
-
+import designRoute from "./routes/fabric/design.routes.js";
 
 
 
@@ -101,7 +101,6 @@ app.use(
 
 
 const allowedOrigins = (process.env.CORS_ORIGINS || '').split(',').map(o => o.trim());
-
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true); // allow mobile apps, curl, Postman
@@ -111,6 +110,14 @@ app.use(cors({
   credentials: true,
 }));
 
+// app.use(cors({
+//    origin: ["http://localhost:5173","http://localhost:3000"]
+// }));
+
+// app.use(cors({
+//  origin: ["http://localhost:5173"],
+//  credentials: true,
+// }));
 
 
 // ========================
@@ -152,8 +159,8 @@ app.use("/api/whatsapp", whatsappRoutes);
 app.use("/api/whatsapp-messages", whatsappMessageRoutes);
 app.use("/api/whatsapp-sender", whatsappSenderRoutes);
 app.use("/api", designRoutes);
-app.use("/api/uploads", uploadRoutes);
-app.use("/api/upload", uploadingRoutes);
+// app.use("/api/uploads", uploadRoutes);
+app.use("/api/uploads", uploadingRoutes);
 app.use("/api/banner", bannerRoutes);
 app.use("/og", ogRoutes);
 app.use("/og", ogFetchRoutes);
@@ -164,7 +171,9 @@ app.use("/api/invoices", invoiceRoutes);
 app.use("/api/invoices", invoiceDeliveryRoutes);
 app.use("/api/sales", salesRoutes);
 app.use("/api/products", productRoutes);
-app.use("/api/designs", designsRoutes);
+
+app.use("/api/designs", designRoute);
+// app.use("/api/design", designRoute);
 
 
 // ========================
@@ -194,6 +203,26 @@ app.use((err, req, res, next) => {
   const errorMessage = err.message || "Something went wrong!";
   res.status(errorStatus).json({ success: false, message: errorMessage });
 });
+
+// app.get("*", (req,res)=>res.sendFile(index.html))
+/*
+if (process.env.NODE_ENV === "production") {
+  const clientPath = path.resolve(__dirname, "../client/dist");
+  app.use(express.static(clientPath));
+  app.get("*", (req, res) =>
+    res.sendFile(path.join(clientPath, "index.html"))
+  );
+}
+
+if (process.env.NODE_ENV === "production") {
+  const clientPath = path.resolve(__dirname, "../client/dist");
+  app.use(express.static(clientPath));
+  app.get("*", (req, res) =>
+    res.sendFile(path.join(clientPath, "index.html"))
+  );
+}
+*/
+
 
 // ========================
 // Start server

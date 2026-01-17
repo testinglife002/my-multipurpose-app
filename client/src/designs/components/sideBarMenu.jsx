@@ -1,12 +1,15 @@
 // options/sideBarMenu.js
-import AddImageSettings from "@/services/Components/AddImageSettings";
-import AiTransforSettings from "@/services/Components/AiTransforSettings";
-import BackgroundSetting from "@/services/Components/BackgroundSetting";
-import EffectsPanel from "@/services/Components/EffectsPanel";
-import Elements from "@/services/Components/Elements";
-import FabricEffects from "@/services/Components/FabricEffects";
-import FabricEffectsPanel from "@/services/Components/FabricEffectsPanel";
-import TextSettings from "@/services/Components/TextSettings";
+
+import AddImageSettings from "./AddImageSettings";
+import AiTransforSettings from "./AiTransforSettings";
+import BackgroundSetting from "./BackgroundSetting";
+import EffectsPanel from "./EffectsPanel";
+import Elements from "./Elements";
+import FabricEffects from "./FabricEffects";
+import FabricEffectsPanel from "./FabricEffectsPanel";
+import TextSettings from "./TextSettings";
+
+// import Elements from "./Elements";
 
 import {
   LayoutTemplate,
@@ -20,6 +23,7 @@ import {
   ImagePlus,
   ImagePlusIcon,
 } from "lucide-react";
+
 
 
 

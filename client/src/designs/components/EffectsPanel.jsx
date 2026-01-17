@@ -10,8 +10,8 @@ import {
   blur,
   pixelate,
   dropShadow,
-  flipHorizontal,
-  flipVertical,
+  flipH,
+  flipV,
   rotate,
   opacity,
   resetAll,
@@ -41,8 +41,8 @@ export default function EffectsPanel() {
       <button onClick={() => blur(canvasEditor, 0.4)}>Blur</button>
       <button onClick={() => pixelate(canvasEditor, 10)}>Pixelate</button>
 
-      <button onClick={() => flipHorizontal(canvasEditor)}>Flip H</button>
-      <button onClick={() => flipVertical(canvasEditor)}>Flip V</button>
+      <button onClick={() => flipH(canvasEditor)}>Flip H</button>
+      <button onClick={() => flipV(canvasEditor)}>Flip V</button>
 
       <label>
         Rotate

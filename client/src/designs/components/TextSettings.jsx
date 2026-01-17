@@ -1,5 +1,6 @@
+// ✅ TextSettings.jsx (Fabric 6)
 import React from 'react'
-
+// import { useCanvasHook } from '@/app/design/[designId]/page';
 import "./text-settings.css";
 import { IText } from 'fabric';
 import { useCanvasHook } from '../../context/CanvasContext';

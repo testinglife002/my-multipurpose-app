@@ -1,0 +1,38 @@
+.topbar {
+  background:#1f2933;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:6px 20px;
+  font-size:13px;
+}
+
+.top-left svg {
+  margin-right:12px;
+  cursor:pointer;
+}
+
+.top-menu {
+  list-style:none;
+  display:flex;
+  gap:20px;
+  padding:0;
+  margin:0;
+}
+
+.top-menu li {
+  cursor:pointer;
+}
+
+.top-right {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.top-right img {
+  width:32px;
+  height:32px;
+  border-radius:50%;
+}

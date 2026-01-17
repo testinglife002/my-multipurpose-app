@@ -32,6 +32,6 @@ router.get("/my", verifyToken, getMyDesigns);
 // Show single design
 router.get("/:id", verifyToken, getDesignById);
 
-router.patch("/:id/save", verifyToken, saveDesign);
+router.put("/:id/save", verifyToken, saveDesign);
 
 export default router;

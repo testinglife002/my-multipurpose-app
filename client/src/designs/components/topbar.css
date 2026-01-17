@@ -1,32 +1,53 @@
-/* components/editor/topbar.css */
-
 .topbar {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  height: 56px;
-  background: #111827;
-  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  padding: 0 14px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.topbar-left {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
 }
 
 .topbar-title {
-  font-size: 14px;
   font-weight: 600;
+  font-size: 14px;
+}
+
+.topbar-right {
+  display: flex;          /* 🔥 THIS FIXES IT */
+  align-items: center;
+  gap: 10px;              /* spacing between buttons */
+  position: relative;
 }
 
 .topbar-btn {
-  background: #2563eb;
-  border: none;
-  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 6px 12px;
   border-radius: 6px;
+  background: #f3f4f6;
+  border: none;
   cursor: pointer;
+  font-size: 13px;
 }
 
 .topbar-btn:hover {
-  background: #1d4ed8;
+  background: #e5e7eb;
 }
+
+.topbar-dropdown-stack {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+}
+

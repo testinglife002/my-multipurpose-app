@@ -55,6 +55,13 @@ import SalesRoutes from "./sales/sales.routes";
 import CRMRoutes from "./crm/crm.routes";
 import InvoiceRoutes from "./invoices/invoice.routes";
 import DesignEditor from "./designs/pages/DesignEditor";
+import DesignDashboard from "./designs/pages/DesignDashboard";
+import DesignsPage from "./editor/DesignsPage";
+import MainEditor from "./editor/MainEditor";
+import MainApp from "./main/MainApp";
+import AppOne from "./demo/AppOne";
+import { AppTwo } from "./demo/AppTwo";
+
 
 // trigger vercel redeploy
 
@@ -146,15 +153,21 @@ function AppWrapper() {
         <Route path="/author/project-manager" element={<PageWrapper><ProjectManagerAuthor /></PageWrapper>} />
 
 
-        <Route path="/sales/*" element={<SalesRoutes />} />
-        <Route path="/crm/*" element={<CRMRoutes />} />
-        <Route path="/invoices/*" element={<InvoiceRoutes />} />
+        <Route path="/sales/*" element={<PageWrapper><SalesRoutes /></PageWrapper>} />
+        <Route path="/crm/*" element={<PageWrapper><CRMRoutes /></PageWrapper>} />
+        <Route path="/invoices/*" element={<PageWrapper><InvoiceRoutes /></PageWrapper>} />
 
         {/*
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/designs/:designId" element={<DesignEditor />} />
         */}
+        <Route path="/design-dashboard" element={<DesignDashboard />} />
+        <Route path="/design/new" element={<DesignEditor />} />
         <Route path="/design/:designId" element={<DesignEditor />} />
+
+        <Route path="/design/dashboard" element={<DesignsPage user={user}  />} />
+       <Route path="/editor/new" element={<MainEditor user={user} />} />
+        <Route path="/editor/:designId" element={<MainEditor user={user} />} />
 
         {/* Banner / Templates */}
         {/*<Route path="/banner-main" element={<PageWrapper><BannerMain /></PageWrapper>} />
@@ -162,15 +175,36 @@ function AppWrapper() {
         <Route path="/create-banner-alt" element={<PageWrapper><BannerMakerAlt /></PageWrapper>} />
         <Route path="/create-banner-ad" element={<PageWrapper><BannerMakerAdvanced /></PageWrapper>} />*/}
         
+        {/* x 
         <Route path="/banners-main" element={<PageWrapper><BannerMain  /></PageWrapper>} />
+        */}
+        {/* x 
         <Route path="/banners-maker" element={<PageWrapper><BannerMaker  /></PageWrapper>} />
+        */}
+        {/* x 
         <Route path="/banners-maker-alt" element={<PageWrapper><BannerMakerAlt  /></PageWrapper>} />
+        */}
+        
         <Route path="/banners-maker-ad" element={<PageWrapper><BannerMakerAdvanced  /></PageWrapper>} />
+        
         <Route path="/banners" element={<PageWrapper><BannerListPage  /></PageWrapper>} />
+        
         <Route path="/create-banner-new" element={<PageWrapper><BannerMakerNew /></PageWrapper>} />
+        {/* x 
         <Route path="/banner-maker" element={<PageWrapper><BannerMakerPage /></PageWrapper>} />
+        */}
+        {/* x 
         <Route path="/banner-templates" element={<PageWrapper><TemplateManagerPage /></PageWrapper>} />
+        */}
+        
         <Route path="/edit-template/:id" element={<PageWrapper><EditTemplatePage /></PageWrapper>} />
+
+
+           {/* Main App */}
+        <Route path="/mainapp" element={<PageWrapper><MainApp /></PageWrapper>} />
+        <Route path="/appone" element={<PageWrapper><AppOne /></PageWrapper>} />
+        <Route path="/apptwo" element={<PageWrapper><AppTwo /></PageWrapper>} />
+
 
         {/* Other Apps */}
         <Route path="/text-editor" element={<PageWrapper><TextApp /></PageWrapper>} />

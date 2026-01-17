@@ -1,10 +1,9 @@
 import React, { useRef, useState } from 'react'
 import './text-settings-bar.css'
-// import { TextSettingsList } from '../Options'
+import { TextSettingsList } from '../Options'
 import { FaTrash } from 'react-icons/fa';
-import { TextSettingsList } from '../Options';
-
-
+import { useCanvasHook } from '../../context/CanvasContext';
+// import { useCanvasHook } from '@/app/design/[designId]/page';
 
 const TextSettingsBar = () => {
 

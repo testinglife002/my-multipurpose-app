@@ -1,0 +1,55 @@
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  background-color: var(--white);
+  padding: 4px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.today-btn {
+  color: var(--gray-600);
+}
+
+.icon-sm {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+.divider-vertical {
+  width: 1px;
+  height: 16px;
+  background-color: var(--gray-200);
+  margin: 0 8px;
+}
+
+.zoom-segments {
+  display: flex;
+  background-color: var(--gray-100);
+  border-radius: var(--radius-md);
+  padding: 2px;
+}
+
+.zoom-segment {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--gray-500);
+  transition: all 0.2s;
+}
+
+.zoom-segment:hover {
+  color: var(--gray-700);
+}
+
+.zoom-segment.active {
+  background-color: var(--white);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}

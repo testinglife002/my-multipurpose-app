@@ -1,19 +1,32 @@
 import React, { useState } from 'react'
-import ImageKit from "imagekit";
-import { FabricImage } from 'fabric';
+
+import { Image as FabricImage } from "fabric";
+
+
 import { useCanvasHook } from '../../context/CanvasContext';
 import { useParams } from 'react-router-dom';
+ import ImageKit from "imagekit";
+// import ImageKit from "imagekit-javascript";
+
 
 
 // or
 
 // var ImageKit = require("imagekit");
 
-var imagekit = new ImageKit({
-    publicKey : process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
-    privateKey : process.env.NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY,
-    urlEndpoint : process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
+/*var imagekit = new ImageKit({
+    publicKey : import.meta.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
+    privateKey : import.meta.env.NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY,
+    urlEndpoint : import.meta.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
 });
+*/
+const imagekit = new ImageKit({
+  publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
+  privateKey : import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY,
+  urlEndpoint: import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT,
+  authenticationEndpoint: "http://localhost:5000/api/imagekit/auth"
+});
+
 
 function UploadImage() {
   const { designId } = useParams();
@@ -21,9 +34,10 @@ function UploadImage() {
   const [loading, setLoading] = useState(false);
 
   var imagekit = new ImageKit({
-    publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
-    privateKey: process.env.NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY,
-    urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
+    publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
+    privateKey : import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY,
+    urlEndpoint: import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT,
+  authenticationEndpoint: "http://localhost:5000/api/imagekit/auth"
   });
 
   const onFileUpload = async (event) => {
@@ -34,6 +48,8 @@ function UploadImage() {
       file: file,
       fileName: designId + ".png",
       isPublished: true
+    }).then(res => {
+    console.log(res.url);
     });
     
     console.log(imageRef?.url);

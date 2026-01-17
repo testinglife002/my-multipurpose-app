@@ -34,7 +34,7 @@ export default function SearchImages() {
           headers: {
             Authorization:
               "Client-ID " +
-              process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY,
+              import.meta.env.VITE_PUBLIC_UNSPLASH_ACCESS_KEY,
           },
         }
       );

@@ -24,5 +24,5 @@ export const getDesignById = (id) => {
 
 // SAVE DESIGN
 export const saveDesign = (id, payload) => {
-  return newRequest.patch(`/designs/${id}/save`, payload);
+  return newRequest.put(`/designs/${id}`, payload);
 };

@@ -1,0 +1,107 @@
+
+.task-bar {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  z-index: 10;
+  overflow: hidden;
+  transition: all 0.2s;
+  background-color: gray;
+}
+
+.task-bar:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-50%) scale(1.01);
+}
+
+/* Priority Styles */
+.task-bar.priority-low {
+  background-color: var(--priority-low);
+  height: 32px;
+}
+
+.task-bar.priority-medium {
+  background-color: var(--priority-medium);
+  height: 36px;
+}
+
+.task-bar.priority-high {
+  background-color: var(--priority-high);
+  height: 40px;
+}
+
+.task-bar.priority-urgent {
+  background-color: var(--priority-urgent);
+  height: 44px;
+}
+
+.progress-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: width 0.3s;
+}
+
+.task-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 12px;
+  color: var(--white);
+}
+
+.task-info {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  gap: 8px;
+}
+
+.task-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.task-title {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.task-assignees {
+  display: flex;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.task-avatar {
+  margin-left: -6px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.drag-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: transparent;
+}
+
+.drag-handle:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+.drag-handle.left { left: 0; cursor: w-resize; }
+.drag-handle.right { right: 0; cursor: e-resize; }

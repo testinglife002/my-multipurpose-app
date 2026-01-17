@@ -1,0 +1,9 @@
+.trending-slider h5 {
+  margin-left:6px;
+}
+
+.trending-slider .card {
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+}

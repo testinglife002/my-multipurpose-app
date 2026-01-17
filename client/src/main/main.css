@@ -1,0 +1,25 @@
+* {
+  box-sizing:border-box;
+}
+
+body {
+  margin:0;
+  font-family: "Segoe UI", sans-serif;
+  background:#f5f6f8;
+  color:#111;
+}
+
+.main-app-root {
+  width:100%;
+}
+
+.main-app-page-container {
+  width:95%;
+  margin:auto;
+}
+
+.main-app-content-layout {
+  display:grid;
+  grid-template-columns: 3fr 1fr;
+  gap:24px;
+}

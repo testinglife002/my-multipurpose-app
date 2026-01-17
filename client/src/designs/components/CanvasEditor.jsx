@@ -1,14 +1,10 @@
-// ✅ src/designs/components/CanvasEditor.jsx
+// ✅ CanvasEditor.jsx (Fabric 6)
 import { useEffect, useRef } from "react";
 import { Canvas } from "fabric";
-import { useCanvasHook } from "../../context/CanvasContext";
-import TopBar from "./TopBar";
-/*
-import { useCanvasHook } from "../../../context/CanvasContext";
-import TopBar from "../../../components/TopBar";
-*/
 
-export default function CanvasEditor({ designInfo, onToggleLayers }) {
+import { useCanvasHook } from "../../context/CanvasContext";
+
+export default function CanvasEditor({ designInfo }) {
   const canvasRef = useRef(null);
   const { setCanvasEditor } = useCanvasHook();
 
@@ -23,7 +19,9 @@ export default function CanvasEditor({ designInfo, onToggleLayers }) {
     });
 
     if (designInfo.jsonTemplate) {
-      canvas.loadFromJSON(designInfo.jsonTemplate, canvas.renderAll.bind(canvas));
+      canvas.loadFromJSON(designInfo.jsonTemplate, () =>
+        canvas.renderAll()
+      );
     }
 
     setCanvasEditor(canvas);
@@ -32,11 +30,8 @@ export default function CanvasEditor({ designInfo, onToggleLayers }) {
   }, [designInfo, setCanvasEditor]);
 
   return (
-    <>
-      <TopBar onToggleLayers={onToggleLayers} />
-      <div className="canvas-editor-wrapper">
-        <canvas ref={canvasRef} />
-      </div>
-    </>
+    <div className="canvas-editor-wrapper">
+      <canvas ref={canvasRef} />
+    </div>
   );
 }

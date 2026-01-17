@@ -3,40 +3,36 @@ import fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import Banner from "../models/Banner.js";
-import cloudinary from "../utils/cloudinary.js";
+import { uploadMediaToCloudinary } from "../utils/cloudinary.js";
 
 export const saveExportedBanner = async (req, res) => {
   try {
     const { dataUrl, backgroundUrl, mainUrl } = req.body;
+
     if (!dataUrl) {
       return res.status(400).json({ message: "No image data provided" });
     }
 
-    // Validate base64 Data URL
     const matches = dataUrl.match(/^data:(image\/\w+);base64,(.+)$/);
     if (!matches) {
       return res.status(400).json({ message: "Invalid data URL" });
     }
 
-    const ext = matches[1].split("/")[1]; // e.g., png, jpg
+    const ext = matches[1].split("/")[1];
     const base64Data = matches[2];
     const buffer = Buffer.from(base64Data, "base64");
 
-    // Ensure upload folder exists
     const uploadDir = path.join(process.cwd(), "public/uploads/banner");
     fs.mkdirSync(uploadDir, { recursive: true });
 
-    // Generate unique filename
     const filename = `banner-${Date.now()}-${uuidv4()}.${ext}`;
     const localPath = path.join(uploadDir, filename);
     fs.writeFileSync(localPath, buffer);
 
-    // Upload to Cloudinary
-    const uploadResult = await cloudinary.uploader.upload(dataUrl, {
-      folder: "my_banner_app/banners",
+    const uploadResult = await uploadMediaToCloudinary({
+      buffer
     });
 
-    // Save banner metadata to DB
     const bannerDoc = await Banner.create({
       backgroundUrl: backgroundUrl || "",
       mainUrl: mainUrl || "",
@@ -45,13 +41,13 @@ export const saveExportedBanner = async (req, res) => {
     });
 
     res.status(201).json({
-      message: "✅ Banner exported and saved successfully",
+      message: "Banner exported and saved successfully",
       localPath: `/uploads/banner/${filename}`,
       cloudUrl: uploadResult.secure_url,
       banner: bannerDoc,
     });
   } catch (error) {
-    console.error("❌ Banner export failed:", error);
+    console.error("Banner export failed:", error);
     res.status(500).json({
       message: "Failed to save banner",
       error: error.message,

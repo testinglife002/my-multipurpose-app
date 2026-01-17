@@ -1,0 +1,19 @@
+.sidebar-sticky {
+  position:sticky;
+  top:20px;
+}
+
+.sidebar-box {
+  background:white;
+  padding:14px;
+  border-radius:8px;
+  margin-bottom:20px;
+  border:1px solid #ddd;
+}
+
+.sidebar-title {
+  margin-bottom:8px;
+}
+.sidebar-list li {
+  margin-bottom:6px;
+}

@@ -3,6 +3,7 @@
 // 📄 src/components/text-editor/LayerPanel.jsx
 import React from "react";
 import "./LayerPanel.css";
+import { useEffect } from "react";
 
 export default function LayerPanel({
   layers,
@@ -20,9 +21,21 @@ export default function LayerPanel({
     onUpdateLayer(id, "__delete__", true);
   };
 
+  useEffect(() => {
+    const el = document.querySelector(".layer-item.selected");
+    el?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [selectedLayer]);
+
+
   return (
     <div className="layer-panel">
-      <h4>Layers</h4>
+      {/*<br/><br/>*/}<br/>
+      {/* SECTION 01 : LAYER LIST */}
+      <div className="layer-section layer-list-section">
+      
+      <div className="section-header">
+        <h4>Layers</h4>
+      </div>
 
       {/* LIST */}
       <div className="layer-items">
@@ -68,12 +81,16 @@ export default function LayerPanel({
 
             </div>
 
-            <div className="layer-title">
-              {l.type === "background" ? "Background" : l.text || "Image"}
+            <div className="layer-left">
+              <div className="layer-title">
+                {l.type === "background" ? "Background" : l.text || "Image"}
+              </div>
+              <div className="layer-sub">{l.type}</div>
             </div>
-            <div className="layer-sub">{l.type}</div>
+
           </div>
         ))}
+      </div>
       </div>
 
       {!layer ? null : (
@@ -106,30 +123,22 @@ export default function LayerPanel({
         </div>
       )}
 
+      {/* DIVIDER */}
+      <div className="layer-divider"></div>
+
+      {/* SECTION 02 : CONTROLS + PROPERTIES */}
+    <div className="layer-section layer-controls-section">
+      <div className="section-header">
+        <h4>Layer Controls</h4>
+      </div>
+    
       {/* PROPERTIES */}
+       <div className="layer-controls-scroll">
       {!layer ? (
         <div className="no-layer">No layer selected</div>
       ) : (
         <div className="layer-properties">
-          <h5>Layer Controls</h5>
-
-          {/* Z-INDEX */}
-          {/*<div className="inline-fields">
-            <button
-              onClick={() =>
-                onUpdateLayer(layer.id, "zIndex", layer.zIndex + 1)
-              }
-            >
-              ▲ Front
-            </button>
-            <button
-              onClick={() =>
-                onUpdateLayer(layer.id, "zIndex", layer.zIndex - 1)
-              }
-            >
-              ▼ Back
-            </button>
-          </div>*/}
+          
 
           
 
@@ -253,7 +262,8 @@ export default function LayerPanel({
               </select>
             </label>
           )}
-    
+      </div>
+      </div>
     </div>
   );
 }

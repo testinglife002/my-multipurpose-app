@@ -1,5 +1,5 @@
 // 📄 src/sales/pages/SalesDashboard.jsx
-
+// 📄 src/sales/pages/SalesDashboard.jsx
 import useSalesDashboard from "../hooks/useSalesDashboard";
 import KPIGrid from "../components/KPIGrid";
 import InvoicePrediction from "../components/InvoicePrediction";
@@ -11,6 +11,11 @@ import PredictionChart from "../components/charts/PredictionChart";
 export default function SalesDashboard() {
   const { data, loading } = useSalesDashboard();
 
+  // ⛔ IMPORTANT: guard FIRST
+  if (loading) return <p>Loading sales dashboard...</p>;
+  if (!data) return <p>No sales data available</p>;
+
+  // ✅ SAFE: data is guaranteed to exist below
   const revenueData = [
     { date: "This Month", revenue: data.totalRevenue },
   ];
@@ -25,10 +30,6 @@ export default function SalesDashboard() {
     { label: "Target", amount: data.targetAmount },
   ];
 
-
-  if (loading) return <p>Loading sales dashboard...</p>;
-  if (!data) return <p>No sales data</p>;
-
   return (
     <div style={{ padding: 24 }}>
       <h2>Sales Dashboard</h2>
@@ -39,7 +40,6 @@ export default function SalesDashboard() {
 
       <ActivityTimeline />
 
-      
       <RevenueChart data={revenueData} />
       <ConversionChart data={conversionData} />
       <PredictionChart data={predictionData} />

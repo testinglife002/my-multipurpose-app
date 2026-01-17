@@ -1,13 +1,11 @@
-import React from 'react'
-import { ShapeList } from '../Options'
-
+// ✅ Shapes.jsx (Fabric 6)
+// import { Circle, Rect, Triangle, Line } from "fabric";
 import { Circle, Line, Rect, Triangle } from 'fabric'
-
-import "./shapes.css";
-import { useCanvasHook } from '../../context/CanvasContext';
+import { ShapeList } from "../Options";
+import { useCanvasHook } from "../../context/CanvasContext";
 
 const Shapes = () => {
-    const { canvasEditor } = useCanvasHook();
+  const { canvasEditor } = useCanvasHook();
     const onShapeSelect = (shape) => {
         const properties = {
             left: 100,
@@ -47,20 +45,15 @@ const Shapes = () => {
     }
 
   return (
-    <div>
-    <div className="shapes-panel" >
-        {
-            ShapeList.map((shape,index) => (
-                <div key={index} onClick={()=>onShapeSelect(shape)}  className="shape-item" >
-                   
-                    <img src={shape.icon} alt={shape.name} width={40} height={40} />
-                    <span>{shape.name}</span>
-                </div>
-            ))
-        }
+    <div className="shapes-panel">
+      {ShapeList.map((shape, i) => (
+        <div key={i} onClick={() => onShapeSelect(shape)}>
+          <img src={shape.icon} alt={shape.name} width={40} height={40} />
+          <span>{shape.name}</span>
+        </div>
+      ))}
     </div>
-    </div>
-  )
-}
+  );
+};
 
-export default Shapes
+export default Shapes;

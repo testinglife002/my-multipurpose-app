@@ -104,10 +104,13 @@ const Header = ({ user, setUser }) => {
         <nav className={`nav-tabs ${tickerVisible ? "show" : "hide"}`}>
           {renderDropdown("home", <Home size={16} />, "Home", [
             { to: "/", label: "Main Home" },
+            { to: "/mainapp", label: "Main App Home" },
             { to: "/gordius", label: "Gordius Home" },
             { to: "/project-manager", label: "Project Manager" },
             { to: "/channel-manager", label: "Channel Manager" },
             { to: "/task-manager", label: "Task Manager" },
+            { to: "/appone", label: "Task Manager App I" },
+            { to: "/apptwo", label: "Task Manager App II" },
           ])}
 
           {user && (
@@ -121,25 +124,24 @@ const Header = ({ user, setUser }) => {
               ])}
 
               {renderDropdown("templates", <FileText size={16} />, "Templates", [
-                { to: "/banners-main", label: "Create Banner New" },
-                { to: "/banners-maker", label: "Create Banner New" },
-                { to: "/banners-maker-alt", label: "Create Banner New" },
+                {/*{ to: "/banners-main", label: "Create Banner New x" },
+                { to: "/banners-maker", label: "Create Banner New x" },
+                { to: "/banners-maker-alt", label: "Create Banner New x" },*/},
                 { to: "/banners-maker-ad", label: "Create Banner New" },
                 { to: "/create-banner-new", label: "Create Banner New" },
                 { to: "/banners", label: "Banners" },
-                { to: "/banner-maker", label: "Banner Maker" },
-                { to: "/banner-templates", label: "Banner Templates" },
+                {/*{ to: "/banner-maker", label: "Banner Maker x" },
+                { to: "/banner-templates", label: "Banner Templates x" },*/},
                 { to: "/text-editor", label: "Text Editor" },
                 { to: "/text-editor-design", label: "Text Design Editor" },
+                { to: "/designs/canva-home", label: "Canva" },
               ])}
 
               {renderDropdown("designs", <Palette size={16} />, "Designs", [
                 { to: "/create-template", label: "Create Template" },
                 { to: "/create-email-template", label: "Email Template Editor" },
                 { to: "/send-newsletter", label: "Send Newsletter" },
-                { to: "/email-templates", label: "Email Templates" },
-                { to: "/designs/canva-home", label: "Canva" },
-                
+                { to: "/email-templates", label: "Email Templates" },              
               ])}
 
               {renderDropdown(

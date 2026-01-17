@@ -1,4 +1,4 @@
-// models/fabric/Design.js
+// models/fabric/DesignFabric.js
 import mongoose from "mongoose";
 
 const designFabricSchema = new mongoose.Schema(

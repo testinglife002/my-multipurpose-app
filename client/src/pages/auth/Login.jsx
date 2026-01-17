@@ -27,6 +27,10 @@ export default function Login({ setUser }) {
       // localStorage.setItem("token", token);
       setUser(user);
       toast.success(`Welcome, ${user.username}`);
+      newRequest.interceptors.request.use(config => {
+        console.log("AUTH:", config.headers.Authorization);
+        return config;
+      });
 
       if (user.role === "admin") navigate("/admin/dashboard");
       else if (user.role === "author") navigate("/author/dashboard");

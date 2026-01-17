@@ -2,10 +2,11 @@
 // "use client";
 
 import { useState } from "react";
-import { sideBarMenu } from "./sideBarMenu";
+// import { sideBarMenu } from "./sideBarMenu";
 import SideBarSettings from "./SideBarSettings";
 import "./sidebar.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { sideBarMenu } from "./sideBarMenu";
 
 export default function SideBar({
   collapsed,

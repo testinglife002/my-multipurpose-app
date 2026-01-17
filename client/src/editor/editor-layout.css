@@ -1,0 +1,36 @@
+/* Root container */
+/* Root */
+.editor-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: auto;
+}
+
+/* Body */
+.editor-body {
+  display: flex;
+  flex: 1;
+  overflow: auto;
+  background: #f3f3f3;
+  min-height: 0; /* 🔑 */
+}
+
+/* LEFT AREA (auto width) */
+.editor-left {
+  display: flex;
+  height: 100%;
+  flex-shrink: 0; /* 👈 critical */
+  min-height: 0; /* 🔑 */
+}
+
+/* CANVAS AREA (auto fill) */
+.editor-canvas {
+  flex: 1; /* 👈 canvas grows/shrinks */
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ededed;
+  overflow: auto;
+}
