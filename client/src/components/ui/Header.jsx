@@ -108,7 +108,7 @@ const Header = ({ user, setUser }) => {
     <header className={`header-alt ${scrolled ? "shrink" : ""}`} ref={navRef}>
       <div className="header-top">
         <div className="logo">
-          <Link to="/">GordiusApp</Link>
+          <Link to="/">GA</Link>
         </div>
 
         <nav className={`nav-tabs ${tickerVisible ? "show" : "hide"}`}>
@@ -151,8 +151,26 @@ const Header = ({ user, setUser }) => {
                 { to: "/create-template", label: "Create Template" },
                 { to: "/create-email-template", label: "Email Template Editor" },
                 { to: "/send-newsletter", label: "Send Newsletter" },
-                { to: "/email-templates", label: "Email Templates" },              
+                { to: "/email-templates", label: "Email Templates" },       
+                
+                { to: "/design-dashboard", label: "Design Dashboard" },
+                { to: "/design/dashboard", label: "My Designs" },
+
+                { to: "/design/new", label: "New Design (Fabric)" },
+                { to: "/editor/new", label: "New Design (Main Editor)" },
+
+                { to: "/design/1", label: "Open Design (Fabric)" }, 
+                { to: "/editor/1", label: "Open Design (Main Editor)" },
               ])}
+
+              {renderDropdown("designs", <Palette size={16} />, "Design Studio", [
+                { to: "/design-dashboard", label: "Fabric Dashboard" },
+                { to: "/design/new", label: "New Fabric Design" },
+
+                { to: "/design/dashboard", label: "Main Editor Dashboard" },
+                { to: "/editor/new", label: "New Main Editor Design" },
+              ])}
+
 
               {renderDropdown(
                 "communication",
