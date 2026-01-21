@@ -12,7 +12,7 @@ export default function Home({ user, setUser }) {
       
       <br/><br/> Home - public <br/><br/>
 
-      <div style={{ margin: '5%', overflow:'auto !important' }}>
+      <div style={{ margin: '5%', overflow:'auto' }}>
         <CrissCrossSwiperDemo />
       </div>
       <br/><br/>
