@@ -2,40 +2,27 @@
    GLOBAL ROOT SCROLL SETTINGS
 ================================ */
 
-html, body {
+html, body, #root {
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
-
-  overflow-x: auto;   /* enable horizontal scroll */
-  overflow-y: auto;   /* enable vertical scroll */
-
-  scrollbar-width: thin;
-  scrollbar-color: #888 #f1f1f1;
-
-  scroll-behavior: smooth;
+  overflow: hidden;
 }
 
-/* React root */
-#root {
+/* Main scroll container */
+.app-scroll-container {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   overflow: auto;
-  cursor: grab;
 }
 
-/* Page wrapper used in App.jsx */
+/* Page wrapper */
 .page-content {
-  width: max-content;      /* allows horizontal expansion */
   min-width: 100%;
-  min-height: 100vh;
-
-  overflow-x: auto;
-  overflow-y: auto;
-
+  min-height: calc(100vh - 100px);
   padding-top: 100px;
+  width: max-content;
 }
+
 
 .page-content:active {
   cursor: grabbing;

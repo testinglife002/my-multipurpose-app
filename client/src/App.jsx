@@ -112,14 +112,15 @@ function AppWrapper() {
   }, [location.pathname]);
 
   // Auto wrap routes with PageWrapper if Header is visible
-  const PageWrapper = ({ children }) =>
-    showHeader ? (
-      <div className="page-content" style={{ paddingTop: headerHeight }}>
-        {children}
-      </div>
-    ) : (
-      <>{children}</>
-    );
+  const PageWrapper = ({ children }) => (
+    <div
+      className="page-content"
+      style={{ paddingTop: showHeader ? headerHeight : 0 }}
+    >
+      {children}
+    </div>
+  );
+
 
    
 
@@ -132,7 +133,11 @@ function AppWrapper() {
       {showHeader && <Header user={user} setUser={setUser} nav={nav} />}
       <Toaster position="top-right" />
 
-      <div ref={scrollRef} style={{ width: "100%", height: "100%", overflow: "auto" }}>
+      <div
+        ref={scrollRef}
+        className="app-scroll-container"
+      >
+
       <Routes>
         {/* Home */}
         <Route path="/" element={<PageWrapper><Home user={user} setUser={setUser} /></PageWrapper>} />
