@@ -1,48 +1,46 @@
-// src/invoices/components/InvoiceItemRow.jsx
-export default function InvoiceItemRow({ item, products, onChange, onRemove }) {
+// 📄 src/invoices/components/InvoiceItemRow.jsx
+export default function InvoiceItemRow({
+  item,
+  products,
+  onChange,
+  onRemove,
+}) {
+  const product = products.find(p => p._id === item.productId);
+
+  const price = product?.price || 0;
+  const total = price * (item.quantity || 0);
+
   return (
-    <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+    <div style={{ display: "flex", gap: 10, marginBottom: 8 }}>
+
       <select
-        value={item.productId || ""}
+        value={item.productId}
         onChange={(e) =>
-          onChange({ ...item, productId: e.target.value, name: "" })
+          onChange({ ...item, productId: e.target.value })
         }
       >
-        <option value="">Custom</option>
-        {products.map((p) => (
+        <option value="">Select product</option>
+        {products.map(p => (
           <option key={p._id} value={p._id}>
-            {p.name}
+            {p.name} ({p.price})
           </option>
         ))}
       </select>
 
-      {!item.productId && (
-        <input
-          placeholder="Item name"
-          value={item.name}
-          onChange={(e) => onChange({ ...item, name: e.target.value })}
-        />
-      )}
-
       <input
         type="number"
-        placeholder="Qty"
+        min="1"
         value={item.quantity}
         onChange={(e) =>
           onChange({ ...item, quantity: Number(e.target.value) })
         }
       />
 
-      <input
-        type="number"
-        placeholder="Price"
-        value={item.price}
-        onChange={(e) =>
-          onChange({ ...item, price: Number(e.target.value) })
-        }
-      />
+      <span>{total}</span>
 
-      <button onClick={onRemove}>✕</button>
+      <button type="button" onClick={onRemove}>
+        ❌
+      </button>
     </div>
   );
 }

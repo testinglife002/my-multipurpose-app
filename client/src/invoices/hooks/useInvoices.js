@@ -1,7 +1,7 @@
-// src/invoices/hooks/useInvoices.js
+// 📄 src/invoices/hooks/useInvoices.js
+
 import { useEffect, useState } from "react";
 import newRequest from "../../api/newRequest";
-
 
 export default function useInvoices() {
   const [invoices, setInvoices] = useState([]);
@@ -20,13 +20,28 @@ export default function useInvoices() {
 
   const createInvoice = async (payload) => {
     const res = await newRequest.post("/invoices", payload);
-    fetchInvoices();
+    await fetchInvoices();
     return res.data.invoice;
+  };
+
+  const regeneratePdf = async (invoiceId) => {
+    try {
+      await newRequest.post(`/invoices/${invoiceId}/generate-pdf`);
+      await fetchInvoices();
+    } catch (err) {
+      console.error("PDF regeneration failed", err);
+    }
   };
 
   useEffect(() => {
     fetchInvoices();
   }, []);
 
-  return { invoices, loading, createInvoice };
+  return {
+    invoices,
+    loading,
+    createInvoice,
+    regeneratePdf,
+    refresh: fetchInvoices,
+  };
 }

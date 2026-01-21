@@ -64,7 +64,11 @@ const Header = ({ user, setUser }) => {
   if (!showHeader) return null;
 
   const renderDropdown = (id, icon, label, links) => {
-    const isActive = links.some((link) => link.to === location.pathname);
+    // const isActive = links.some((link) => link.to === location.pathname);
+    const isActive = links.some((link) =>
+                      location.pathname.startsWith(link.to)
+                    );
+
     return (
       <div
         className={`dropdown ${isActive ? "active-dropdown" : ""}`}
@@ -85,7 +89,13 @@ const Header = ({ user, setUser }) => {
           >
             {links.map((link, idx) => (
               <li key={idx} className={link.to === location.pathname ? "active-link" : ""}>
-                <Link to={link.to}>{link.label}</Link>
+                {/*<Link to={link.to}>{link.label}</Link>*/}
+                {link.onClick ? (
+                  <button onClick={link.onClick}>{link.label}</button>
+                ) : (
+                  <Link to={link.to}>{link.label}</Link>
+                )}
+
               </li>
             ))}
           </ul>
@@ -154,6 +164,26 @@ const Header = ({ user, setUser }) => {
                   { to: "/whatsapp-sender", label: "WhatsApp Message Sender" },
                 ]
               )}
+
+              {renderDropdown(
+                "business",
+                <FolderKanban size={16} />,
+                "Business",
+                [
+                  { to: "/sales/sales-dashboard", label: "Sales Dashboard" },
+                  { to: "/sales/ml-analytics", label: "Sales ML Analytics" },
+
+                  { to: "/crm/leads", label: "CRM Leads" },
+                  { to: "/crm/customers", label: "CRM Customers" },
+
+                  { to: "/invoices", label: "Invoices List" },
+                  { to: "/invoices/create", label: "Create Invoice" },
+
+                  { to: "/products", label: "Products List" },
+                  { to: "/products/create", label: "Create Product" },
+                ]
+              )}
+
             </>
           )}
 

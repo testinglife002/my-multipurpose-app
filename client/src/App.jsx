@@ -61,6 +61,10 @@ import MainEditor from "./editor/MainEditor";
 import MainApp from "./main/MainApp";
 import AppOne from "./demo/AppOne";
 import { AppTwo } from "./demo/AppTwo";
+import useDragScroll from "./hooks/useDragScroll";
+import useWheelScroll from "./hooks/useWheelScroll";
+import ProductRoutes from "./products/product.routes";
+
 
 
 // trigger vercel redeploy
@@ -73,6 +77,9 @@ function AppWrapper() {
   const [user, setUser] = useState(null);
   const [headerHeight, setHeaderHeight] = useState(100);
   const nav = useRef();
+  const scrollRef = useRef();
+  useDragScroll(scrollRef);
+  useWheelScroll(scrollRef);
 
   // ✅ Load user & token from localStorage
   useEffect(() => {
@@ -124,6 +131,8 @@ function AppWrapper() {
     <>
       {showHeader && <Header user={user} setUser={setUser} nav={nav} />}
       <Toaster position="top-right" />
+
+      <div ref={scrollRef} style={{ width: "100%", height: "100%", overflow: "auto" }}>
       <Routes>
         {/* Home */}
         <Route path="/" element={<PageWrapper><Home user={user} setUser={setUser} /></PageWrapper>} />
@@ -156,6 +165,7 @@ function AppWrapper() {
         <Route path="/sales/*" element={<PageWrapper><SalesRoutes /></PageWrapper>} />
         <Route path="/crm/*" element={<PageWrapper><CRMRoutes /></PageWrapper>} />
         <Route path="/invoices/*" element={<PageWrapper><InvoiceRoutes /></PageWrapper>} />
+        <Route path="/products/*" element={<PageWrapper><ProductRoutes /></PageWrapper>} />
 
         {/*
         <Route path="/dashboard" element={<Dashboard />} />
@@ -166,7 +176,7 @@ function AppWrapper() {
         <Route path="/design/:designId" element={<DesignEditor />} />
 
         <Route path="/design/dashboard" element={<DesignsPage user={user}  />} />
-       <Route path="/editor/new" element={<MainEditor user={user} />} />
+        <Route path="/editor/new" element={<MainEditor user={user} />} />
         <Route path="/editor/:designId" element={<MainEditor user={user} />} />
 
         {/* Banner / Templates */}
@@ -222,6 +232,7 @@ function AppWrapper() {
         <Route path="/edit-email-template/:id" element={<PageWrapper><EmailTemplateEditor /></PageWrapper>} />
       
       </Routes>
+      </div>
     </>
   );
 }

@@ -1,4 +1,67 @@
-/* Approx header + ticker height */
+/* ================================
+   GLOBAL ROOT SCROLL SETTINGS
+================================ */
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  overflow-x: auto;   /* enable horizontal scroll */
+  overflow-y: auto;   /* enable vertical scroll */
+
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+
+  scroll-behavior: smooth;
+}
+
+/* React root */
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  cursor: grab;
+}
+
+/* Page wrapper used in App.jsx */
 .page-content {
-  padding-top: 100px; /* adjust as needed, match header + ticker */
+  width: max-content;      /* allows horizontal expansion */
+  min-width: 100%;
+  min-height: 100vh;
+
+  overflow-x: auto;
+  overflow-y: auto;
+
+  padding-top: 100px;
+}
+
+.page-content:active {
+  cursor: grabbing;
+}
+
+/* Smooth scrolling */
+* {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
