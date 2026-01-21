@@ -64,38 +64,36 @@ const Header = ({ user, setUser }) => {
   if (!showHeader) return null;
 
   const renderDropdown = (id, icon, label, links) => {
-    // const isActive = links.some((link) => link.to === location.pathname);
     const isActive = links.some((link) =>
-                      location.pathname.startsWith(link.to)
-                    );
+      location.pathname.startsWith(link.to)
+    );
 
     return (
       <div
         className={`dropdown ${isActive ? "active-dropdown" : ""}`}
         onMouseEnter={() => setDropdownOpen(id)}
-        onMouseLeave={() => setDropdownOpen(id)}
+        onMouseLeave={() => setDropdownOpen(null)}
       >
         <button
           className={`dropdown-toggle ${dropdownOpen === id ? "active" : ""}`}
           onClick={() => toggleDropdown(id)}
         >
-          {icon} {label} <ChevronDown size={12} className="dropdown-arrow" />
+          {icon} {label} <ChevronDown size={12} />
         </button>
+
         {dropdownOpen === id && (
           <ul
             className="dropdown-menu"
             onMouseEnter={() => setDropdownOpen(id)}
-            onMouseLeave={() => setDropdownOpen(id)}
+            onMouseLeave={() => setDropdownOpen(null)}
           >
             {links.map((link, idx) => (
-              <li key={idx} className={link.to === location.pathname ? "active-link" : ""}>
-                {/*<Link to={link.to}>{link.label}</Link>*/}
+              <li key={idx}>
                 {link.onClick ? (
                   <button onClick={link.onClick}>{link.label}</button>
                 ) : (
                   <Link to={link.to}>{link.label}</Link>
                 )}
-
               </li>
             ))}
           </ul>
@@ -103,6 +101,7 @@ const Header = ({ user, setUser }) => {
       </div>
     );
   };
+
 
   return (
     <header className={`header-alt ${scrolled ? "shrink" : ""}`} ref={navRef}>
@@ -163,7 +162,7 @@ const Header = ({ user, setUser }) => {
                 { to: "/editor/1", label: "Open Design (Main Editor)" },
               ])}
 
-              {renderDropdown("designs", <Palette size={16} />, "Design Studio", [
+              {renderDropdown("designStudio", <Palette size={16} />, "Design Studio", [
                 { to: "/design-dashboard", label: "Fabric Dashboard" },
                 { to: "/design/new", label: "New Fabric Design" },
 
