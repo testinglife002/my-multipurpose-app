@@ -5,10 +5,12 @@ import {
   Grid,
   Pencil,
   Settings,
-  Sparkle,
+  Sparkles,
   Type,
   Upload,
 } from "lucide-react";
+
+
 import { useState } from "react";
 import "./main-sidebar.css";
 import ElementsPanel from "./ElementsPanel";
@@ -32,7 +34,7 @@ function MainSidebar() {
   const items = [
     { id: "elements", icon: Grid, label: "Elements", panel: <ElementsPanel/> },
     { id: "text", icon: Type, label: "Text", panel: <TextPanel/> },
-     { id: "text-effects", icon: Sparkle, label: "Text Effects", panel: <TextEffectsPanel/> },
+    { id: "text-effects", icon: Sparkles, label: "Text Effects", panel: <TextEffectsPanel/> },
     { id: "uploads", icon: Upload, label: "Uploads", panel: <UploadPanel /> },
     { id: "draw", icon: Pencil, label: "Draw", panel: <DrawingPanel /> },
     { id: "settings", icon: Settings, label: "Settings", panel: <SettingsPanel/> },
