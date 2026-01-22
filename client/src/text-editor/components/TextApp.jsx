@@ -396,7 +396,7 @@ export default function TextApp() {
 
     <div /* style={{marginRight:'10%', marginLeft:'10%', marginTop:'10%'}} */ >
     {/* RIGHT PANEL */}
-      <br/>
+    
       {/* RIGHT PANEL (CONTENT ONLY) */}
       <aside className={`right-panel ${rightCollapsed ? "collapsed" : ""}`}>
         {rightTab === "layers" && (
