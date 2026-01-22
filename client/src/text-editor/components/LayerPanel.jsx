@@ -34,7 +34,7 @@ export default function LayerPanel({
       <div className="layer-section layer-list-section" >
       
       {/*<div className="section-header">*/}
-      <br/><br/><br/>
+      
         <h4>Layers</h4>
       {/*</div>*/}
 
