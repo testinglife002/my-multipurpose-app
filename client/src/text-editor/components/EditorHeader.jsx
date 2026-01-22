@@ -52,7 +52,7 @@ export default function EditorHeader({
         >
           Background
         </button>
-        <button className="eh-btn" onClick={toggleRight}>
+        <button className="eh-tab" onClick={toggleRight}>
           BG {rightCollapsed ? "▶" : "◀"}
         </button>
       </div>

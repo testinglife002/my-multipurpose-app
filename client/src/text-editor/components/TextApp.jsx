@@ -333,13 +333,14 @@ export default function TextApp() {
 
     <div /* className="app-root" */  >
     <br/>
-    <button
+
+    {/*<button
       className="toggle-btn"
       onClick={() => setLeftCollapsed(c => !c)}
       >
       <Layers size={20}/>
       {!leftCollapsed && <span>Layers</span>}
-      </button>
+      </button>*/}
 
     <div className="editor-body">
     {/* LEFT SIDEBAR */}
