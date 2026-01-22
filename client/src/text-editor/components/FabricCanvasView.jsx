@@ -106,7 +106,7 @@ export default function FabricCanvasView({
 
   /* ─────────────────────────────
      GLOBAL OVERLAY (TEXT OVERLAY)
-  ───────────────────────────── */
+  ───────────────────────────── 
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
@@ -144,10 +144,46 @@ export default function FabricCanvasView({
 
     canvas.renderAll();
   }, [overlay, width, height]);
+  */
+
+   /* OVERLAY */
+  useEffect(() => {
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+
+    if (!overlay?.showOverlay) {
+      if (overlayRef.current) {
+        canvas.remove(overlayRef.current);
+        overlayRef.current = null;
+        canvas.renderAll();
+      }
+      return;
+    }
+
+    const w = canvas.getWidth();
+    const h = canvas.getHeight();
+
+    if (!overlayRef.current) {
+      overlayRef.current = new Rect({
+        left: 0,
+        top: 0,
+        width: w,
+        height: h,
+        fill: "rgba(0,0,0,0.25)",
+        selectable: false,
+        evented: false,
+      });
+      canvas.add(overlayRef.current);
+      canvas.sendObjectToBack(overlayRef.current);
+    }
+
+    overlayRef.current.set({ width: w, height: h });
+    canvas.renderAll();
+  }, [overlay]);
 
   /* ─────────────────────────────
      SYNC LAYERS → CANVAS
-  ───────────────────────────── */
+  ───────────────────────────── 
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
@@ -156,7 +192,6 @@ export default function FabricCanvasView({
     const map = objectsRef.current;
     const activeIds = new Set(layers.map((l) => l.id));
 
-    /* 🧹 REMOVE DELETED LAYERS */
     Object.keys(map).forEach((id) => {
       if (!activeIds.has(id)) {
         if (map[id].bg) canvas.remove(map[id].bg);
@@ -168,7 +203,7 @@ export default function FabricCanvasView({
     layers.forEach((layer) => {
       let entry = map[layer.id];
 
-      /* ───── BACKGROUND / IMAGE ───── */
+  
       if (layer.type === "background" || layer.type === "image") {
         if (!entry && layer.url) {
           FabricImage.fromURL(layer.url).then((img) => {
@@ -222,7 +257,6 @@ export default function FabricCanvasView({
         return;
       }
 
-      /* ───── TEXT + TEXT BACKGROUND ───── */
       if (!entry) {
         const text = new Textbox(layer.text || "", {
           left: (layer.x / 100) * width,
@@ -321,10 +355,79 @@ export default function FabricCanvasView({
 
     canvas.renderAll();
   }, [layers, width, height]);
+  */
+
+
+  /* SYNC LAYERS */
+  useEffect(() => {
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+
+    const w = canvas.getWidth();
+    const h = canvas.getHeight();
+    const map = objectsRef.current;
+
+    const active = new Set(layers.map(l => l.id));
+
+    Object.keys(map).forEach(id => {
+      if (!active.has(id)) {
+        if (map[id].bg) canvas.remove(map[id].bg);
+        canvas.remove(map[id].main);
+        delete map[id];
+      }
+    });
+
+    layers.forEach(layer => {
+      let entry = map[layer.id];
+
+      if (layer.type === "image" || layer.type === "background") {
+        if (!entry && layer.url) {
+          FabricImage.fromURL(layer.url).then(img => {
+            img.set({
+              left: (layer.x ?? 0) / 100 * w,
+              top: (layer.y ?? 0) / 100 * h,
+              scaleX: layer.width / img.width,
+              scaleY: layer.height / img.height,
+            });
+            img.data = { layerId: layer.id };
+            map[layer.id] = { main: img };
+            canvas.add(img);
+            setZIndex(canvas, img, layer.zIndex);
+            canvas.renderAll();
+          });
+        }
+        return;
+      }
+
+      if (!entry) {
+        const text = new Textbox(layer.text || "", {
+          left: (layer.x / 100) * w,
+          top: (layer.y / 100) * h,
+          width: layer.width,
+          fontSize: layer.fontSize,
+          fill: layer.color,
+        });
+        text.data = { layerId: layer.id };
+        canvas.add(text);
+        map[layer.id] = { main: text };
+      } else {
+        entry.main.set({
+          text: layer.text,
+          left: (layer.x / 100) * w,
+          top: (layer.y / 100) * h,
+          width: layer.width,
+          fontSize: layer.fontSize,
+          fill: layer.color,
+        });
+      }
+    });
+
+    canvas.renderAll();
+  }, [layers]);
 
   /* ─────────────────────────────
      FABRIC → REACT (MOVE / SCALE)
-  ───────────────────────────── */
+  ───────────────────────────── 
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
@@ -353,6 +456,28 @@ export default function FabricCanvasView({
       canvas.off("object:modified", sync);
     };
   }, [onUpdateLayer, width, height]);
+  */
+
+  /* MOVE / SCALE */
+  useEffect(() => {
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+
+    const sync = e => {
+      const obj = e.target;
+      const id = obj?.data?.layerId;
+      if (!id) return;
+
+      const w = canvas.getWidth();
+      const h = canvas.getHeight();
+
+      onUpdateLayer(id, "x", (obj.left / w) * 100);
+      onUpdateLayer(id, "y", (obj.top / h) * 100);
+    };
+
+    canvas.on("object:modified", sync);
+    return () => canvas.off("object:modified", sync);
+  }, [onUpdateLayer]);
 
   /* ─────────────────────────────
      SELECTION → LAYER PANEL
