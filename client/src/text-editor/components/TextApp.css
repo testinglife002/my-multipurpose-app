@@ -1,8 +1,56 @@
 .editor-shell {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
 }
+
+.editor-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* LEFT */
+.left-sidebar {
+  width: 280px;
+  transition: width 0.25s ease;
+  overflow: hidden;
+  background: #0f1115;
+}
+
+.left-sidebar.collapsed {
+  width: 48px;
+}
+
+/* RIGHT */
+.right-panel {
+  width: 300px;
+  transition: width 0.25s ease;
+  overflow: hidden;
+  background: #0f1115;
+}
+
+.right-panel.collapsed {
+  width: 48px;
+}
+
+/* CANVAS */
+.canvas-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.25s ease;
+  background: #16181d;
+}
+
+.canvas-stage {
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  padding: 20px;
+}
+
 
 .app-root {
   flex: 1;

@@ -15,6 +15,8 @@ import BgControls from "./BgControls";
 import EditorHeader from "./EditorHeader";
 import newRequest from "../../api/newRequest";
 import RightBgPanel from "./RightBgPanel";
+import { ArrowUp, ArrowDown, Layers, SlidersHorizontal, PanelLeft, PanelRight } from "lucide-react";
+
 /*
 import TextCanvas from "@/components/text-editor/TextCanvas";
 import TextSidebar from "@/components/text-editor/TextSidebar";
@@ -305,132 +307,42 @@ export default function TextApp() {
 
   return (
     <>
-    {/*<div className="app-root">
-      
-      {<TextSidebar
-        templates={templates}
-        onSelect={(tpl) => setCurrent(tpl)}
-        onPresetSelect={handleSelectPreset}
-        onPresetHover={(pId) => setHoverEffect(pId)}
-        layers={layers}
-        selectedLayer={selectedLayerObj}
-        selectedLayerId={selectedLayer}
-        onDeleteTemplate={handleDeleteTemplate}
-      />}
-
-      <main className="main-area">
-        <div className="top-controls">
-          <button className="btn" onClick={handleAddTextLayer}>
-            + Add Text Layer
-          </button>
-          <ExportControls canvasId="studio-canvas" template={current} />
-        </div>
-        <div className="workspace">
-          
-          <CanvasView
-            id="studio-canvas"
-            layers={layers}
-            template={current}
-            selectedLayer={selectedLayer}
-            hoverEffect={hoverEffect}
-            showOverlay={showOverlay}
-            onSelectLayer={(id) => setSelectedLayer(id)}
-            onUpdateLayer={handleUpdateLayer}
-            onSaveTemplate={handleSaveTemplate}
-            showBgControls={showBgControls}
-          />
-          
-          <TextCanvas showBgControls={showBgControls} />
-
-          <div className="canvas-area">
-            <FabricCanvasView
-                layers={layers}
-                selectedLayerId={selectedLayer}
-                onSelectLayer={setSelectedLayer}
-                onUpdateLayer={handleUpdateLayer}
-            />
-            </div>
-
-        
-            <BgControls
-              // backgroundLayer={layers.find((l) => l.type === "background")}
-                overlayScale={overlayScale}
-                textBgScale={textBgScale}
-                showOverlay={showOverlay}
-                showTextBg={showTextBg}
-                setOverlayScale={setOverlayScale}
-                setTextBgScale={setTextBgScale}
-                setShowOverlay={setShowOverlay}
-                setShowTextBg={setShowTextBg}
-                selectedLayerObj={selectedLayerObj}
-                onUpdateLayer={handleUpdateLayer}
-            />            
-         
-           
-            <BgControls
-                overlayScale={overlayScale}
-                textBgScale={textBgScale}
-                showOverlay={showOverlay}
-                showTextBg={showTextBg}
-                setOverlayScale={setOverlayScale}
-                setTextBgScale={setTextBgScale}
-                setShowOverlay={setShowOverlay}
-                setShowTextBg={setShowTextBg}
-                selectedLayerObj={selectedLayerObj}
-                onUpdateLayer={onUpdateLayer}
-                />
-          
-          
-        </div>
-
-      </main>
-
-      <div className="right-panel">
-        <div className="panel-slot">
-            <LayerPanel
-            layers={layers}
-            selectedLayer={selectedLayer}
-            showOverlay={showOverlay}
-            onToggleOverlay={setShowOverlay}
-            onSelectLayer={setSelectedLayer}
-            onUpdateLayer={handleUpdateLayer}
-            showBgControls={showBgControls}
-            setShowBgControls={setShowBgControls}
-            onBgUpload={handleBgUpload}   // ✅ ADD THIS
-            />
-
-            <BgControl
-            collapsed={!showBgControls}
-            showOverlay={showOverlay}
-            setShowOverlay={setShowOverlay}
-            selectedLayerObj={selectedLayerObj}
-            onUpdateLayer={handleUpdateLayer}
-            />
-        </div>
-        </div>
-
-
-    </div>*/}
+    
     <div className="editor-shell">
 
-        <EditorHeader
-            activeTab={rightTab}
-            setActiveTab={setRightTab}
-            onAddText={handleAddTextLayer}
-            onAddImage={handleAddImageLayer}
+       
+       <EditorHeader
+          activeTab={rightTab}
+          setActiveTab={setRightTab}
+          onAddText={handleAddTextLayer}
+          onAddImage={handleAddImageLayer}
+          leftCollapsed={leftCollapsed}
+          rightCollapsed={rightCollapsed}
+          toggleLeft={() => setLeftCollapsed(v => !v)}
+          toggleRight={() => setRightCollapsed(v => !v)}
         />
     <div className="app-root">
+
+    <button
+      className="toggle-btn"
+      onClick={() => setLeftCollapsed(c => !c)}
+      >
+      <Layers size={20}/>
+      {!leftCollapsed && <span>Layers</span>}
+      </button>
+
+    <div className="editor-body">
     {/* LEFT SIDEBAR */}
     <div className={`left-sidebar ${leftCollapsed ? "collapsed" : ""}`}>
         <TextSidebar
-        templates={templates}
-        onSelect={(tpl) => setCurrent(tpl)}
-        onPresetSelect={handleSelectPreset}
-        // onPresetHover={(pId) => setHoverEffect(pId)}
-        layers={layers}
-        selectedLayer={selectedLayerObj}
-        selectedLayerId={selectedLayer}
-        onDeleteTemplate={handleDeleteTemplate}
+          templates={templates}
+          onSelect={(tpl) => setCurrent(tpl)}
+          onPresetSelect={handleSelectPreset}
+          // onPresetHover={(pId) => setHoverEffect(pId)}
+          layers={layers}
+          selectedLayer={selectedLayerObj}
+          selectedLayerId={selectedLayer}
+          onDeleteTemplate={handleDeleteTemplate}
         />
         <button
         className="collapse-btn left"
@@ -441,61 +353,12 @@ export default function TextApp() {
     </div>
 
     
-    {/*<div className="top-controls">
-        <button className="btn" onClick={handleAddTextLayer}>
-        + Add Text Layer
-        </button>
-        <button className="btn" onClick={handleAddImageLayer}>
-        + Add Images
-        </button>
-      
-        <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={(e) => {
-                if (!e.target.files) return;
-
-                Array.from(e.target.files).forEach((file) => {
-                    const files = Array.from(e.target.files);
-                    let lastId = null;
-
-                    setLayers((prev) => {
-                    const baseZ = Math.max(...prev.map(l => l.zIndex), 0);
-
-                    const newLayers = files.map((file, i) => {
-                        lastId = uuidv4();
-                        return {
-                        id: lastId,
-                        type: "image",
-                        url: URL.createObjectURL(file),
-                        x: 50,
-                        y: 50,
-                        width: 400,
-                        height: 300,
-                        zIndex: baseZ + i + 1,
-                        opacity: 1,
-                        blur: 0,
-                        blendMode: "source-over",
-                        visible: true,
-                        locked: false,
-                        };
-                    });
-
-                    return [...prev, ...newLayers];
-                    });
-
-                    setSelectedLayer(lastId);
-
-                });
-            }}
-        />
-
-
-    </div>*/}
 
     {/* CANVAS AREA */}
-     { <div className="canvas-area">
+     { <div className={`canvas-area` 
+        // ${leftCollapsed ? "left-collapsed" : ""} 
+        // ${rightCollapsed ? "right-collapsed" : ""}`}
+       }>
         <div className="canvas-stage">
         <FabricCanvasView
             layers={layers}
@@ -511,82 +374,9 @@ export default function TextApp() {
 
     <div /* style={{marginRight:'10%', marginLeft:'10%', marginTop:'10%'}} */ >
     {/* RIGHT PANEL */}
-    {/* RIGHT PANEL 
-        <aside className={`right-panel ${rightCollapsed ? "collapsed" : ""}`}>
-        
-        <button
-          className="collapse-btn right"
-          onClick={() => setRightCollapsed((v) => !v)}
-        >
-          {rightCollapsed ? "◀" : "▶"}
-        </button>
-
-        {!rightCollapsed && (
-          <>
-      
-            <div className="right-tabs">
-                <button
-                    className={`tab-btn ${rightTab === "layers" ? "active" : ""}`}
-                    onClick={() => setRightTab("layers")}
-                >
-                    Layers
-                </button>
-
-                <button
-                    className={`tab-btn ${rightTab === "bg" ? "active" : ""}`}
-                    onClick={() => setRightTab("bg")}
-                >
-                    Background
-                </button>
-            </div>
-
-
-          
-            <div className="right-panel-content">
-              {rightTab === "layers" && (
-                <>
-                <LayerPanel
-                  layers={layers}
-                  selectedLayer={selectedLayer}
-                  onSelectLayer={setSelectedLayer}
-                  onUpdateLayer={handleUpdateLayer}
-                  onBgUpload={handleBgUpload}
-                  showOverlay={showOverlay}
-                  onToggleOverlay={() => setShowOverlay((p) => !p)}
-                />
-                <LayerPanel
-                  layers={layers}
-                  selectedLayer={selectedLayer}
-                  onSelectLayer={setSelectedLayer}
-                  onUpdateLayer={(id, key, val) =>
-                    updateLayer(id, { [key]: val })
-                  }
-                />
-                </>
-              )}
-
-              {rightTab === "bg" && (
-                <BgControls
-                  bg={backgroundLayer}
-                  onUpload={handleBgUpload}
-                  onChange={updateBackground}
-                  showOverlay={showOverlay}
-                  setShowOverlay={setShowOverlay}
-                  overlayScale={overlayScale}
-                  setOverlayScale={setOverlayScale}
-                  textBgScale={textBgScale}
-                  setTextBgScale={setTextBgScale}
-                  showTextBg={showTextBg}
-                  setShowTextBg={setShowTextBg}
-                />
-              )}
-            </div>
-          </>
-        )}
-      </aside>*/}
-
+    
       {/* RIGHT PANEL (CONTENT ONLY) */}
-      <aside className="right-panel">
+      <aside className={`right-panel ${rightCollapsed ? "collapsed" : ""}`}>
         {rightTab === "layers" && (
           <LayerPanel
             layers={layers}
@@ -598,23 +388,7 @@ export default function TextApp() {
           />
         )}
 
-        {
-        /*
-        rightTab === "bg" && (
-        <BgControls
-            bg={backgroundLayer}
-            selectedLayer={selectedLayerObj}
-            onUploadBg={handleBgUpload}
-            onUpdateBg={updateBackground}
-            onUpdateLayer={updateLayer}
-            showOverlay={showOverlay}
-            setShowOverlay={setShowOverlay}
-            overlayScale={overlayScale}
-            setOverlayScale={setOverlayScale}
-        />
-        )
-        */
-        }
+        
 
         {rightTab === "bg" && (
             <RightBgPanel
@@ -636,7 +410,7 @@ export default function TextApp() {
 
     </div>
     </div>
-
+    </div>        
     </div>
 
     </>

@@ -11,6 +11,7 @@ import {
   filters,
 } from "fabric";
 import { applyTextEffect } from "./effects";
+import './fabric.css';
 
 /* ─────────────────────────────
    Z-INDEX HELPER (FABRIC v6 SAFE)
@@ -40,6 +41,8 @@ export default function FabricCanvasView({
   const objectsRef = useRef({});        // layerId → { main, bg? }
   const overlayRef = useRef(null);      // overlay rect
 
+
+
   /* ─────────────────────────────
      INIT CANVAS (ONCE)
   ───────────────────────────── */
@@ -58,6 +61,30 @@ export default function FabricCanvasView({
       fabricRef.current = null;
     };
   }, [width, height]);
+
+
+  /* AUTO RESIZE */
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    const canvas = fabricRef.current;
+    if (!wrapper || !canvas) return;
+
+    const resize = () => {
+      const w = wrapper.clientWidth;
+      const h = wrapper.clientHeight;
+      canvas.setWidth(w);
+      canvas.setHeight(h);
+      canvas.renderAll();
+    };
+
+    resize();
+
+    const observer = new ResizeObserver(resize);
+    observer.observe(wrapper);
+
+    return () => observer.disconnect();
+  }, []);
+
 
   /* ─────────────────────────────
      GLOBAL OVERLAY (TEXT OVERLAY)
@@ -342,8 +369,10 @@ export default function FabricCanvasView({
   }, [selectedLayerId]);
 
   return (
-    <div className="fabric-canvas-wrapper">
+    <div className="fabric-wrapper" ref={wrapperRef}>
+    {/*<div className="fabric-canvas-wrapper">*/}
       <canvas ref={domRef} />
+    {/*</div>*/}
     </div>
   );
 }

@@ -35,6 +35,7 @@ export default function TextSidebar({
 
   return (
     <aside className="text-sidebar">
+      <div className="text-sidebar-scroll">
       <div className="sidebar-top">
         <h3 className="sidebar-title">Text Effects</h3>
         <div className="live-preview">
@@ -136,6 +137,7 @@ export default function TextSidebar({
           }
         }}
       />
+      </div>
     </aside>
   );
 }
