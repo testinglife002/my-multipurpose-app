@@ -39,6 +39,8 @@ export default function EditorHeader({
         </label>
       </div>
 
+      
+
       <div className="editor-header-center">
         <button
           className={`eh-tab ${activeTab==="layers"?"active":""}`}
@@ -46,18 +48,27 @@ export default function EditorHeader({
         >
           Layers
         </button>
+
         <button
           className={`eh-tab ${activeTab==="bg"?"active":""}`}
           onClick={()=>setActiveTab("bg")}
         >
           Background
         </button>
+
+        <button className="eh-tab" onClick={toggleLeft}>
+          {leftCollapsed ? "▶ Left" : "◀ Left"}
+        </button>
+
+        <button className="eh-tab" onClick={toggleRight}>
+          {rightCollapsed ? "▶ Right" : "Right ▶"}
+        </button>
         <button className="eh-tab" onClick={toggleRight}>
           BG {rightCollapsed ? "▶" : "◀"}
         </button>
       </div>
 
-      <div  className="editor-header-right" >
+      {/*<div  className="editor-header-right" >
         
         <div  className="header-toggle-group" >
           <button
@@ -78,7 +89,7 @@ export default function EditorHeader({
             <SlidersHorizontal size={18} />
           </button>
         </div>
-      </div>
+      </div>*/}
       {/* Toggle Button */}
             
     </header>
