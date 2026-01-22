@@ -55,10 +55,8 @@ export default function EditorHeader({
         <button className="eh-btn" onClick={toggleRight}>
           BG {rightCollapsed ? "▶" : "◀"}
         </button>
-      </div>
-      {/* Toggle Button */}
-            <div>
-              <button
+        <div>
+            <button
               className="toggle-btn"
               style={{marginRight:'5%'}}
               onClick={() => setCollapsed((c) => !c)}
@@ -75,8 +73,11 @@ export default function EditorHeader({
                 title="Toggle BG Controls"
               >
                 <SlidersHorizontal size={18} />
-              </button>
-            </div>
+            </button>
+          </div>
+      </div>
+      {/* Toggle Button */}
+            
     </header>
   );
 }

@@ -329,7 +329,7 @@ export default function TextApp() {
         />
 
     <div /* className="app-root" */  >
-    <br/><br/>
+    <br/>
     <button
       className="toggle-btn"
       onClick={() => setLeftCollapsed(c => !c)}
