@@ -1,11 +1,13 @@
 // text-effects.js
-import { fabric } from "fabric";
+import * as fabric from "fabric";
+
 import {
   getSelectedTextObject,
   registerTextEffect,
   removeTextEffect,
   applyTextEffects,
 } from "./fabric-utils";
+
 
 
 export const toggleTextShadow = (canvas, options) => {
