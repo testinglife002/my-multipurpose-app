@@ -1,11 +1,24 @@
+// fabric-utils.js
 import { shapeDefinitions } from "./shapes/shape-definitions";
 import { createShape } from "./shapes/shape-factory";
+import { apply3DText, applyGlow, applyGradientFill, applyNeon } from "./text-effects";
+
 
 
 
 export const initializeFabric = async (canvasEl, containerEl) => {
   try {
-    const { Canvas, PencilBrush } = await import("fabric");
+    // const { Canvas, PencilBrush } = await import("fabric");
+    const { Canvas, PencilBrush, fabric } = fabricModule;
+
+    // 🔥 ENABLE METADATA SERIALIZATION
+    fabric.Object.prototype.toObject = (function (toObject) {
+      return function () {
+        return fabric.util.object.extend(toObject.call(this), {
+          metadata: this.metadata || null,
+        });
+      };
+    })(fabric.Object.prototype.toObject);
 
     const canvas = new Canvas(canvasEl, {
       preserveObjectStacking: true,
@@ -125,6 +138,96 @@ export const addTextToCanvas = async (
     return null;
   }
 };
+
+export const getSelectedTextObject = (canvas) => {
+  if (!canvas) return null;
+  const obj = canvas.getActiveObject();
+  if (!obj) return null;
+
+  if (["i-text", "textbox", "text"].includes(obj.type)) return obj;
+  return null;
+};
+
+
+export const registerTextEffect = (textObj, name, options = {}) => {
+  if (!textObj.metadata) textObj.metadata = {};
+  if (!textObj.metadata.effects) textObj.metadata.effects = [];
+
+  const exists = textObj.metadata.effects.find(e => e.name === name);
+  if (!exists) {
+    textObj.metadata.effects.push({ name, options });
+  }
+};
+
+export const removeTextEffect = (textObj, name) => {
+  if (!textObj?.metadata?.effects) return;
+  textObj.metadata.effects = textObj.metadata.effects.filter(e => e.name !== name);
+};
+
+
+export const resetTextBaseState = (textObj) => {
+  textObj.set({
+    shadow: null,
+    stroke: null,
+    strokeWidth: 0,
+    fill: textObj.metadata.baseFill || textObj.fill,
+  });
+};
+
+
+
+export const applyTextEffects = (canvas, textObj) => {
+  if (!canvas || !textObj) return;
+
+  if (!textObj.metadata) textObj.metadata = {};
+  if (!textObj.metadata.baseFill) {
+    textObj.metadata.baseFill = textObj.fill;
+  }
+
+  resetTextBaseState(textObj);
+
+  // cleanup 3D clones
+  if (textObj.metadata._3dClones) {
+    textObj.metadata._3dClones.forEach(c => canvas.remove(c));
+    textObj.metadata._3dClones = [];
+  }
+
+  const effects = textObj.metadata.effects || [];
+
+  effects.forEach(effect => {
+    switch (effect.name) {
+      case "shadow":
+        textObj.set({ shadow: effect.options });
+        break;
+
+      case "stroke":
+        textObj.set({
+          stroke: effect.options.color,
+          strokeWidth: effect.options.width,
+        });
+        break;
+
+      case "gradient":
+        applyGradientFill(textObj, effect.options);
+        break;
+
+      case "glow":
+        applyGlow(textObj, effect.options);
+        break;
+
+      case "neon":
+        applyNeon(textObj, effect.options);
+        break;
+
+      case "3d":
+        apply3DText(canvas, textObj, effect.options);
+        break;
+    }
+  });
+
+  canvas.requestRenderAll();
+};
+
 
 
 

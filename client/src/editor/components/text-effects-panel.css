@@ -1,0 +1,20 @@
+/* text-effects-panel.css */
+
+.text-effects-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.text-effects-panel button {
+  padding: 8px;
+  border-radius: 6px;
+  background: #f3f3f3;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.text-effects-panel button:hover {
+  background: #e5e5e5;
+}

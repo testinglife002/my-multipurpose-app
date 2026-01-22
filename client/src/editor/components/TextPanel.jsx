@@ -17,7 +17,7 @@ function TextPanel() {
       {textPresets.map((preset, i) => (
         <button
           key={i}
-          onClick={() => addTextToCanvas(canvas, preset.text, preset)}
+          onClick={() => applyTextEffects(canvas, preset.text, preset)}
           style={{
             fontSize: preset.fontSize / 2,
             fontFamily: preset.fontFamily,
