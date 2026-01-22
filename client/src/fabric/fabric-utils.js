@@ -8,13 +8,10 @@ import { apply3DText, applyGlassText, applyGlow, applyGradientFill, applyIsometr
 
 export const initializeFabric = async (canvasEl, containerEl) => {
   try {
-    // const { Canvas, PencilBrush } = await import("fabric");
-    // const { Canvas, PencilBrush, fabric } = fabricModule;
-    const fabricModule = await import("fabric");
-    const { Canvas, PencilBrush } = fabricModule;
-    const fabric = fabricModule;
+    const fabric = await import("fabric");
 
-    // 🔥 ENABLE METADATA SERIALIZATION
+    const { Canvas, PencilBrush } = fabric;
+
     fabric.Object.prototype.toObject = (function (toObject) {
       return function () {
         return fabric.util.object.extend(toObject.call(this), {
@@ -29,17 +26,18 @@ export const initializeFabric = async (canvasEl, containerEl) => {
       renderOnAddRemove: true,
     });
 
-    //drawing init
     const brush = new PencilBrush(canvas);
     brush.color = "#000000";
     brush.width = 5;
     brush.opacity = 1;
     brush.pathCaching = false;
+
     canvas.freeDrawingBrush = brush;
     canvas.renderAll();
+
     return canvas;
   } catch (e) {
-    console.error("Failed to load fabric", e);
+    console.error("Failed to initialize Fabric.js canvas", e);
     return null;
   }
 };
@@ -189,7 +187,6 @@ export const applyTextEffects = async (canvas, textObj) => {
 
   resetTextBaseState(textObj);
 
-  // 🔥 CLEAN ALL DEPTH CLONES
   if (textObj.metadata._effectClones?.length) {
     textObj.metadata._effectClones.forEach(c => canvas.remove(c));
     textObj.metadata._effectClones = [];
@@ -198,8 +195,9 @@ export const applyTextEffects = async (canvas, textObj) => {
   const effects = textObj.metadata.effects || [];
 
   for (const effect of effects) {
-    switch (effect.name) {
+    if (!textObj) return; // safety
 
+    switch (effect.name) {
       case "shadow":
         textObj.set({ shadow: effect.options });
         break;
