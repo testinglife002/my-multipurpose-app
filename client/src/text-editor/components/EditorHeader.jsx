@@ -1,7 +1,9 @@
 // 📄 src/text-editor/components/EditorHeader.jsx
 import React from "react";
 import "./EditorHeader.css";
-import { ArrowUp, ArrowDown, Layers, SlidersHorizontal } from "lucide-react";
+// import { ArrowUp, ArrowDown, Layers, SlidersHorizontal } from "lucide-react";
+import { Layers, SlidersHorizontal } from "lucide-react";
+
 
 export default function EditorHeader({
   activeTab,

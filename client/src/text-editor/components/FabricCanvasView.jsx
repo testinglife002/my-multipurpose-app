@@ -90,10 +90,8 @@ export default function FabricCanvasView({
     if (!wrapper || !canvas || !window.ResizeObserver) return;
 
     const resize = () => {
-      const w = wrapper.clientWidth;
-      const h = wrapper.clientHeight;
-      canvas.setWidth(w);
-      canvas.setHeight(h);
+      canvas.setWidth(wrapper.clientWidth);
+      canvas.setHeight(wrapper.clientHeight);
       canvas.renderAll();
     };
 
@@ -112,6 +110,9 @@ export default function FabricCanvasView({
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
+    const width = canvas.getWidth();
+    const height = canvas.getHeight();
+    const map = objectsRef.current;
 
     if (!overlay?.showOverlay) {
       if (overlayRef.current) {
@@ -150,7 +151,8 @@ export default function FabricCanvasView({
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
-
+    const width = canvas.getWidth();
+    const height = canvas.getHeight();
     const map = objectsRef.current;
     const activeIds = new Set(layers.map((l) => l.id));
 

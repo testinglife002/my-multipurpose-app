@@ -15,7 +15,9 @@ import BgControls from "./BgControls";
 import EditorHeader from "./EditorHeader";
 import newRequest from "../../api/newRequest";
 import RightBgPanel from "./RightBgPanel";
-import { ArrowUp, ArrowDown, Layers, SlidersHorizontal, PanelLeft, PanelRight } from "lucide-react";
+// import { ArrowUp, ArrowDown, Layers, SlidersHorizontal, PanelLeft, PanelRight } from "lucide-react";
+import { Layers } from "lucide-react";
+
 
 /*
 import TextCanvas from "@/components/text-editor/TextCanvas";
