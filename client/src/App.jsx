@@ -199,7 +199,7 @@ function AppWrapper() {
         <Route path="/mainapp" element={<PageWrapper><MainApp /></PageWrapper>} />
         <Route path="/appone" element={<PageWrapper><AppOne /></PageWrapper>} />
         <Route path="/apptwo" element={<PageWrapper><AppTwo /></PageWrapper>} />
-        <Route path="/appdemo" element={<PageWrapper><DemoApp /></PageWrapper>} />
+        <Route path="/appdemo" element={<DemoApp />} />
 
         <Route path="/whatsapp/*" element={<PageWrapper><WhatsApp /></PageWrapper>} />
         <Route path="/whatsapp/sender" element={<PageWrapper><WhatsAppSender /></PageWrapper>} />

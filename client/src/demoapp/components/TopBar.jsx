@@ -11,7 +11,8 @@ const TopBar = ({
   isDarkMode
 }) => {
   return (
-    <header className={`topbar ${isDarkMode ? "dark" : ""}`}>
+    <header className={`demoapp-topbar ${isDarkMode ? "dark" : ""}`}>
+        
       <div className="topbar-left">
         {activeView === "board" && activeBoard && (
           <>

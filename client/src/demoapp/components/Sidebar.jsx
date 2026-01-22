@@ -14,7 +14,7 @@ const Sidebar = ({
   notificationCount
 }) => {
   return (
-    <aside className={`sidebar ${isOpen ? 'open' : 'collapsed'} ${isDarkMode ? 'dark' : ''}`}>
+    <aside className={`demoapp-sidebar ${isOpen ? 'open' : 'collapsed'} ${isDarkMode ? 'dark' : ''}`}>
       <div className="sidebar-header">
         <div className="logo">
           <span>S</span>

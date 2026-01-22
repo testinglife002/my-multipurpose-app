@@ -1,20 +1,21 @@
 /* ===== ROOT ===== */
-.app-root {
+.demoapp-root {
   display: flex;
   height: 100vh;
   width: 100%;
   background: #f8fafc;
   color: #0f172a;
   overflow: hidden;
+  margin-top: 60px;
 }
 
-.app-root.dark {
+.demoapp-root.dark {
   background: #020617;
   color: #ffffff;
 }
 
 /* ===== LAYOUT ===== */
-.app-main {
+.demoapp-main {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -30,8 +31,13 @@
 .content-main {
   flex: 1;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: auto;
+  min-width: 0;
 }
+
+
+
 
 /* ===== COMMON ===== */
 button {
@@ -42,7 +48,10 @@ button {
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
+
+
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(100, 116, 139, 0.4);
@@ -53,4 +62,10 @@ button {
 .dark .card {
   background: #020617;
   border-color: #1e293b;
+}
+
+.horizontal-scroll-container {
+  display: inline-flex;
+  width: max-content;
+  min-height: 100%;
 }

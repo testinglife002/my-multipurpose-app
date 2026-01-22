@@ -1,8 +1,8 @@
 // src/demoapp/DemoApp.jsx
 import React, { useState, useCallback, useMemo } from 'react';
 import './DemoApp.css';
-import './global.css';
-import './utilities.css';
+// import './global.css';
+// import './utilities.css';
 
 import Sidebar from './components/Sidebar.jsx';
 import KanbanBoard from './components/KanbanBoard.jsx';
@@ -68,7 +68,7 @@ const DemoApp = () => {
   );
 
   return (
-    <div className={`app-root ${state.isDarkMode ? 'dark' : ''}`}>
+    <div className={`demoapp-root ${state.isDarkMode ? 'dark' : ''}`}>
       <Sidebar
         isOpen={isSidebarOpen}
         setIsOpen={setIsSidebarOpen}
@@ -84,8 +84,8 @@ const DemoApp = () => {
           state.notifications.filter(n => !n.read).length
         }
       />
-
-      <div className="app-main">
+      
+      <div className="demoapp-main">
         <TopBar
           activeBoard={activeBoard}
           activeView={activeView}
@@ -96,9 +96,10 @@ const DemoApp = () => {
           }
           isDarkMode={state.isDarkMode}
         />
-
+        
         <div className="content-row">
-          <main className="content-main">
+          <main className="content-main custom-scrollbar">
+            <div className="horizontal-scroll-container">
             {activeView === 'dashboard' && (
               <Dashboard
                 state={state}
@@ -137,6 +138,7 @@ const DemoApp = () => {
             {activeView === 'canvas' && (
               <CollaborativeCanvas isDarkMode={state.isDarkMode} />
             )}
+            </div>
           </main>
 
           {isChatOpen && (

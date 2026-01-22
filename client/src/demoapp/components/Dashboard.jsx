@@ -5,18 +5,26 @@ import "./Dashboard.css";
 const Dashboard = ({ state, onSelectBoard }) => {
   const { boards, users } = state;
 
-  const totalTasks = boards.reduce(
-    (sum, b) => sum + b.columns.reduce((s, c) => s + c.tasks.length, 0),
-    0
-  );
+  const totalTasks = boards.reduce((sum, b) => {
+    const columns = b.columns || [];
+    return (
+        sum +
+        columns.reduce((s, c) => {
+        const tasks = c.tasks || [];
+        return s + tasks.length;
+        }, 0)
+    );
+    }, 0);
+
 
   return (
-    <div className="dashboard">
+    <div className="demoapp-dashboard">
       {/* ===== STATS ===== */}
       <div className="dashboard-stats">
         <div className="stat-card">
           <h4>Total Boards</h4>
-          <p>{boards.length}</p>
+          <p>{boards?.length || 0}</p>
+
         </div>
 
         <div className="stat-card">
@@ -26,7 +34,8 @@ const Dashboard = ({ state, onSelectBoard }) => {
 
         <div className="stat-card">
           <h4>Team Members</h4>
-          <p>{users.length}</p>
+          <p>{users?.length || 0}</p>
+
         </div>
       </div>
 
@@ -42,7 +51,8 @@ const Dashboard = ({ state, onSelectBoard }) => {
               onClick={() => onSelectBoard(board.id)}
             >
               <h4>{board.title}</h4>
-              <p>{board.columns.length} Lists</p>
+              <p>{board.columns?.length || 0} Lists</p>
+
             </div>
           ))}
         </div>

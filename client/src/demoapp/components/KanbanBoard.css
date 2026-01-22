@@ -1,6 +1,7 @@
 /* ===== KANBAN BOARD ===== */
 .kanban-board {
   display: flex;
+  width: max-content;
   flex-direction: column;
   gap: 16px;
   padding: 16px;

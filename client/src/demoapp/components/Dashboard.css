@@ -1,11 +1,11 @@
 /* ===== DASHBOARD ===== */
-.dashboard {
+.demoapp-dashboard {
   height: 100%;
   padding: 24px;
   overflow-y: auto;
 }
 
-.dashboard h3 {
+.demoapp-dashboard h3 {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 16px;
