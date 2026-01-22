@@ -220,3 +220,30 @@
   left: 0;
   border-radius: 0 6px 6px 0;
 }
+
+
+.toggle-btn {
+  position: relative;
+  top: 20px;
+  right: 20px;
+  z-index: 300;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+.toggle-btn:hover {
+  background: #00baff;
+  color: #111;
+}
+.toggle-text {
+  font-size: 13px;
+  font-weight: 600;
+}
