@@ -1,0 +1,56 @@
+/* ===== ROOT ===== */
+.app-root {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background: #f8fafc;
+  color: #0f172a;
+  overflow: hidden;
+}
+
+.app-root.dark {
+  background: #020617;
+  color: #ffffff;
+}
+
+/* ===== LAYOUT ===== */
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.content-row {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.content-main {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== COMMON ===== */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.4);
+  border-radius: 10px;
+}
+
+/* ===== DARK MODE ===== */
+.dark .card {
+  background: #020617;
+  border-color: #1e293b;
+}

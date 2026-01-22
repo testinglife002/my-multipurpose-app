@@ -1,0 +1,47 @@
+/* Layout */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.flex-1 { flex: 1; }
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.inset-0 { top:0; right:0; bottom:0; left:0; }
+
+/* Sizing */
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.max-w-5xl { max-width: 80rem; }
+.h-\[90vh\] { height: 90vh; }
+
+/* Spacing */
+.p-10 { padding: 2.5rem; }
+.p-6 { padding: 1.5rem; }
+.p-4 { padding: 1rem; }
+.px-10 { padding-left:2.5rem; padding-right:2.5rem; }
+.py-8 { padding-top:2rem; padding-bottom:2rem; }
+.space-y-4 > * + * { margin-top: 1rem; }
+.space-x-4 > * + * { margin-left: 1rem; }
+
+/* Typography */
+.text-sm { font-size: 0.875rem; }
+.text-lg { font-size: 1.125rem; }
+.text-3xl { font-size: 1.875rem; }
+.font-black { font-weight: 900; }
+.uppercase { text-transform: uppercase; }
+
+/* Borders & Radius */
+.rounded-2xl { border-radius: 1rem; }
+.rounded-3xl { border-radius: 1.5rem; }
+.border { border: 1px solid rgba(0,0,0,0.08); }
+
+/* Scroll */
+.overflow-y-auto { overflow-y: auto; }
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(100,100,100,0.3);
+}

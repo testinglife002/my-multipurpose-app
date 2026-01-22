@@ -1,0 +1,78 @@
+/* ===== TOP BAR ===== */
+.topbar {
+  height: 64px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.topbar.dark {
+  background: #020617;
+  border-color: #1e293b;
+}
+
+/* ===== LEFT ===== */
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.topbar.dark .topbar-title {
+  color: #ffffff;
+}
+
+.topbar-badge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.topbar.dark .topbar-badge {
+  background: #1e293b;
+  color: #cbd5f5;
+}
+
+/* ===== ACTIONS ===== */
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.topbar-btn:hover {
+  background: #e2e8f0;
+}
+
+.topbar.dark .topbar-btn {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+.topbar.dark .topbar-btn:hover {
+  background: #334155;
+}

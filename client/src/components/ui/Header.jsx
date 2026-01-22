@@ -120,6 +120,7 @@ const Header = ({ user, setUser }) => {
             { to: "/task-manager", label: "Task Manager" },
             { to: "/appone", label: "Task Manager App I" },
             { to: "/apptwo", label: "Task Manager App II" },
+            { to: "/appdemo", label: "Demo App III" },
           ])}
 
           {user && (

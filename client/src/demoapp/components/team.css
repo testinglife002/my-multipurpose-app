@@ -1,0 +1,25 @@
+.team-wrapper {
+  padding: 40px;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 32px;
+}
+
+.team-card {
+  padding: 32px;
+  border-radius: 40px;
+  background: white;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.team-card:hover {
+  transform: translateY(-8px);
+}
+
+.dark .team-card {
+  background: #020617;
+}

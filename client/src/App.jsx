@@ -64,6 +64,7 @@ import { AppTwo } from "./demo/AppTwo";
 import useDragScroll from "./hooks/useDragScroll";
 import useWheelScroll from "./hooks/useWheelScroll";
 import ProductRoutes from "./products/product.routes";
+import DemoApp from "./demoapp/DemoApp";
 
 
 
@@ -197,6 +198,7 @@ function AppWrapper() {
         <Route path="/mainapp" element={<PageWrapper><MainApp /></PageWrapper>} />
         <Route path="/appone" element={<PageWrapper><AppOne /></PageWrapper>} />
         <Route path="/apptwo" element={<PageWrapper><AppTwo /></PageWrapper>} />
+        <Route path="/appdemo" element={<PageWrapper><DemoApp /></PageWrapper>} />
 
         <Route path="/whatsapp/*" element={<PageWrapper><WhatsApp /></PageWrapper>} />
         <Route path="/whatsapp/sender" element={<PageWrapper><WhatsAppSender /></PageWrapper>} />

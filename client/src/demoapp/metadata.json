@@ -1,0 +1,9 @@
+
+{
+  "name": "Synergy OS",
+  "description": "A high-performance Kanban and real-time collaboration platform featuring integrated chat, task management, and a collaborative whiteboard, powered by Gemini AI.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

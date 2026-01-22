@@ -1,0 +1,76 @@
+/* ===== TASK CARD ===== */
+.task-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dark .task-card {
+  background: #1e293b;
+  color: #f8fafc;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.task-card.dragging {
+  opacity: 0.6;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.task-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.task-priority {
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 6px;
+  width: fit-content;
+  text-transform: uppercase;
+}
+
+.priority-low {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.priority-medium {
+  background-color: #fef3c7;
+  color: #78350f;
+}
+
+.priority-urgent {
+  background-color: #fecaca;
+  color: #b91c1c;
+}
+
+.task-assignees {
+  display: flex;
+  gap: 4px;
+}
+
+.assignee-avatar {
+  width: 24px;
+  height: 24px;
+  background: #e2e8f0;
+  color: #1e293b;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.dark .assignee-avatar {
+  background: #334155;
+  color: #f8fafc;
+}

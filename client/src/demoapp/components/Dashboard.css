@@ -1,0 +1,88 @@
+/* ===== DASHBOARD ===== */
+.dashboard {
+  height: 100%;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.dashboard h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* ===== STATS ===== */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.dark .stat-card {
+  background: #020617;
+  border-color: #1e293b;
+}
+
+.stat-card h4 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.stat-card p {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+/* ===== BOARDS ===== */
+.dashboard-section {
+  margin-top: 24px;
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.board-card {
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.board-card:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+.dark .board-card {
+  background: #020617;
+  border: 1px solid #1e293b;
+}
+
+.dark .board-card:hover {
+  background: #1e293b;
+}
+
+.board-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.board-card p {
+  font-size: 13px;
+  opacity: 0.7;
+}
