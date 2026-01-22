@@ -91,7 +91,7 @@ export default function LayerPanel({
           </div>
         ))}
       </div>
-      
+      </div>
 
       {!layer ? null : (
         <div className="layer-properties">
@@ -122,7 +122,7 @@ export default function LayerPanel({
           )}
         </div>
       )}
-      </div>
+      
 
       {/* DIVIDER 
       <div className="layer-divider"></div>
@@ -139,10 +139,7 @@ export default function LayerPanel({
       {!layer ? (
         <div className="no-layer">No layer selected</div>
       ) : (
-        <div className="layer-properties">
-          
-
-          
+        <div className="layer-properties" style={{marginBottom:'5%'}}>
 
           {/* OPACITY */}
           {"opacity" in layer && (
@@ -241,7 +238,9 @@ export default function LayerPanel({
               )}
             </>
           )}
+          <br/><br/><br/><br/><br/><br/>
         </div>
+
       )}
 
       {/* BLEND MODE (IMAGE ONLY) */}
