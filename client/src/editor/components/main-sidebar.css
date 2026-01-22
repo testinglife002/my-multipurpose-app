@@ -15,6 +15,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-y: auto; /* 🔥 FIX */
 }
 
 .sidebar.collapsed {
@@ -72,7 +73,7 @@
 .sidebar-label {
   font-size: 11px;
   margin-top: 4px;
-  color: #fff;
+  color: #111827; /* 🔥 FIX */
   font-weight: 600;
   transition: opacity 0.2s ease;
 }
@@ -123,10 +124,9 @@
 /* Panel Content */
 .panel-content {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: auto; /* 🔥 FIX */
   padding: 12px;
-  min-height: 0; /* 🔑 CRITICAL */
-  overflow: hidden; /* delegate scroll to children */
+  min-height: 0;
 }
 
 /* Collapse Button */
