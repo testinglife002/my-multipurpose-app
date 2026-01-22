@@ -1,4 +1,4 @@
-// src/components/LayerPanel.jsx
+  // src/components/LayerPanel.jsx
 // src/components/LayerPanel.jsx
 // 📄 src/components/text-editor/LayerPanel.jsx
 import React from "react";
@@ -29,7 +29,7 @@ export default function LayerPanel({
 
   return (
     <div className="layer-panel">
-      {/*<br/><br/>*/}<br/>
+      <br/><br/><br/>
       {/* SECTION 01 : LAYER LIST */}
       <div className="layer-section layer-list-section">
       

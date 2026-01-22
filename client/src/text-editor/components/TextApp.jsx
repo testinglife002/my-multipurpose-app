@@ -332,15 +332,7 @@ export default function TextApp() {
         />
 
     <div /* className="app-root" */  >
-    <br/>
 
-    {/*<button
-      className="toggle-btn"
-      onClick={() => setLeftCollapsed(c => !c)}
-      >
-      <Layers size={20}/>
-      {!leftCollapsed && <span>Layers</span>}
-      </button>*/}
 
     <div className="editor-body">
     {/* LEFT SIDEBAR */}
@@ -365,11 +357,6 @@ export default function TextApp() {
 
     
 
-    {/* CANVAS AREA */}
-    {/* <div className={`canvas-area` 
-        // ${leftCollapsed ? "left-collapsed" : ""} 
-        // ${rightCollapsed ? "right-collapsed" : ""}`}
-       }>*/}
 
       <div className={`canvas-area ${leftCollapsed?"left-collapsed":""} ${rightCollapsed?"right-collapsed":""}`}>
 
@@ -392,7 +379,7 @@ export default function TextApp() {
         />
         
         </div>
-    </div>
+      </div>
 
     <div /* style={{marginRight:'10%', marginLeft:'10%', marginTop:'10%'}} */ >
     {/* RIGHT PANEL */}
@@ -431,6 +418,7 @@ export default function TextApp() {
       </aside>
 
     </div>
+    
     </div>
     </div>        
     </div>
