@@ -28,7 +28,7 @@ export default function LayerPanel({
 
 
   return (
-    <div className="layer-panel" style={{marginTop:'100px'}} >
+    <div className="layer-panel" style={{marginTop:'10%'}} >
       
       {/* SECTION 01 : LAYER LIST */}
       <div className="layer-section layer-list-section" >
