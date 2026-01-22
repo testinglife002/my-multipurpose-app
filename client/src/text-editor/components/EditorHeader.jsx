@@ -54,16 +54,17 @@ export default function EditorHeader({
         </button>
       </div>
 
-      <div className="editor-header-right">
+      <div /* className="editor-header-right" */>
         <button className="eh-btn" onClick={toggleRight}>
           BG {rightCollapsed ? "▶" : "◀"}
         </button>
-        <div className="header-toggle-group">
+        <div /* className="header-toggle-group" */>
           <button
-            className="toggle-btn header-toggle"
+            // className="toggle-btn header-toggle"
+            className="toggle-btn"
             onClick={() => setCollapsed((c) => !c)}
             title={collapsed ? "Show Layers" : "Hide Layers"}
-          >
+          > 
             <Layers size={20} />
             {!collapsed && <span className="toggle-text">Layers</span>}
           </button>
