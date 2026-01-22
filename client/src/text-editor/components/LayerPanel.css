@@ -4,8 +4,8 @@
   flex-direction: column;
   background: #0f172a;
   color: #e5e7eb;
-  overflow: hidden;
-  margin-top: 80px;
+  overflow-y: auto;
+  margin-top: 60px;
 }
 
 
@@ -13,7 +13,7 @@
 .layer-panel::-webkit-scrollbar {
   width: 6px;
 }
-.layer-panel::-webkit-scrollbar-thumb {
+.layer-panel  ::-webkit-scrollbar-thumb {
   background: #475569;
   border-radius: 4px;
 }
