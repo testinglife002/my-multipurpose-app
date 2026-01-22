@@ -18,7 +18,8 @@
   background: #0f172a;
   color: #e5e7eb;
   flex: 1;
-  overflow: hidden;   /* IMPORTANT */
+  overflow-y: auto;   /* IMPORTANT */
+  margin-top: 60px;
 }
 
 
