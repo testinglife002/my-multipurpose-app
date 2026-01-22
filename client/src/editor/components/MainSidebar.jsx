@@ -41,6 +41,8 @@ function MainSidebar() {
   ];
 
   const active = items.find(i => i.id === activeSidebar);
+  console.log(items.map(i => i.label));
+
 
   return (
     <div >
@@ -49,18 +51,22 @@ function MainSidebar() {
     <div className="sidebar-layout">
       {/* PRIMARY SIDEBAR */}
       <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
-        {items.map(i => (
-          <button
-            key={i.id}
-            className={`sidebar-item ${activeSidebar === i.id ? "active" : ""}`}
-            onClick={() => setActiveSidebar(i.id)}
-          >
-            <i.icon className="sidebar-icon" />
-            {!collapsed && (
-              <span className="sidebar-label">{i.label}</span>
-            )}
-          </button>
-        ))}
+        {items.map(i => {
+          const Icon = i.icon;
+          
+          return (
+            <button
+              key={i.id}
+              className={`sidebar-item ${activeSidebar === i.id ? "active" : ""}`}
+              onClick={() => setActiveSidebar(i.id)}
+            >
+              <Icon className="sidebar-icon" />
+              {!collapsed && (
+                <span className="sidebar-label">{i.label}</span>
+              )}
+            </button>
+          );
+        })}
 
         <button
           className="sidebar-toggle"
