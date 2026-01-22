@@ -58,26 +58,24 @@ export default function EditorHeader({
         <button className="eh-btn" onClick={toggleRight}>
           BG {rightCollapsed ? "▶" : "◀"}
         </button>
-        <div>
-            <button
-              className="toggle-btn"
-              style={{marginRight:'5%'}}
-              onClick={() => setCollapsed((c) => !c)}
-              title={collapsed ? "Show Layers" : "Hide Layers"}
-            >
-              <Layers size={20} />
-              {!collapsed && <span className="toggle-text">Layers</span>}
-            </button>
+        <div className="header-toggle-group">
+          <button
+            className="toggle-btn header-toggle"
+            onClick={() => setCollapsed((c) => !c)}
+            title={collapsed ? "Show Layers" : "Hide Layers"}
+          >
+            <Layers size={20} />
+            {!collapsed && <span className="toggle-text">Layers</span>}
+          </button>
 
-            {/* BG Controls Toggle */}
-              <button
-                className={`toggle-btn ${showBgControls ? "active" : ""}`}
-                onClick={() => setShowBgControls((p) => !p)}
-                title="Toggle BG Controls"
-              >
-                <SlidersHorizontal size={18} />
-            </button>
-          </div>
+          <button
+            className={`toggle-btn header-toggle ${showBgControls ? "active" : ""}`}
+            onClick={() => setShowBgControls((p) => !p)}
+            title="Toggle BG Controls"
+          >
+            <SlidersHorizontal size={18} />
+          </button>
+        </div>
       </div>
       {/* Toggle Button */}
             

@@ -384,11 +384,9 @@ export default function TextApp() {
         />*/}
         <FabricViewCanvas 
             layers={layers}
-            selectedLayerId={selectedLayer}
-            onSelectLayer={setSelectedLayer}
-            onUpdateLayer={(id, key, val) =>
-            updateLayer(id, { [key]: val })
-          }
+          selectedLayerId={selectedLayer}
+          onSelectLayer={setSelectedLayer}
+          onUpdateLayer={(id,k,v)=>updateLayer(id,{[k]:v})}
           overlay={{ showOverlay, overlayScale }}
         />
         

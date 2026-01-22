@@ -78,3 +78,15 @@
   font-size: 13px;
   font-weight: 600;
 }
+
+.header-toggle-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.header-toggle {
+  position: relative;
+  top: auto;
+  right: auto;
+}
+
