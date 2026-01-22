@@ -29,7 +29,7 @@ export default function LayerPanel({
 
   return (
     <div className="layer-panel">
-      <br/>
+      
       {/* SECTION 01 : LAYER LIST */}
       <div className="layer-section layer-list-section">
       
