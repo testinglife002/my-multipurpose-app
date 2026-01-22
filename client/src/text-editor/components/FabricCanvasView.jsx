@@ -40,7 +40,7 @@ export default function FabricCanvasView({
   const fabricRef = useRef(null);       // fabric.Canvas
   const objectsRef = useRef({});        // layerId → { main, bg? }
   const overlayRef = useRef(null);      // overlay rect
-
+  const wrapperRef = useRef(null);    
 
 
   /* ─────────────────────────────
