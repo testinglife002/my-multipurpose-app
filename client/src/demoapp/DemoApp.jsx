@@ -1,7 +1,7 @@
 // src/demoapp/DemoApp.jsx
 import React, { useState, useCallback, useMemo } from 'react';
 import './DemoApp.css';
-import './globals.css';
+import './global.css';
 import './utilities.css';
 
 import Sidebar from './components/Sidebar.jsx';
