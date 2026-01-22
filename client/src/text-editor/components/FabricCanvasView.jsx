@@ -33,8 +33,8 @@ export default function FabricCanvasView({
   onSelectLayer,
   onUpdateLayer,
   overlay,
-  // width = 1200,
-  // height = 630,
+   width = 1200,
+   height = 630,
 }) {
   const domRef = useRef(null);          // <canvas>
   const fabricRef = useRef(null);       // fabric.Canvas
@@ -45,7 +45,7 @@ export default function FabricCanvasView({
 
   /* ─────────────────────────────
      INIT CANVAS (ONCE)
-  ───────────────────────────── 
+  ─────────────────────────────  */
   useEffect(() => {
     const canvas = new Canvas(domRef.current, {
       width,
@@ -61,11 +61,11 @@ export default function FabricCanvasView({
       fabricRef.current = null;
     };
   }, [width, height]);
-  */
+ 
 
   /* ─────────────────────────────
      INIT CANVAS
-  ───────────────────────────── */
+  ───────────────────────────── 
   useEffect(() => {
     const canvas = new Canvas(domRef.current, {
       preserveObjectStacking: true,
@@ -79,6 +79,7 @@ export default function FabricCanvasView({
       fabricRef.current = null;
     };
   }, []);
+  */
 
 
   /* ─────────────────────────────
@@ -106,7 +107,7 @@ export default function FabricCanvasView({
 
   /* ─────────────────────────────
      GLOBAL OVERLAY (TEXT OVERLAY)
-  ───────────────────────────── 
+  ───────────────────────────── */
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
@@ -144,9 +145,9 @@ export default function FabricCanvasView({
 
     canvas.renderAll();
   }, [overlay, width, height]);
-  */
+  
 
-   /* OVERLAY */
+   /* OVERLAY 
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
@@ -180,10 +181,11 @@ export default function FabricCanvasView({
     overlayRef.current.set({ width: w, height: h });
     canvas.renderAll();
   }, [overlay]);
+  */
 
   /* ─────────────────────────────
      SYNC LAYERS → CANVAS
-  ───────────────────────────── 
+  ───────────────────────────── */
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
@@ -355,10 +357,10 @@ export default function FabricCanvasView({
 
     canvas.renderAll();
   }, [layers, width, height]);
-  */
+  
 
 
-  /* SYNC LAYERS */
+  /* SYNC LAYERS 
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
@@ -424,10 +426,11 @@ export default function FabricCanvasView({
 
     canvas.renderAll();
   }, [layers]);
+  */
 
   /* ─────────────────────────────
      FABRIC → REACT (MOVE / SCALE)
-  ───────────────────────────── 
+  ───────────────────────────── */
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
@@ -456,9 +459,9 @@ export default function FabricCanvasView({
       canvas.off("object:modified", sync);
     };
   }, [onUpdateLayer, width, height]);
-  */
+  
 
-  /* MOVE / SCALE */
+  /* MOVE / SCALE 
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
@@ -478,6 +481,7 @@ export default function FabricCanvasView({
     canvas.on("object:modified", sync);
     return () => canvas.off("object:modified", sync);
   }, [onUpdateLayer]);
+  */
 
   /* ─────────────────────────────
      SELECTION → LAYER PANEL

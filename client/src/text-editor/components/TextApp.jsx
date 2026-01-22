@@ -17,6 +17,7 @@ import newRequest from "../../api/newRequest";
 import RightBgPanel from "./RightBgPanel";
 // import { ArrowUp, ArrowDown, Layers, SlidersHorizontal, PanelLeft, PanelRight } from "lucide-react";
 import { Layers } from "lucide-react";
+import FabricViewCanvas from "./FabricViewCanvas";
 
 
 /*
@@ -372,7 +373,16 @@ export default function TextApp() {
       <div className={`canvas-area ${leftCollapsed?"left-collapsed":""} ${rightCollapsed?"right-collapsed":""}`}>
 
         <div className="canvas-stage">
-        <FabricCanvasView
+        {/*<FabricCanvasView
+            layers={layers}
+            selectedLayerId={selectedLayer}
+            onSelectLayer={setSelectedLayer}
+            onUpdateLayer={(id, key, val) =>
+            updateLayer(id, { [key]: val })
+          }
+          overlay={{ showOverlay, overlayScale }}
+        />*/}
+        <FabricViewCanvas 
             layers={layers}
             selectedLayerId={selectedLayer}
             onSelectLayer={setSelectedLayer}
@@ -381,6 +391,7 @@ export default function TextApp() {
           }
           overlay={{ showOverlay, overlayScale }}
         />
+        
         </div>
     </div>
 
