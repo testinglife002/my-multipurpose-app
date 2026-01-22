@@ -33,8 +33,8 @@ export default function FabricCanvasView({
   onSelectLayer,
   onUpdateLayer,
   overlay,
-  width = 1200,
-  height = 630,
+  // width = 1200,
+  // height = 630,
 }) {
   const domRef = useRef(null);          // <canvas>
   const fabricRef = useRef(null);       // fabric.Canvas
@@ -45,7 +45,7 @@ export default function FabricCanvasView({
 
   /* ─────────────────────────────
      INIT CANVAS (ONCE)
-  ───────────────────────────── */
+  ───────────────────────────── 
   useEffect(() => {
     const canvas = new Canvas(domRef.current, {
       width,
@@ -61,13 +61,33 @@ export default function FabricCanvasView({
       fabricRef.current = null;
     };
   }, [width, height]);
+  */
+
+  /* ─────────────────────────────
+     INIT CANVAS
+  ───────────────────────────── */
+  useEffect(() => {
+    const canvas = new Canvas(domRef.current, {
+      preserveObjectStacking: true,
+      selection: true,
+    });
+
+    fabricRef.current = canvas;
+
+    return () => {
+      canvas.dispose();
+      fabricRef.current = null;
+    };
+  }, []);
 
 
-  /* AUTO RESIZE */
+  /* ─────────────────────────────
+     AUTO RESIZE
+  ───────────────────────────── */
   useEffect(() => {
     const wrapper = wrapperRef.current;
     const canvas = fabricRef.current;
-    if (!wrapper || !canvas) return;
+    if (!wrapper || !canvas || !window.ResizeObserver) return;
 
     const resize = () => {
       const w = wrapper.clientWidth;

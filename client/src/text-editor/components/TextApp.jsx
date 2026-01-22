@@ -64,6 +64,8 @@ export default function TextApp() {
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const [rightTab, setRightTab] = useState("layers"); // layers | bg
+  const [collapsed, setCollapsed] = useState(true);
+  const [showBgControls, setShowBgControls] = useState(false)
 
   /* ---------------- BG STATE (FIX) ---------------- */
   /* ---------------- BG STATE ---------------- */
@@ -320,6 +322,10 @@ export default function TextApp() {
           rightCollapsed={rightCollapsed}
           toggleLeft={() => setLeftCollapsed(v => !v)}
           toggleRight={() => setRightCollapsed(v => !v)}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+          showBgControls={showBgControls}
+          setShowBgControls={setShowBgControls}
         />
 
     <div /* className="app-root" */  >
@@ -356,10 +362,13 @@ export default function TextApp() {
     
 
     {/* CANVAS AREA */}
-     { <div className={`canvas-area` 
+    {/* <div className={`canvas-area` 
         // ${leftCollapsed ? "left-collapsed" : ""} 
         // ${rightCollapsed ? "right-collapsed" : ""}`}
-       }>
+       }>*/}
+
+      <div className={`canvas-area ${leftCollapsed?"left-collapsed":""} ${rightCollapsed?"right-collapsed":""}`}>
+
         <div className="canvas-stage">
         <FabricCanvasView
             layers={layers}
@@ -371,7 +380,7 @@ export default function TextApp() {
           overlay={{ showOverlay, overlayScale }}
         />
         </div>
-    </div>}
+    </div>
 
     <div /* style={{marginRight:'10%', marginLeft:'10%', marginTop:'10%'}} */ >
     {/* RIGHT PANEL */}

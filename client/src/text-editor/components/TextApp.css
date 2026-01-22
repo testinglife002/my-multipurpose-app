@@ -50,6 +50,8 @@
   max-width: 1200px;
   height: 100%;
   padding: 20px;
+  display: flex;
+  height: calc(100vh - 80px);
 }
 
 /*
