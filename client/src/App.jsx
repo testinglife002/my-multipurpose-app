@@ -184,7 +184,32 @@ function AppWrapper() {
         <Route path="/editor/new" element={<MainEditor user={user} />} />
         <Route path="/editor/:designId" element={<MainEditor user={user} />} />
 
-        {/* Banner / Templates */}
+        <Route path="/banners-maker-ad" element={<PageWrapper><BannerMakerAdvanced  /></PageWrapper>} />
+        <Route path="/banners" element={<PageWrapper><BannerListPage  /></PageWrapper>} />  
+        <Route path="/create-banner-new" element={<PageWrapper><BannerMakerNew /></PageWrapper>} />   
+        <Route path="/edit-template/:id" element={<PageWrapper><EditTemplatePage /></PageWrapper>} />
+        
+        {/* Other Apps */}
+        <Route path="/text-editor" element={<PageWrapper><TextApp /></PageWrapper>} />
+        <Route path="/text-editor-design" element={<PageWrapper><TextEditorPage /></PageWrapper>} />
+
+           {/* Main App */}
+        <Route path="/mainapp" element={<PageWrapper><MainApp /></PageWrapper>} />
+        <Route path="/appone" element={<PageWrapper><AppOne /></PageWrapper>} />
+        <Route path="/apptwo" element={<PageWrapper><AppTwo /></PageWrapper>} />
+
+        <Route path="/whatsapp/*" element={<PageWrapper><WhatsApp /></PageWrapper>} />
+        <Route path="/whatsapp/sender" element={<PageWrapper><WhatsAppSender /></PageWrapper>} />
+        <Route path="/whatsapp-sender" element={<PageWrapper><WhatsAppMessageSender /></PageWrapper>} />
+
+        {/* Newsletter / Templates */}
+        <Route path="/create-template" element={<PageWrapper><TemplateEditor /></PageWrapper>} />
+        <Route path="/create-email-template" element={<PageWrapper><EmailTemplateEditor /></PageWrapper>} />
+        <Route path="/send-newsletter" element={<PageWrapper><NewsletterForm /></PageWrapper>} />
+        <Route path="/email-templates" element={<PageWrapper><TemplatesList /></PageWrapper>} />
+        <Route path="/edit-email-template/:id" element={<PageWrapper><EmailTemplateEditor /></PageWrapper>} />
+          
+           {/* Banner / Templates */}
         {/*<Route path="/banner-main" element={<PageWrapper><BannerMain /></PageWrapper>} />
         <Route path="/create-banner" element={<PageWrapper><BannerMaker /></PageWrapper>} />
         <Route path="/create-banner-alt" element={<PageWrapper><BannerMakerAlt /></PageWrapper>} />
@@ -199,43 +224,13 @@ function AppWrapper() {
         {/* x 
         <Route path="/banners-maker-alt" element={<PageWrapper><BannerMakerAlt  /></PageWrapper>} />
         */}
-        
-        <Route path="/banners-maker-ad" element={<PageWrapper><BannerMakerAdvanced  /></PageWrapper>} />
-        
-        <Route path="/banners" element={<PageWrapper><BannerListPage  /></PageWrapper>} />
-        
-        <Route path="/create-banner-new" element={<PageWrapper><BannerMakerNew /></PageWrapper>} />
         {/* x 
         <Route path="/banner-maker" element={<PageWrapper><BannerMakerPage /></PageWrapper>} />
         */}
         {/* x 
         <Route path="/banner-templates" element={<PageWrapper><TemplateManagerPage /></PageWrapper>} />
         */}
-        
-        <Route path="/edit-template/:id" element={<PageWrapper><EditTemplatePage /></PageWrapper>} />
 
-
-           {/* Main App */}
-        <Route path="/mainapp" element={<PageWrapper><MainApp /></PageWrapper>} />
-        <Route path="/appone" element={<PageWrapper><AppOne /></PageWrapper>} />
-        <Route path="/apptwo" element={<PageWrapper><AppTwo /></PageWrapper>} />
-
-
-        {/* Other Apps */}
-        <Route path="/text-editor" element={<PageWrapper><TextApp /></PageWrapper>} />
-        <Route path="/text-editor-design" element={<PageWrapper><TextEditorPage /></PageWrapper>} />
-
-        <Route path="/whatsapp/*" element={<PageWrapper><WhatsApp /></PageWrapper>} />
-        <Route path="/whatsapp/sender" element={<PageWrapper><WhatsAppSender /></PageWrapper>} />
-        <Route path="/whatsapp-sender" element={<PageWrapper><WhatsAppMessageSender /></PageWrapper>} />
-
-        {/* Newsletter / Templates */}
-        <Route path="/create-template" element={<PageWrapper><TemplateEditor /></PageWrapper>} />
-        <Route path="/create-email-template" element={<PageWrapper><EmailTemplateEditor /></PageWrapper>} />
-        <Route path="/send-newsletter" element={<PageWrapper><NewsletterForm /></PageWrapper>} />
-        <Route path="/email-templates" element={<PageWrapper><TemplatesList /></PageWrapper>} />
-        <Route path="/edit-email-template/:id" element={<PageWrapper><EmailTemplateEditor /></PageWrapper>} />
-      
       </Routes>
       </div>
     </>
