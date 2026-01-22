@@ -1,7 +1,7 @@
 // fabric-utils.js
 import { shapeDefinitions } from "./shapes/shape-definitions";
 import { createShape } from "./shapes/shape-factory";
-import { apply3DText, applyGlow, applyGradientFill, applyNeon } from "./text-effects";
+import { apply3DText, applyGlassText, applyGlow, applyGradientFill, applyIsometricText, applyLongShadow, applyNeon, applyPerspective } from "./text-effects";
 
 
 
@@ -9,7 +9,10 @@ import { apply3DText, applyGlow, applyGradientFill, applyNeon } from "./text-eff
 export const initializeFabric = async (canvasEl, containerEl) => {
   try {
     // const { Canvas, PencilBrush } = await import("fabric");
-    const { Canvas, PencilBrush, fabric } = fabricModule;
+    // const { Canvas, PencilBrush, fabric } = fabricModule;
+    const fabricModule = await import("fabric");
+    const { Canvas, PencilBrush } = fabricModule;
+    const fabric = fabricModule;
 
     // 🔥 ENABLE METADATA SERIALIZATION
     fabric.Object.prototype.toObject = (function (toObject) {
@@ -176,7 +179,7 @@ export const resetTextBaseState = (textObj) => {
 
 
 
-export const applyTextEffects = (canvas, textObj) => {
+export const applyTextEffects = async (canvas, textObj) => {
   if (!canvas || !textObj) return;
 
   if (!textObj.metadata) textObj.metadata = {};
@@ -186,16 +189,17 @@ export const applyTextEffects = (canvas, textObj) => {
 
   resetTextBaseState(textObj);
 
-  // cleanup 3D clones
-  if (textObj.metadata._3dClones) {
-    textObj.metadata._3dClones.forEach(c => canvas.remove(c));
-    textObj.metadata._3dClones = [];
+  // 🔥 CLEAN ALL DEPTH CLONES
+  if (textObj.metadata._effectClones?.length) {
+    textObj.metadata._effectClones.forEach(c => canvas.remove(c));
+    textObj.metadata._effectClones = [];
   }
 
   const effects = textObj.metadata.effects || [];
 
-  effects.forEach(effect => {
+  for (const effect of effects) {
     switch (effect.name) {
+
       case "shadow":
         textObj.set({ shadow: effect.options });
         break;
@@ -220,14 +224,29 @@ export const applyTextEffects = (canvas, textObj) => {
         break;
 
       case "3d":
-        apply3DText(canvas, textObj, effect.options);
+        await apply3DText(canvas, textObj, effect.options);
+        break;
+
+      case "longShadow":
+        applyLongShadow(canvas, textObj, effect.options);
+        break;
+
+      case "isometric":
+        applyIsometricText(canvas, textObj, effect.options);
+        break;
+
+      case "perspective":
+        applyPerspective(textObj);
+        break;
+
+      case "glass":
+        applyGlassText(textObj);
         break;
     }
-  });
+  }
 
   canvas.requestRenderAll();
 };
-
 
 
 

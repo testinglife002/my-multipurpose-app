@@ -3,18 +3,39 @@
 .text-effects-panel {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
 }
 
-.text-effects-panel button {
+.text-effects-panel h4 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
+  color: #111;
+}
+
+.effects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.effects-grid button {
   padding: 8px;
   border-radius: 6px;
-  background: #f3f3f3;
-  border: none;
-  cursor: pointer;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  font-size: 12px;
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.text-effects-panel button:hover {
-  background: #e5e5e5;
+.effects-grid button:hover {
+  background: #f3f4f6;
+}
+
+.panel-hint {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-top: 8px;
 }

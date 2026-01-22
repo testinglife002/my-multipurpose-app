@@ -42,16 +42,21 @@ export const toggleTextStroke = (canvas, options) => {
 export const applyGradientFill = (textObj, options) => {
   const gradient = new fabric.Gradient({
     type: "linear",
-    gradientUnits: "percentage",
-    coords: { x1: 0, y1: 0, x2: 1, y2: 0 },
-    colorStops: options.colors || [
-      { offset: 0, color: "red" },
-      { offset: 1, color: "blue" },
-    ],
+    coords: {
+      x1: 0,
+      y1: 0,
+      x2: textObj.width,
+      y2: 0,
+    },
+    colorStops: (options.colors || ["red", "blue"]).map((c, i, arr) => ({
+      offset: i / (arr.length - 1),
+      color: c,
+    })),
   });
 
   textObj.set("fill", gradient);
 };
+
 
 
 export const applyGlow = (textObj, options) => {
@@ -79,14 +84,46 @@ export const applyNeon = (textObj, options) => {
 };
 
 
+/* ---------------- DEPTH EFFECTS ---------------- */
 
-export const apply3DText = (canvas, textObj, options) => {
+export const apply3DText = async (canvas, textObj, options) => {
   const depth = options.depth || 5;
   const color = options.color || "#333";
 
-  if (!textObj.metadata._3dClones) {
-    textObj.metadata._3dClones = [];
+  if (!textObj.metadata) textObj.metadata = {};
+  textObj.metadata._effectClones = [];
+
+  const baseIndex = canvas.getObjects().indexOf(textObj);
+
+  for (let i = 1; i <= depth; i++) {
+    const clone = fabric.util.object.clone(textObj);
+
+    clone.set({
+      left: textObj.left + i,
+      top: textObj.top + i,
+      fill: color,
+      selectable: false,
+      evented: false,
+      objectCaching: false,
+      shadow: null,
+      stroke: null,
+    });
+
+    canvas.add(clone);
+    canvas.moveTo(clone, baseIndex);
+
+    textObj.metadata._effectClones.push(clone);
   }
+
+  canvas.bringToFront(textObj);
+};
+
+export const applyLongShadow = (canvas, textObj, options) => {
+  const depth = options.depth || 20;
+  const color = options.color || "rgba(0,0,0,0.3)";
+
+  if (!textObj.metadata._effectClones)
+    textObj.metadata._effectClones = [];
 
   for (let i = 1; i <= depth; i++) {
     const clone = fabric.util.object.clone(textObj);
@@ -99,15 +136,74 @@ export const apply3DText = (canvas, textObj, options) => {
       evented: false,
     });
 
-    textObj.metadata._3dClones.push(clone);
     canvas.add(clone);
-    canvas.sendToBack(clone);
+    canvas.moveTo(clone, canvas.getObjects().indexOf(textObj));
+
+    textObj.metadata._effectClones.push(clone);
   }
 };
 
+export const applyIsometricText = (canvas, textObj, options) => {
+  const depth = options.depth || 10;
+  const color = options.color || "#555";
 
+  if (!textObj.metadata._effectClones)
+    textObj.metadata._effectClones = [];
 
-export const toggleTextEffect = (canvas, name, options = {}) => {
+  for (let i = 1; i <= depth; i++) {
+    const clone = fabric.util.object.clone(textObj);
+
+    clone.set({
+      left: textObj.left + i,
+      top: textObj.top - i,
+      fill: color,
+      skewX: -20,
+      selectable: false,
+      evented: false,
+    });
+
+    canvas.add(clone);
+    canvas.moveTo(clone, canvas.getObjects().indexOf(textObj));
+
+    textObj.metadata._effectClones.push(clone);
+  }
+};
+
+/* ---------------- TRANSFORM EFFECTS ---------------- */
+
+export const applyPerspective = (textObj) => {
+  textObj.set({
+    skewX: -25,
+    skewY: 5,
+  });
+};
+
+export const applyGlassText = (textObj) => {
+  textObj.set({
+    opacity: 0.85,
+    shadow: {
+      color: "rgba(255,255,255,0.6)",
+      blur: 10,
+      offsetX: -2,
+      offsetY: -2,
+    },
+  });
+};
+
+/* ---------------- OPTIONAL ANIMATION ---------------- */
+
+export const animate3D = (canvas, textObj) => {
+  let step = 1;
+  setInterval(() => {
+    step = (step % 10) + 1;
+    apply3DText(canvas, textObj, { depth: step });
+    canvas.requestRenderAll();
+  }, 200);
+};
+
+/* ---------------- TOGGLE HANDLER ---------------- */
+
+export const toggleTextEffect = async (canvas, name, options = {}) => {
   const text = getSelectedTextObject(canvas);
   if (!text) return;
 
@@ -120,7 +216,6 @@ export const toggleTextEffect = (canvas, name, options = {}) => {
     registerTextEffect(text, name, options);
   }
 
-  applyTextEffects(canvas, text);
+  await applyTextEffects(canvas, text);
 };
-
 
