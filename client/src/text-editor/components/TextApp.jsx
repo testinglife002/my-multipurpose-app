@@ -321,8 +321,9 @@ export default function TextApp() {
           toggleLeft={() => setLeftCollapsed(v => !v)}
           toggleRight={() => setRightCollapsed(v => !v)}
         />
-    <div className="app-root">
 
+    <div /* className="app-root" */  >
+    <br/><br/>
     <button
       className="toggle-btn"
       onClick={() => setLeftCollapsed(c => !c)}

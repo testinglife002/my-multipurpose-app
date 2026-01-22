@@ -22,7 +22,7 @@
   width: 48px;
 }
 
-/* RIGHT */
+/* RIGHT 
 .right-panel {
   width: 300px;
   transition: width 0.25s ease;
@@ -33,6 +33,7 @@
 .right-panel.collapsed {
   width: 48px;
 }
+*/
 
 /* CANVAS */
 .canvas-area {
@@ -51,13 +52,13 @@
   padding: 20px;
 }
 
-
+/*
 .app-root {
   flex: 1;
   display: flex;
-  /* overflow: hidden;*/  
+   overflow: hidden;
 }
-
+*/  
 
 
 /* ROOT 
@@ -71,7 +72,7 @@
 }
 */
 
-/* LEFT SIDEBAR */
+/* LEFT SIDEBAR 
 .left-sidebar {
   width: 20%;
   min-width: 260px;
@@ -81,17 +82,18 @@
   border-right: 1px solid #222;
   position: relative;
   transition: width 0.25s ease;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .left-sidebar.collapsed {
   width: 40px;
   min-width: 40px;
 }
+*/
 
 /* CANVAS AREA (KEY FIX) */
 .canvas-area {
-  width: 45%;
+  width: 75%;
   height: 100%;
   flex-shrink: 0;
   display: flex;
