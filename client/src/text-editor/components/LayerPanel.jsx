@@ -33,9 +33,10 @@ export default function LayerPanel({
       {/* SECTION 01 : LAYER LIST */}
       <div className="layer-section layer-list-section" style={{marginTop:'13%'}}>
       
-      <div className="section-header">
+      {/*<div className="section-header">*/}
+      <br/><br/><br/>
         <h4>Layers</h4>
-      </div>
+      {/*</div>*/}
 
       {/* LIST */}
       <div className="layer-items">
