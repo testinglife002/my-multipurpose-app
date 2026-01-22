@@ -10,11 +10,18 @@
   z-index: 50;
 }
 
-.editor-header-left,
+.editor-header-left {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+
 .editor-header-center {
   display: flex;
   gap: 8px;
   align-items: center;
+  margin-left: 200px;
 }
 
 .eh-btn {
@@ -54,7 +61,7 @@
 
 
 .toggle-btn {
-  position: fixed;
+  position: relative;
   top: 20px;
   right: 20px;
   z-index: 300;
