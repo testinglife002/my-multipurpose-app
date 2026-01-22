@@ -95,7 +95,7 @@ export default function LayerPanel({
 
       {!layer ? null : (
         <div className="layer-properties">
-          <h5>Layer Controls</h5>
+           {/*<h5>Layer Controls</h5> */}
 
           <div className="inline-fields">
             <button onClick={() => onUpdateLayer(layer.id, "zIndex", layer.zIndex + 1)}>
@@ -123,14 +123,15 @@ export default function LayerPanel({
         </div>
       )}
 
-      {/* DIVIDER */}
+      {/* DIVIDER 
       <div className="layer-divider"></div>
+      */}
 
       {/* SECTION 02 : CONTROLS + PROPERTIES */}
     <div className="layer-section layer-controls-section">
-      <div className="section-header">
+       {/*<div className="section-header">
         <h4>Layer Controls</h4>
-      </div>
+      </div>*/}
     
       {/* PROPERTIES */}
        <div className="layer-controls-scroll">

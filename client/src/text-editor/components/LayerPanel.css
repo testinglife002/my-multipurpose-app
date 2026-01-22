@@ -38,8 +38,16 @@
   flex-direction: column;
   min-height: 0;     /* REQUIRED for flex scroll */
   flex: 1;
+  overflow-y: auto;
 }
-
+/* Scrollbar */
+.layer-section::-webkit-scrollbar {
+  width: 6px;
+}
+.layer-section::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
 
 /* headers sticky */
 .section-header {
